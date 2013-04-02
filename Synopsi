@@ -1,0 +1,43 @@
+
+Löysin vanhan muistion aiheesta ja mukkasin sen vastaamaan nykytilannetta.
+
+Generoituva peli jossa käytettään avointa dataa.
+
+Pelin aihetta voidaan vaihtaa, tämä on vain yksi idea.
+
+Esimerkiksi Zombi-peli jossa ideana on selvitä mahdollisimman pitkään, lootatta kauppoja ja sairaaloita (googler maps), 
+vältellä zombiksi muuttuneita asukkaita (wikipedia väestöluku). Jos aikaa voitaisiin lisätä säätila (joku vanha tilasto tai sen hetkinen täsmä sää).
+
+Peli voisi olla hivenen roguelike henkinen. Ideaan että pelihahmo tulee kyllä todennäköisesti kuolemaan, kysymys on vain siitä miten pitkään hän selviää.
+Kauppojen tyhjeneminen voisi aina ajaa hänet liikkeelle, mikä pakottaa hänet lopulta kaupunkiin jossa on paljon asukkaita (Zombeja). 
+Talvi pakottaa hankkimaan lämmintä vaatetta ja lämpimän yösijan. Aina kun pelaaja vaihtaa maisemaa, voimme goolemapsin ja wikipedia avulla generoida uuden tason.
+
+
+
+
+Prosessi incrementaalinen
+
+Lisätään toimintoja sitä mukaan kun edellisiä saadaan toimimaan. Kukin voi tehdä osastaan erikseen eikä tarvetta olla koodauksen puolesta yhtä aikaa paikalla kuin vain osasia yhteen sovittaessa.
+Lisäksi toiminnot voidaan protottaa erikseen, ei tarvitse koko koodia välttämättä aina uusiksi kirjoittaa.
+
+Työnjako tässä inkrementissä.
+Henrik: UI
+Joel: xml Parseri
+Artturi:Tiedon lataaminen
+Vladimir: väkimäärän ja sään hakeminen
+
+
+
+Työkaluja:
+Visualstudio(asennettu), ohjelmointi kielenä käytämme C#
+Tortoisegit (repona Github)
+Paint.net
+Joku äänieditori (ehkä)
+
+
+Mahdolisia lähteitä:
+Google Api tai open streetmaps api
+Wikipedia http://fi.wikipedia.org/wiki/Luettelo_Suomen_kunnista
+ilmatiteen laitos tai joku josta saadaan sää
+Selivitetään muita
+
