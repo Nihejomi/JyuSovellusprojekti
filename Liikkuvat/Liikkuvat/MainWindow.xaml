@@ -1,0 +1,10 @@
+﻿<Window x:Class="Liikkuvat.Ikkuna"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" WindowStyle="none" Height="350" Width="525" Loaded="Window_Loaded" MouseLeftButtonUp="Window_MouseLeftButtonUp">
+    <Grid>
+        <Canvas Height="311" HorizontalAlignment="Left" Name="canvas1" VerticalAlignment="Top" Width="503">
+            <Label Canvas.Left="22" Canvas.Top="11" Content="Label" Height="28" Name="label1" />
+        </Canvas>
+    </Grid>
+</Window>

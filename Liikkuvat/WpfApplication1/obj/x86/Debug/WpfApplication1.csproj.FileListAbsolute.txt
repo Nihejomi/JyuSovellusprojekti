@@ -1,0 +1,9 @@
+C:\Users\Henrik\Desktop\SovellusProjekti\Liikkuvat\WpfApplication1\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Henrik\Desktop\SovellusProjekti\Liikkuvat\WpfApplication1\obj\x86\Debug\MainWindow.baml
+C:\Users\Henrik\Desktop\SovellusProjekti\Liikkuvat\WpfApplication1\obj\x86\Debug\MainWindow.g.cs
+C:\Users\Henrik\Desktop\SovellusProjekti\Liikkuvat\WpfApplication1\obj\x86\Debug\App.g.cs
+C:\Users\Henrik\Desktop\SovellusProjekti\Liikkuvat\WpfApplication1\obj\x86\Debug\WpfApplication1_MarkupCompile.cache
+C:\Users\Henrik\Desktop\SovellusProjekti\Liikkuvat\WpfApplication1\obj\x86\Debug\WpfApplication1.g.resources
+C:\Users\Henrik\Desktop\SovellusProjekti\Liikkuvat\WpfApplication1\obj\x86\Debug\Naytto.Properties.Resources.resources
+C:\Users\Henrik\Desktop\SovellusProjekti\Liikkuvat\WpfApplication1\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Henrik\Desktop\SovellusProjekti\Liikkuvat\WpfApplication1\obj\x86\Debug\GenerateResource.write.1.tlog
