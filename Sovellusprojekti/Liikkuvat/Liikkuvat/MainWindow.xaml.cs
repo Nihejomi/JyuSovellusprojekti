@@ -31,7 +31,7 @@ namespace Liikkuvat
         public MainWindow()
         {
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,120);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,60);
  
             liikuta.Add(pelaaja1);
             InitializeComponent();
