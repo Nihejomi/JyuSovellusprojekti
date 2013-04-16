@@ -97,6 +97,10 @@
       <Project>{7BEA7332-C24E-46F2-B40A-BBA490F39F7E}</Project>
       <Name>WpfControlLibrary1</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Zombi\Zombi.csproj">
+      <Project>{5F29658F-512B-4C0B-B267-57EE84A81490}</Project>
+      <Name>Zombi</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -13,6 +13,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
 using System.Collections;
+using Zombi;
+
+using WpfControlLibrary1;
+
 namespace Liikkuvat
 {    
     /// <summary>
@@ -25,17 +29,24 @@ namespace Liikkuvat
         public int l;
         public int kohdex;
         public int kohdey;
+       
         public double pelaajakulma;
+        public double zombikulma;
         
        ArrayList liikuta = new ArrayList();
         public MainWindow()
         {
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,60);
- 
-            liikuta.Add(pelaaja1);
-            InitializeComponent();
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,100);
+           
 
+            InitializeComponent();
+            UserControl1 z = new UserControl1(); 
+            canvas1.Children.Add(z);
+            //z.Name = "testiZombi";
+            Canvas.SetTop(z, 100);
+            Canvas.SetLeft(z, 100);
+            liikuta.Add(z);
             dispatcherTimer.Start();
             
         }
@@ -98,14 +109,33 @@ namespace Liikkuvat
 
         private void kaikkiliikkuu()
         {
-        int  korkeutta = (int)Canvas.GetTop((UIElement)this.pelaaja1);
-          int  leveytta = (int)Canvas.GetLeft((UIElement)this.pelaaja1);
-            if(tarkistaetaisyys(korkeutta, leveytta, kohdex,kohdey,pelaaja1.vektorinpituus)){
+            int zkorkeutta = 0;
+            int zleveytta = 0;
+            int korkeutta = (int)Canvas.GetTop((UIElement)this.pelaaja1);
+            int leveytta = (int)Canvas.GetLeft((UIElement)this.pelaaja1);
+            if (tarkistaetaisyys(korkeutta, leveytta, kohdex, kohdey, pelaaja1.vektorinpituus))
+            {
                 //pelaaja1.pyorita(pelaajakulma);
-                Canvas.SetLeft((UIElement)this.pelaaja1, this.pelaaja1.liikuta(l, k, pelaajakulma)[0]);
-            
+                Canvas.SetLeft((UIElement)this.pelaaja1, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[0]);
 
-            Canvas.SetTop((UIElement)this.pelaaja1, this.pelaaja1.liikuta(l, k, pelaajakulma)[1]);  
+
+                Canvas.SetTop((UIElement)this.pelaaja1, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[1]);
+                foreach (liikkuva testi in liikuta)
+                {
+                    
+                    zkorkeutta = (int)Canvas.GetTop(testi as UIElement);
+                    zleveytta = (int)Canvas.GetLeft(testi as UIElement);
+                    //label2.Content = leveytta + ":" + korkeutta; 
+                    if (tarkistaetaisyys(zkorkeutta, zleveytta, korkeutta, leveytta, testi.getvectorinpituus()))
+                    {
+                        zombikulma=laskeKulma( leveytta - zleveytta,korkeutta - zkorkeutta);
+                        Canvas.SetLeft(testi as UIElement, testi.liikuta(zleveytta, zkorkeutta, zombikulma)[0]);
+                      
+
+                        Canvas.SetTop(testi as UIElement, testi.liikuta(zleveytta, zkorkeutta, zombikulma)[1]);
+                    }
+                    //label2.Content = testi.liikuta(leveytta, korkeutta, pelaajakulma)[0] + ":" + pelaajakulma; 
+                }
             }
         }
         /// <summary>

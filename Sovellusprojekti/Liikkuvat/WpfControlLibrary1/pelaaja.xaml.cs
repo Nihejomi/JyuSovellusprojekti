@@ -19,7 +19,7 @@ namespace WpfControlLibrary1
     /// </summary>
     public partial class pelaaja : UserControl
     {
-        public int vektorinpituus=2;
+        public int vektorinpituus = 5;
         //double jakojaannosx;
         //double jakojaannosy;
         public pelaaja()

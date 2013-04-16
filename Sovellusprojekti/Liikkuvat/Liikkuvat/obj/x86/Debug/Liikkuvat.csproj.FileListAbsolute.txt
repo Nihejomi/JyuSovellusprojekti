@@ -28,3 +28,5 @@ C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Liikkuvat\bi
 C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Liikkuvat\bin\Debug\Liikkuvat.pdb
 C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Liikkuvat\bin\Debug\WpfControlLibrary1.dll
 C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Liikkuvat\bin\Debug\WpfControlLibrary1.pdb
+C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Liikkuvat\bin\Debug\Zombi.dll
+C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Liikkuvat\bin\Debug\Zombi.pdb
