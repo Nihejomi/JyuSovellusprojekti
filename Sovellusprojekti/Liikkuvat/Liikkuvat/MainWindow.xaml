@@ -7,6 +7,7 @@
           
             <Label Canvas.Left="432" Canvas.Top="33" Content="Label" Height="28" Name="label1" />
             <my:pelaaja Canvas.Left="218" Canvas.Top="146" Name="pelaaja1" />
+            <Label Canvas.Left="447" Canvas.Top="271" Content="Label" Height="28" Name="label2" />
         </Canvas>
     </Grid>
 </Window>

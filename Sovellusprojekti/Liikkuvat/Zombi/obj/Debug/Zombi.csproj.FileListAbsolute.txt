@@ -1,0 +1,12 @@
+C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Zombi\bin\Debug\Zombi.dll
+C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Zombi\bin\Debug\Zombi.pdb
+C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Zombi\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Zombi\obj\Debug\UserControl1.baml
+C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Zombi\obj\Debug\UserControl1.g.cs
+C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Zombi\obj\Debug\Zombi_MarkupCompile.cache
+C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Zombi\obj\Debug\Zombi.g.resources
+C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Zombi\obj\Debug\Zombi.Properties.Resources.resources
+C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Zombi\obj\Debug\GenerateResource.read.1.tlog
+C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Zombi\obj\Debug\GenerateResource.write.1.tlog
+C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Zombi\obj\Debug\Zombi.dll
+C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\Zombi\obj\Debug\Zombi.pdb

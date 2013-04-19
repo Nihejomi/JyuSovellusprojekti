@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Liikkuvat", "Liikkuvat\Liik
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfControlLibrary1", "WpfControlLibrary1\WpfControlLibrary1.csproj", "{7BEA7332-C24E-46F2-B40A-BBA490F39F7E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zombi", "Zombi\Zombi.csproj", "{5F29658F-512B-4C0B-B267-57EE84A81490}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,16 @@ Global
 		{7BEA7332-C24E-46F2-B40A-BBA490F39F7E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7BEA7332-C24E-46F2-B40A-BBA490F39F7E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7BEA7332-C24E-46F2-B40A-BBA490F39F7E}.Release|x86.ActiveCfg = Release|Any CPU
+		{5F29658F-512B-4C0B-B267-57EE84A81490}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F29658F-512B-4C0B-B267-57EE84A81490}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F29658F-512B-4C0B-B267-57EE84A81490}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5F29658F-512B-4C0B-B267-57EE84A81490}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5F29658F-512B-4C0B-B267-57EE84A81490}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5F29658F-512B-4C0B-B267-57EE84A81490}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F29658F-512B-4C0B-B267-57EE84A81490}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F29658F-512B-4C0B-B267-57EE84A81490}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5F29658F-512B-4C0B-B267-57EE84A81490}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5F29658F-512B-4C0B-B267-57EE84A81490}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
