@@ -8,7 +8,7 @@ namespace Zombi
 
     public interface liikkuva
     {
-        int getvectorinpituus();
-         int[] liikuta(int x, int y, double kulma);
+       double getvectorinpituus();
+         double[] liikuta(double x, double y, double kulma);
     }
 }

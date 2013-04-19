@@ -19,30 +19,30 @@ namespace Zombi
     /// </summary>
     public partial class UserControl1 : UserControl, liikkuva
     {
-        public int vektorinpituus;
+        public double vektorinpituus;
         public UserControl1()
         {
             InitializeComponent();
-            vektorinpituus = 2;
+            vektorinpituus = 1;
 
         }
-        public int getvectorinpituus(){
+        public double getvectorinpituus(){
             return vektorinpituus;
         }
-        public int[] liikuta(int l, int k, double pelaajakulma)
+        public double[] liikuta(double l, double k, double pelaajakulma)
         {
 
-            int[] palautus = new int[2];
+            double[] palautus = new double[2];
             //+x ja +y
             if (pelaajakulma < Math.PI / 2)
             {
                 double apux = (vektorinpituus * Math.Cos(pelaajakulma)); //+jakojaannosx;
 
                 //jakojaannosx = apux -  (int)Math.Round(apux);
-                palautus[0] = l + (int)apux;
+                palautus[0] = l + apux;
                 double apuy = (vektorinpituus * Math.Sin(pelaajakulma)); //+jakojaannosy;
                 //jakojaannosy = apuy - (int)Math.Round(apuy);
-                palautus[1] = k + (int)(apuy);
+                palautus[1] = k + apuy;
             }
             else
             {
@@ -53,10 +53,10 @@ namespace Zombi
                     double apux = -(vektorinpituus * Math.Sin(pelaajakulma - Math.PI / 2));// +jakojaannosx;
 
                     // jakojaannosx = apux - (int)Math.Round(apux);
-                    palautus[0] = l + (int)apux;
+                    palautus[0] = l + apux;
                     double apuy = (vektorinpituus * Math.Cos(pelaajakulma - Math.PI / 2));//+jakojaannosy);
                     //jakojaannosy = apuy - (int)Math.Round(apuy);
-                    palautus[1] = k + (int)apuy;
+                    palautus[1] = k + apuy;
 
                     //   palautus[0]=l;
                     //  palautus[1]=k;
@@ -70,10 +70,10 @@ namespace Zombi
                         double apux = -(vektorinpituus * Math.Cos(pelaajakulma - Math.PI));// +jakojaannosx;
 
                         //jakojaannosx = apux - (int)Math.Round(apux);
-                        palautus[0] = l + (int)apux;
+                        palautus[0] = l + apux;
                         double apuy = -(vektorinpituus * Math.Sin(pelaajakulma - Math.PI));// +jakojaannosy;
                         //  jakojaannosy = apuy - (int)(int)Math.Round(apuy);
-                        palautus[1] = k + (int)apuy;
+                        palautus[1] = k + apuy;
 
 
                     }
@@ -84,10 +84,10 @@ namespace Zombi
                         double apux = (vektorinpituus * Math.Sin(pelaajakulma - 3 * Math.PI / 2));// + jakojaannosx;
 
                         //jakojaannosx = apux - (int)Math.Round(apux);
-                        palautus[0] = l + (int)apux;
+                        palautus[0] = l + apux;
                         double apuy = -(vektorinpituus * Math.Cos(pelaajakulma - 3 * Math.PI / 2));// + jakojaannosy;
                         //jakojaannosy = apuy - (int)(int)Math.Round(apuy);
-                        palautus[1] = k + (int)apuy;
+                        palautus[1] = k + apuy;
                     }
 
                 }

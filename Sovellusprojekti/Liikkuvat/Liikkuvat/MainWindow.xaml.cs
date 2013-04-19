@@ -25,17 +25,18 @@ namespace Liikkuvat
     public partial class MainWindow : Window
     {
         System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-        public int k;
-        public int l;
-        public int kohdex;
-        public int kohdey;
-       
+        public double k;
+        public double l;
+        public double kohdex;
+        public double kohdey;
+        RotateTransform r = new RotateTransform();
         public double pelaajakulma;
         public double zombikulma;
         
        ArrayList liikuta = new ArrayList();
         public MainWindow()
         {
+
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,100);
            
@@ -59,19 +60,23 @@ namespace Liikkuvat
         {
            
             //Console.Beep();
-            k = (int)Canvas.GetTop((UIElement)this.pelaaja1);
-            l = (int)Canvas.GetLeft((UIElement)this.pelaaja1);
-            int xsuunta= kohdex-l;
-            int ysuunta= kohdey-k;
+            k = Canvas.GetTop((UIElement)this.pelaaja1);
+            l = Canvas.GetLeft((UIElement)this.pelaaja1);
+            double xsuunta= kohdex-l;
+            double ysuunta= kohdey-k;
             label1.Content = xsuunta + ":" + ysuunta + "::" + pelaajakulma;
             pelaajakulma = laskeKulma(xsuunta, ysuunta);
-           
 
-
-            kaikkiliikkuu();
+      
+           /*     
+            r.Angle = pelaajakulma;
+            label2.Content = pelaajakulma / Math.PI * 2 * 360;
+            pelaaja1.RenderTransform = r;
+            */
+           kaikkiliikkuu();
         }
 
-        private double laskeKulma(int xsuunta, int ysuunta)
+        private double laskeKulma(double xsuunta, double ysuunta)
         {
             double kulma;
             if (xsuunta < 0)
@@ -106,13 +111,15 @@ namespace Liikkuvat
             }
             return kulma;
         }
-
+        /// <summary>
+        /// Liikuttaa kaikkia siihen liikkuvat listan komponentteja sekä kaikkia pelaajaa
+        /// </summary>
         private void kaikkiliikkuu()
         {
-            int zkorkeutta = 0;
-            int zleveytta = 0;
-            int korkeutta = (int)Canvas.GetTop((UIElement)this.pelaaja1);
-            int leveytta = (int)Canvas.GetLeft((UIElement)this.pelaaja1);
+            double zkorkeutta = 0;
+            double zleveytta = 0;
+            double korkeutta = Canvas.GetTop((UIElement)this.pelaaja1);
+            double leveytta = Canvas.GetLeft((UIElement)this.pelaaja1);
             if (tarkistaetaisyys(korkeutta, leveytta, kohdex, kohdey, pelaaja1.vektorinpituus))
             {
                 //pelaaja1.pyorita(pelaajakulma);
@@ -120,22 +127,29 @@ namespace Liikkuvat
 
 
                 Canvas.SetTop((UIElement)this.pelaaja1, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[1]);
-                foreach (liikkuva testi in liikuta)
-                {
-                    
-                    zkorkeutta = (int)Canvas.GetTop(testi as UIElement);
-                    zleveytta = (int)Canvas.GetLeft(testi as UIElement);
-                    //label2.Content = leveytta + ":" + korkeutta; 
-                    if (tarkistaetaisyys(zkorkeutta, zleveytta, korkeutta, leveytta, testi.getvectorinpituus()))
-                    {
-                        zombikulma=laskeKulma( leveytta - zleveytta,korkeutta - zkorkeutta);
-                        Canvas.SetLeft(testi as UIElement, testi.liikuta(zleveytta, zkorkeutta, zombikulma)[0]);
-                      
+                RotateTransform r = new RotateTransform();
+                
+                r.Angle = pelaajakulma/ (Math.PI * 2) * 360+90;
+                label2.Content = pelaajakulma;
+                pelaaja1.RenderTransform = r;
+              //  pelaaja1.RenderTransform.SetValue
+    
+            }
+            foreach (liikkuva testi in liikuta)
+            {
 
-                        Canvas.SetTop(testi as UIElement, testi.liikuta(zleveytta, zkorkeutta, zombikulma)[1]);
-                    }
-                    //label2.Content = testi.liikuta(leveytta, korkeutta, pelaajakulma)[0] + ":" + pelaajakulma; 
+                zkorkeutta = Canvas.GetTop(testi as UIElement);
+                zleveytta = Canvas.GetLeft(testi as UIElement);
+                //label2.Content = leveytta + ":" + korkeutta; 
+                if (tarkistaetaisyys(zkorkeutta, zleveytta, korkeutta, leveytta, testi.getvectorinpituus()))
+                {
+                    zombikulma = laskeKulma(leveytta - zleveytta, korkeutta - zkorkeutta);
+                    Canvas.SetLeft(testi as UIElement, testi.liikuta(zleveytta, zkorkeutta, zombikulma)[0]);
+
+
+                    Canvas.SetTop(testi as UIElement, testi.liikuta(zleveytta, zkorkeutta, zombikulma)[1]);
                 }
+                //label2.Content = testi.liikuta(leveytta, korkeutta, pelaajakulma)[0] + ":" + pelaajakulma; 
             }
         }
         /// <summary>
@@ -147,7 +161,7 @@ namespace Liikkuvat
         /// <param name="kohdey"></param>
         /// <param name="vektorinpituus"></param>
         /// <returns></returns>
-        private bool tarkistaetaisyys(int korkeutta, int leveytta,int kohdex, int kohdey, int vektorinpituus)
+        private bool tarkistaetaisyys(double korkeutta, double leveytta,double kohdex, double kohdey, double vektorinpituus)
         {
 
             if (((kohdex - leveytta) * (kohdex - leveytta) + (kohdey - korkeutta) * (kohdey - korkeutta)) > (vektorinpituus * vektorinpituus+2))
@@ -162,8 +176,8 @@ namespace Liikkuvat
         private void Window_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
      
-            kohdex = (int)e.GetPosition(canvas1).X;
-            kohdey = (int)e.GetPosition(canvas1).Y;
+            kohdex = e.GetPosition(canvas1).X;
+            kohdey = e.GetPosition(canvas1).Y;
         }
     }
 }
