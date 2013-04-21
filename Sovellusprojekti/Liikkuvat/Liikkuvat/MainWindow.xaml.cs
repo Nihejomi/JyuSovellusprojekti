@@ -34,6 +34,8 @@ namespace Liikkuvat
         public double zombikulma;
         
        ArrayList liikuta = new ArrayList();
+       ArrayList Viivat = new ArrayList();
+       ArrayList seinat = new ArrayList();
         public MainWindow()
         {
 
@@ -48,6 +50,7 @@ namespace Liikkuvat
             Canvas.SetTop(z, 100);
             Canvas.SetLeft(z, 100);
             liikuta.Add(z);
+            piirraViiva(50, 50, 100, 100);
             dispatcherTimer.Start();
             
         }
@@ -75,7 +78,88 @@ namespace Liikkuvat
             */
            kaikkiliikkuu();
         }
+        /// <summary>
+        /// Piirtää viivan. viiva liataan Viivat- arraylistaan ja Canvas1 lapsiin.
+        /// </summary>
+        /// <param name="x1">viivan ekapisteen x</param>
+        /// <param name="x2">viivan tokan pisteen x</param>
+        /// <param name="y1">viivan eka pisteen y</param>
+        /// <param name="y2">viivan toka pisteen y</param>
+        private void piirraViiva(double x1, double y1, double x2, double y2)
+        {
 
+            Line viiva = new Line();
+            viiva.Visibility = Visibility.Visible;
+            viiva.StrokeThickness = 1;
+            viiva.X1 = x1;
+            viiva.Y1 = y1;
+            viiva.X2 = x2;
+            viiva.Y2 = y2;
+            viiva.Stroke = System.Windows.Media.Brushes.Black;
+            canvas1.Children.Add(viiva);
+            
+            Viivat.Add(viiva);
+        }
+        /// <summary>
+        /// kesken
+        /// </summary>
+        /// <param name="x1">kohteen alkuperäisen sijainnin x</param>
+        /// <param name="y1">kohteen alkuperäisen sijainnin y</param>
+        /// <param name="x2">kohteen uuden sijainnin x</param>
+        /// <param name="y2">kohteen uuden sijainnin y</param>
+        /// <returns>mennäämkö seinän läpi</returns>
+        private bool tarkistaSeinat(double x1, double y1, double x2, double y2) {
+           foreach(Line s in seinat){
+              // siirretään piste s.x1 s.y1 origoksi ja otetaan ristitulo vektoreille s.x1 s.y1-> x2 y2
+              //jos haluaisi jättää else puoliskon pois, pitäisi jana käydä aina samoin päin.
+              //Nyt sillä ei pitäisi olla merkitystä.
+               if (ristitulo(x2 - s.X1, y2 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) > 0)
+               {
+                   if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) < 0) {
+                       //tehdään vastaava tarkastelu toisesta viivasta käsin
+                       if (ristitulo(s.X1-x1,s.Y1-y1, x2-x1, y2- y1) < 0)
+                       {
+                           if (ristitulo(s.X2-x1, s.Y2-y1, x2 - x1, y2 - y1) > 0)
+                           {
+                               return true;
+                           }
+                       }
+                   }
+               }
+               else { 
+                   //todo tapaus toisin päin
+                   if(ristitulo(0,0,0,0)<0){
+                       if (ristitulo(0, 0, 0, 0) > 0) {
+                           return true;
+                       }
+                   }
+               }
+           
+           }
+      //todo
+            return false;
+        }
+        /// <summary>
+        /// palauttaa kahden vektorin välisen ristitulon 3 komponentin
+        /// Z komponentti on merkattu nollaksi koska ollaan 2 ulotteisessa avaruudessa
+        /// tämäntakia palauttaa yhden doublen
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"</param>
+        /// <param name="y2"></param>
+        /// <returns></returns>
+        public double ristitulo(double x1, double y1, double x2, double y2 ) {
+            // z komponentit on merkatt unolliksi
+
+            return x1*y2-y1*x2;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="xsuunta"></param>
+        /// <param name="ysuunta"></param>
+        /// <returns></returns>
         private double laskeKulma(double xsuunta, double ysuunta)
         {
             double kulma;
