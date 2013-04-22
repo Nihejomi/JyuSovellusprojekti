@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Threading;
 using System.Collections;
 using Zombi;
+using Peli;
 
 using WpfControlLibrary1;
 
@@ -32,7 +33,8 @@ namespace Liikkuvat
         RotateTransform r = new RotateTransform();
         public double pelaajakulma;
         public double zombikulma;
-        
+        Peli.Peli testi;
+        ArrayList rakennukset = new ArrayList();
        ArrayList liikuta = new ArrayList();
        ArrayList Viivat = new ArrayList();
        ArrayList seinat = new ArrayList();
@@ -51,10 +53,29 @@ namespace Liikkuvat
             Canvas.SetLeft(z, 100);
             liikuta.Add(z);
             piirraViiva(50, 50, 100, 100);
+            testi = new Peli.Peli(62.23339, 25.71007, 62.25034, 25.75491, (int)this.Width, (int)this.Height);//new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
+          
+           //rakennukset = testi.annaAlueRakennukset(62.2330, 25.733, 62.2335, 25.7335);
+           piirraRakennukset();
             dispatcherTimer.Start();
+           
             
         }
-
+        /// <summary>
+        /// tässä vaiheessa piirtää testimielessä rakennukset, mutta ei tee niistä vielä seiniä.
+        /// </summary>
+        private void piirraRakennukset()
+        {
+            for (int f = 0; f < testi.annaRakennusLkm()-1; f++)
+            {
+                Peli.Rakennus kohde = testi.annaRakennus(f);
+                
+                for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
+                {
+                    piirraViiva(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+                }
+            }
+        }
         private void canvas1_MouseUp(object sender, MouseButtonEventArgs e)
         {
 
