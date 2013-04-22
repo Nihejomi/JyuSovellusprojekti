@@ -27,7 +27,7 @@ namespace Peli
         /// </summary>
         public OpenStreetMapClient()
         {
-            serverList = new string[] { "http://overpass-api.de/api/interpreter", "http://api.openstreetmap.fr/oapi/interpreter", "http://overpass.osm.rambler.ru/cgi/interpreter" };
+            serverList = new string[] { "http://overpass-api.de/api/interpreter?data=", "http://overpass.osm.rambler.ru/cgi/interpreter?data=", "http://api.openstreetmap.fr/oapi/interpreter?data=" };
             currentServer = serverList[0];
         }
         
@@ -47,6 +47,19 @@ namespace Peli
         public void downloadOSMFile(double minlat, double minlon, double maxlat, double maxlon, string filename)
         {
             string address = currentServer + queryMap(coordinatesToString(minlat, minlon, maxlat, maxlon)) + email;
+            client.DownloadFile(address, filename);
+        }
+
+        //experimental
+        /// <summary>
+        /// Downloads OSM xml-file containing relations with given value and key
+        /// </summary>
+        /// <param name="key">Tag key</param>
+        /// <param name="value">Key value</param>
+        /// <param name="filename">Name for the downloaded file</param>
+        public void downloadOSMFile(string key, string value, string filename)
+        {
+            string address = currentServer + queryKeyValue(key, value) + email;
             client.DownloadFile(address, filename);
         }
 
@@ -70,7 +83,19 @@ namespace Peli
         /// <returns>Useable Overpass map query for given coordinates</returns>
         private string queryMap(string coordinates)
         {
-            return string.Format("?data=node({0});out;", coordinates);
+            return string.Format("node({0});out;", coordinates);
+        }
+
+        //experimental
+        /// <summary>
+        /// Forms a request to retrieve all nodes with given key and value
+        /// </summary>
+        /// <param name="key">Tag key</param>
+        /// <param name="value">Key value</param>
+        /// <returns>Useable Overpass relations query</returns>
+        private string queryKeyValue(string key, string value) 
+        {
+            return string.Format("relation[\"{0}\"=\"{1}\"];node(r);out;", key, value);
         }
 
     }
