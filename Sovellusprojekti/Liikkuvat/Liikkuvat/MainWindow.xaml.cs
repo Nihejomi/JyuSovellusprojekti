@@ -31,6 +31,7 @@ namespace Liikkuvat
         public double kohdex;
         public double kohdey;
         RotateTransform r = new RotateTransform();
+       
         public double pelaajakulma;
         public double zombikulma;
         Peli.Peli testi;
@@ -46,14 +47,15 @@ namespace Liikkuvat
            
 
             InitializeComponent();
-            UserControl1 z = new UserControl1(); 
+            UserControl1 z = new UserControl1();
+            
             canvas1.Children.Add(z);
             //z.Name = "testiZombi";
             Canvas.SetTop(z, 100);
             Canvas.SetLeft(z, 100);
             liikuta.Add(z);
-            piirraViiva(50, 50, 100, 100);
-            testi = new Peli.Peli(62.23339, 25.71007, 62.25034, 25.75491, (int)this.Width, (int)this.Height);//new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
+           // piirraViiva(50, 50, 100, 100);
+            testi = new Peli.Peli(62.24, 25.73007, 62.25034, 25.75491, (int)this.Width, (int)this.Height);//new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
           
            //rakennukset = testi.annaAlueRakennukset(62.2330, 25.733, 62.2335, 25.7335);
            piirraRakennukset();
@@ -232,9 +234,11 @@ namespace Liikkuvat
 
 
                 Canvas.SetTop((UIElement)this.pelaaja1, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[1]);
-                RotateTransform r = new RotateTransform();
+                // pitäs saada noiden 10 paikalle user controllin leveys ja korkeus, mutta jostain syystä ei toimi oikein... ottaakohan kuvan korkeuden? Kuva on isompi kuin kontrollli.
+                RotateTransform r = new RotateTransform( pelaajakulma/ (Math.PI * 2) * 360+90,10,10);
                 
-                r.Angle = pelaajakulma/ (Math.PI * 2) * 360+90;
+              
+ 
                 label2.Content = pelaajakulma;
                 pelaaja1.RenderTransform = r;
               //  pelaaja1.RenderTransform.SetValue
@@ -283,6 +287,11 @@ namespace Liikkuvat
      
             kohdex = e.GetPosition(canvas1).X;
             kohdey = e.GetPosition(canvas1).Y;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
