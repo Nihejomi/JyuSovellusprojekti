@@ -216,7 +216,7 @@ namespace Peli
                         if (tempnoodi.getId() == haettava)
                         {
                             // tallennetaan rakennusten luokkaan tällaisella kaavalla, TODO: oikeanlainen muunnos jotta saadaan järkevät koordinaatit käyttöön
-                            Vektori tempvektori = new Vektori((tempnoodi.getLon() + this.offsetx) *this.scalex, (tempnoodi.getLat() + this.offsety) *this.scaley);
+                            Vektori tempvektori = new Vektori((tempnoodi.getLon() + this.offsetx) *this.scalex, resoy-((tempnoodi.getLat() + this.offsety) *this.scaley));
                             tempvektorit.Add(tempvektori);
 
                             find = true;
