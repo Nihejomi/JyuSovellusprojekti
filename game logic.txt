@@ -1,0 +1,47 @@
+hp bar - ei muutu(?), kun 0 niin kuolee
+armor bar - nousee vaatteiden mukana, häviää kun vaatteet hajoaa ja vähentää endurance baria, jos on armoria niin se kuluu healthin sijaan.
+endurance bar - palautuva, pienenee mitä enemmän vaatetta päällä, ei voi sprintata. 
+nälkä bar - menee alas hitaasti koko ajan
+jano bar - menee alas hitaasti, mutta nopeammin jos juoksee
+temperature bar - jos menee täytee, paleltuu, armori (vaatteet) vaikuttaa kuinka nopeaa menee täytee // tarvitaanko tätä?
+
+Kaupungit
+-Enemmän loottia
+-Parempaa loottia
+-Enemmän zombeja ja enemmän zombeja taloista
+-Enemmän aseita ja panoksia
+-random zombeja kaupungilla + taloista spawnaavat
+
+
+
+Kapunkien laidat
+-Keskiverran loottia
+-Perusloottia
+-jonku verran zombeja
+
+
+Metsää
+-Random zombie spawnit
+-Random loottia jos ollenkaan
+
+
+Talot
+-random lootti, jokaisen talon voi lootata (onko hankalaa toteuttaa)
+-kun pelaaja lähellä, spawnaa lähelle 1-? määrä zombeja
+
+
+Lämpötila
+
+-kylmempää -> enemmän zombeja
+-kylmempää -> pelaajan temperature bar siirtyy toiseen laitaan
+-kylmempää -> nälkä bar hupenee nopiampaa
+
+-lämpimäpää ->vähemmän zombeja
+-lämpimämpää -> pelaajan temperature bar siirtyy toiseen laitaan
+-lämpimämpää -> jano bar hupenee nopiampaa
+
+Kartta(?)
+
+
+Asukasluvut 
+
