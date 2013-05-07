@@ -55,28 +55,99 @@ namespace Liikkuvat
             Canvas.SetLeft(z, 100);
             liikuta.Add(z);
            // piirraViiva(50, 50, 100, 100);
-            testi = new Peli.Peli(62.24, 25.73007, 62.25034, 25.75491, (int)this.Width, (int)this.Height);//new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
+            testi = new Peli.Peli(62.24, 25.73, 62.26, 25.75, (int)this.Width, (int)this.Height);//
+           // testi= new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
           
            //rakennukset = testi.annaAlueRakennukset(62.2330, 25.733, 62.2335, 25.7335);
            piirraRakennukset();
+           piirraVesistot();
             dispatcherTimer.Start();
            
             
+        }
+
+        private void piirraVesistot()
+        {
+            SolidColorBrush sininen = new SolidColorBrush();
+            sininen.Color = Colors.Blue;
+            for (int f = 0; f < testi.annaVesiLkm() - 1; f++)
+            {
+                Peli.Vesi kohde = testi.annaVesi(f);
+
+                PointCollection pisteet = new PointCollection();
+                for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
+                {
+                    pisteet.Add(new Point(kohde.annaVektori(i).x, kohde.annaVektori(i).y));
+                    piirraSeina(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+                    //  piirraViiva(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+                }
+
+                Polygon talo = new Polygon();
+                talo.Points = pisteet;
+
+                talo.Fill = sininen;
+
+                canvas1.Children.Add(talo);
+
+
+                /*  for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
+                  {
+                    
+                      piirraViiva(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+                  }*/
+            }
         }
         /// <summary>
         /// tässä vaiheessa piirtää testimielessä rakennukset, mutta ei tee niistä vielä seiniä.
         /// </summary>
         private void piirraRakennukset()
         {
-            for (int f = 0; f < testi.annaRakennusLkm()-1; f++)
+            SolidColorBrush harmaa = new SolidColorBrush();
+            harmaa.Color = Colors.Gray;
+           for (int f = 0; f < testi.annaRakennusLkm()-1; f++)
             {
                 Peli.Rakennus kohde = testi.annaRakennus(f);
-                
-                for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
+
+               PointCollection pisteet = new PointCollection();             
+                  for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
+                     
+                     
+   {
+    pisteet.Add(new Point(kohde.annaVektori(i).x,kohde.annaVektori(i).y));
+    piirraSeina(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+     //  piirraViiva(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+   }
+
+                  Polygon talo = new Polygon();
+                  talo.Points = pisteet;
+
+                  talo.Fill = harmaa;
+
+                  canvas1.Children.Add(talo);
+              
+
+              /*  for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
                 {
+                    
                     piirraViiva(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
-                }
+                }*/
             }
+        }
+        /// <summary>
+        /// tämä ei tällä hetkellä piirrä seinää, mutta tekee sen törmäystarkistusta varten.
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        private void piirraSeina(double x1, double y1, double x2, double y2)
+        {
+            Line viiva = new Line();
+            viiva.X1 = x1;
+            viiva.Y1 = y1;
+            viiva.X2 = x2;
+            viiva.Y2 = y2;
+            seinat.Add(viiva);
         }
         private void canvas1_MouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -140,24 +211,33 @@ namespace Liikkuvat
                {
                    if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) < 0) {
                        //tehdään vastaava tarkastelu toisesta viivasta käsin
-                       if (ristitulo(s.X1-x1,s.Y1-y1, x2-x1, y2- y1) < 0)
+                       if (ristitulo(s.X1-x1,s.Y1-y1, x2-x1, y2- y1) > 0)
                        {
-                           if (ristitulo(s.X2-x1, s.Y2-y1, x2 - x1, y2 - y1) > 0)
+                          
+                           if (ristitulo(s.X2-x1, s.Y2-y1, x2 - x1, y2 - y1) < 0)
+                           {
+                               //Console.Beep();
+                               return true;
+                           }
+                       }
+                   }
+               }
+               else
+               {
+                   if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) > 0)
+                   {
+                    
+                       //tehdään vastaava tarkastelu toisesta viivasta käsin
+                       if (ristitulo(s.X1 - x1, s.Y1 - y1, x2 - x1, y2 - y1) < 0)
+                       {
+                          
+                           if (ristitulo(s.X2 - x1, s.Y2 - y1, x2 - x1, y2 - y1) > 0)
                            {
                                return true;
                            }
                        }
                    }
                }
-               else { 
-                   //todo tapaus toisin päin
-                   if(ristitulo(0,0,0,0)<0){
-                       if (ristitulo(0, 0, 0, 0) > 0) {
-                           return true;
-                       }
-                   }
-               }
-           
            }
       //todo
             return false;
@@ -173,7 +253,7 @@ namespace Liikkuvat
         /// <param name="y2"></param>
         /// <returns></returns>
         public double ristitulo(double x1, double y1, double x2, double y2 ) {
-            // z komponentit on merkatt unolliksi
+            // z komponentit on merkattu nolliksi
 
             return x1*y2-y1*x2;
         }
@@ -229,20 +309,25 @@ namespace Liikkuvat
             double leveytta = Canvas.GetLeft((UIElement)this.pelaaja1);
             if (tarkistaetaisyys(korkeutta, leveytta, kohdex, kohdey, pelaaja1.vektorinpituus))
             {
-                //pelaaja1.pyorita(pelaajakulma);
-                Canvas.SetLeft((UIElement)this.pelaaja1, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[0]);
+                if (tarkistaSeinat(Canvas.GetLeft(this.pelaaja1)+pelaaja1.ActualWidth/2, Canvas.GetTop(this.pelaaja1)+pelaaja1.ActualHeight/2, pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[0]+pelaaja1.ActualWidth/2, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[1]+pelaaja1.ActualHeight/2))
+                { }
+                else
+                {
+                    //pelaaja1.pyorita(pelaajakulma);
+                    Canvas.SetLeft((UIElement)this.pelaaja1, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[0]);
 
 
-                Canvas.SetTop((UIElement)this.pelaaja1, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[1]);
-                // pitäs saada noiden 10 paikalle user controllin leveys ja korkeus, mutta jostain syystä ei toimi oikein... ottaakohan kuvan korkeuden? Kuva on isompi kuin kontrollli.
-                RotateTransform r = new RotateTransform( pelaajakulma/ (Math.PI * 2) * 360+90,10,10);
-                
-              
- 
-                label2.Content = pelaajakulma;
-                pelaaja1.RenderTransform = r;
-              //  pelaaja1.RenderTransform.SetValue
-    
+                    Canvas.SetTop((UIElement)this.pelaaja1, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[1]);
+
+                    // pitäs saada noiden 10 paikalle user controllin leveys ja korkeus, mutta jostain syystä ei toimi oikein... ottaakohan kuvan korkeuden? Kuva on isompi kuin kontrollli.
+                    RotateTransform r = new RotateTransform(pelaajakulma / (Math.PI * 2) * 360 + 90, 10, 10);
+
+
+
+                    label2.Content = pelaajakulma;
+                    pelaaja1.RenderTransform = r;
+                    //  pelaaja1.RenderTransform.SetValue
+                }
             }
             foreach (liikkuva testi in liikuta)
             {
