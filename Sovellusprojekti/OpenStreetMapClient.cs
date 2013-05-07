@@ -83,7 +83,7 @@ namespace Peli
         /// <returns>Useable Overpass map query for given coordinates</returns>
         private string queryMap(string coordinates)
         {
-            return string.Format("node({0});out;", coordinates);
+            return string.Format("(node({0});<;);out;", coordinates);
         }
 
         //experimental
