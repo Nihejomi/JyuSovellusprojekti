@@ -5,9 +5,9 @@ using System.Text;
 using HtmlAgilityPack;
 
 
-namespace ConsoleApplication2
+namespace HTMLParser
 {
-    class Hienompi
+    class Parsinta
     {
        
 
@@ -17,7 +17,7 @@ namespace ConsoleApplication2
             string kunta;
             string asukasluku;
             string saa;
-            
+            int zombieMaara;
             
             List<string> listaKunnista = new List<String>();
             List<string> lista = new List<String>();
@@ -26,12 +26,24 @@ namespace ConsoleApplication2
 
             lista = haeKunnat(listaKunnista);
             asukasluku = haeAsukasluku(kunta, listaKunnista);
-            
+            zombieMaara = zombieLuku(asukasluku);
             
             saa = haeSaa(kunta);
-            tulosta(kunta, asukasluku, saa);
+            tulosta(kunta, asukasluku, saa, zombieMaara);
 
         }
+
+        private static int zombieLuku(string asukasluku)
+        {
+            
+            int asukasLUKU;
+            int.TryParse(asukasluku, out asukasLUKU);
+            
+            int zombieProsentti = 5;
+            int zombieMaara = zombieProsentti * asukasLUKU / 100;
+            return zombieMaara;
+        }
+
 
         private static string kysyKysymys()
         {
@@ -61,11 +73,12 @@ namespace ConsoleApplication2
             return listaKunnista;
         }
 
-        private static void tulosta(string kunta, string asukasluku, string saa)
+        private static void tulosta(string kunta, string asukasluku, string saa, int zombieMaara)
         {
-            Console.WriteLine(kunta);
-            Console.WriteLine(asukasluku);
-            Console.WriteLine(saa);
+            Console.WriteLine("Kunnannimi: " + kunta);
+            Console.WriteLine("Kunnan asukasluku: " + asukasluku);
+            Console.WriteLine("Kunnan tämän hetkinen sää: " + saa);
+            Console.WriteLine("Kunnan mahdollinen zombie määrä: " + zombieMaara);
             Console.ReadKey();
         }
 
@@ -106,7 +119,7 @@ namespace ConsoleApplication2
                         string asukasluku = cols[3].InnerText;
                         if (asukasluku.Contains("&#160;"))
                         {
-                            string uusvakiluku = asukasluku.Replace("&#160;", ",");
+                            string uusvakiluku = asukasluku.Replace("&#160;", "");
                             return uusvakiluku;
                         }
                         else
