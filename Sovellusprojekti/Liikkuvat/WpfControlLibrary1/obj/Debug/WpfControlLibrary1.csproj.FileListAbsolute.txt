@@ -20,3 +20,13 @@ C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\WpfControlLi
 C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\WpfControlLibrary1\obj\Debug\GenerateResource.write.1.tlog
 C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\WpfControlLibrary1\obj\Debug\WpfControlLibrary1.dll
 C:\Users\Henrik\Desktop\SovellusProjekti\Sovellusprojekti\Liikkuvat\WpfControlLibrary1\obj\Debug\WpfControlLibrary1.pdb
+C:\Users\axwitech\Documents\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\WpfControlLibrary1\bin\Debug\WpfControlLibrary1.dll
+C:\Users\axwitech\Documents\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\WpfControlLibrary1\bin\Debug\WpfControlLibrary1.pdb
+C:\Users\axwitech\Documents\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\WpfControlLibrary1\obj\Debug\pelaaja.baml
+C:\Users\axwitech\Documents\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\WpfControlLibrary1\obj\Debug\pelaaja.g.cs
+C:\Users\axwitech\Documents\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\WpfControlLibrary1\obj\Debug\WpfControlLibrary1_MarkupCompile.cache
+C:\Users\axwitech\Documents\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\WpfControlLibrary1\obj\Debug\WpfControlLibrary1.g.resources
+C:\Users\axwitech\Documents\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\WpfControlLibrary1\obj\Debug\WpfControlLibrary1.Properties.Resources.resources
+C:\Users\axwitech\Documents\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\WpfControlLibrary1\obj\Debug\WpfControlLibrary1.csproj.GenerateResource.Cache
+C:\Users\axwitech\Documents\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\WpfControlLibrary1\obj\Debug\WpfControlLibrary1.dll
+C:\Users\axwitech\Documents\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\WpfControlLibrary1\obj\Debug\WpfControlLibrary1.pdb

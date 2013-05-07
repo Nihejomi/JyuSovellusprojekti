@@ -1,6 +1,11 @@
 ﻿/*  KMKK-sovellusprojekti: Avointa Dataa hyödyntävä Zombie-selviytymispeli 
+<<<<<<< HEAD
  *  versio 0.03
  *  Luokat xml-datasta luetuille objekteilla pelimaailmaan
+=======
+ *  versio 0.01
+ *  Hahmotelmaa server-tyyppisestä pelin (logiikan)pääluokasta. 
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
  *  
  *  Tein aluksi kaiken samaan tiedostoon, tästä voi sitten leikata ja jatkaa kutakin luokkaa omaan tiedostoonsa jne. -joel
  *  
@@ -67,6 +72,7 @@ namespace Peli
                 System.Console.WriteLine(i + " X: " + luettuvektori.getX() + " Y:" + luettuvektori.getY());
             }
         }
+<<<<<<< HEAD
         public Vektori annaVektori(int i)
         {
             Vektori luettuvektori = (Vektori)this.vektorit[i];
@@ -119,6 +125,13 @@ namespace Peli
     }
 
 
+=======
+
+
+
+    }
+   
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
     public class Tie{
        // String nimi;
        // ArrayList vektorit;
@@ -157,12 +170,16 @@ namespace Peli
         // väkiluku
    
         ArrayList Rakennukset;
+<<<<<<< HEAD
         ArrayList Vedet;
+=======
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
 
          //ArrayList Tiet;
 
 
         // koordinaattivektoreiden muuntelua näillä parametreillä -joel
+<<<<<<< HEAD
         double scalex;
         double scaley;
         double offsetx;
@@ -170,6 +187,14 @@ namespace Peli
 
         // debuggausta
         public void listaaDataKonsoliin()
+=======
+        double scale = 100000;
+        double offset = 0;
+
+
+        // debuggausta
+        public void listaaRakennuksetKonsoliin()
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
         {
 
             for (int i = 0; i < Rakennukset.Count; i++)
@@ -177,6 +202,7 @@ namespace Peli
                 Rakennus luetturakennus = (Rakennus)Rakennukset[i];
                 luetturakennus.TulostaKonsoliin();
             }
+<<<<<<< HEAD
             for (int i = 0; i < Vedet.Count; i++)
             {
                 Vesi luettuvesi = (Vesi)Vedet[i];
@@ -198,6 +224,14 @@ namespace Peli
 
 
             System.Console.WriteLine("XML->Peli: Muunnetaan tiedot pelin sisälle...: rakennuksia yhteensä " + luettudata.annaRakennusLkm() );
+=======
+        }
+
+        // Valmis osa: Siirtää rakennusten datan pelisysteemille nopeasti saataville -joel
+        public void LataaRakennukset(XMLData luettudata)
+        {
+            System.Console.WriteLine("XML->Peli: Muunnetaan tiedot pelin sisälle: rakennuksia yhteensä " + luettudata.annaRakennusLkm() );
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
             for (int i = 0; i < luettudata.annaRakennusLkm(); i++)
             {
                 XMLRakennus temprakennus = (luettudata.annaRakennus(i));
@@ -209,6 +243,7 @@ namespace Peli
                     double haettava = temprakennus.annaNoodiId(k);
                     
                     bool find = false;
+<<<<<<< HEAD
                     int l = 0;                  
                     while (!find)
                     {
@@ -244,6 +279,8 @@ namespace Peli
                     double haettava = tempvesi.annaNoodiId(k);
 
                     bool find = false;
+=======
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
                     int l = 0;
 
                     while (!find)
@@ -252,12 +289,17 @@ namespace Peli
                         if (tempnoodi.getId() == haettava)
                         {
                             // tallennetaan rakennusten luokkaan tällaisella kaavalla, TODO: oikeanlainen muunnos jotta saadaan järkevät koordinaatit käyttöön
+<<<<<<< HEAD
                             Vektori tempvektori = new Vektori((tempnoodi.getLon() + this.offsetx) * this.scalex, (tempnoodi.getLat() + this.offsety) * this.scaley);
+=======
+                            Vektori tempvektori = new Vektori((tempnoodi.getLon() * this.scale)+this.offset, (tempnoodi.getLat() * this.scale)+this.offset);
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
                             tempvektorit.Add(tempvektori);
 
                             find = true;
                         }
                         l++;
+<<<<<<< HEAD
                         if (l >= luettudata.annaNoodiLkm())
                             break;
 
@@ -412,12 +454,43 @@ namespace Peli
         }
 
 
+=======
+                    }          
+                }
+                Rakennus uusirakennus = new Rakennus(temprakennus.annaNimi(), tempvektorit);
+                Rakennukset.Add(uusirakennus);
+            }
+
+        }
+
+
+
+
+        // itse systeemin konstruktori voisi säilyä kuitenkin tässä tiedostossa -joel
+        public Peli(String filename)
+        {
+
+                XMLData luettudata = XMLLukija.LueXML(filename);
+                
+                Rakennukset = new ArrayList();
+
+                LataaRakennukset(luettudata);
+                System.Console.WriteLine("Enteriä ja listataan kaikkien rakennusten data ");
+                System.Console.ReadLine();
+                // debuggausta
+                listaaRakennuksetKonsoliin();
+                System.Console.ReadLine();
+              
+        }
+
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
         // keskeisimmät pelilogiikan metodit, joita kutsutaan jollain timerillä luupissa, nämä voisi myös kirjoittaa tähän tiedostoon, vai (?) -joel
         public void update() { }
         public void scan() { }
         public void move() { }
 
 
+<<<<<<< HEAD
         // testiohjelma: ilman viimeistä paramaetriä (tiedostoa), latautuu jyväskylän keskustan alue. tiedosto mukana..
         
         static void EntinenMaini(string[] args)
@@ -442,6 +515,12 @@ namespace Peli
            }
 
            System.Console.ReadLine();
+=======
+        // testiohjelma, lutakon alueella. voi koittaa myös jkl.osm, jolloin tulee yli 18 tuhatta noodia ja melkein tuhat rakennusta 
+        static void Mainfff(string[] args)
+        {
+            Peli testipeli = new Peli("lutakko.osm");
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
 
         }  
 

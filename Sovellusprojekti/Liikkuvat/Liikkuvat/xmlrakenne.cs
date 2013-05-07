@@ -2,7 +2,11 @@
  *  
  *  XML-Parseri lukemaan xml-tiedostosta pelissä käytettävä karttadata
  *  Palauttaa kaiken karttadatan XMLData tyyppisenä oliona
+<<<<<<< HEAD
  *  versio 0.03
+=======
+ *  versio 0.02
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
  *  Joel Kivelä joaakive@student.jyu.fi
  */
 
@@ -108,6 +112,7 @@ namespace Peli
 
     // TODO: tietyypit 
     // tasg K = highway, v = footway/cycleway 
+<<<<<<< HEAD
     //public class XMLTie
     //{
      //   ArrayList noderefs; // (double)
@@ -118,6 +123,18 @@ namespace Peli
         //String Name;
 
     //}
+=======
+    public class XMLTie
+    {
+     //   ArrayList noderefs; // (double)
+     //   String Name; // tags k =name, v = <data>
+
+        double id; // tunniste
+        ArrayList noderefs; // lista noodireferensseistä
+        String Name;
+
+    }
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
 
 
 
@@ -201,10 +218,13 @@ namespace Peli
             return Rakennukset.Count;
         }
 
+<<<<<<< HEAD
         public int annaVesiLkm()
         {
             return Vedet.Count;
         }
+=======
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
 
         public XMLNoodi annaNoodi(int i)
         {
@@ -215,11 +235,14 @@ namespace Peli
             return (XMLRakennus)Rakennukset[i];
         }
 
+<<<<<<< HEAD
         public XMLVesi annaVesi(int i)
         {
             return (XMLVesi)Vedet[i];
         }
 
+=======
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
 
     } // endof XMLData
 
@@ -235,7 +258,10 @@ namespace Peli
 
             ArrayList XmlNoodit = new ArrayList();
             ArrayList XmlRakennukset = new ArrayList();
+<<<<<<< HEAD
             ArrayList XmlVedet = new ArrayList();
+=======
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
 
             ArrayList reftemp = new ArrayList();
 
@@ -249,9 +275,14 @@ namespace Peli
             double tempId = 0;
            // bool refluku = false;
             int muutettava =0;
+<<<<<<< HEAD
             int muutettavaV = 0;
             bool auki = false;
             bool vauki = false;
+=======
+            bool auki = false;
+
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
             System.Console.WriteLine("aloitetaan xml-tiedoston " + filename + " parsiminen");
 
 
@@ -320,12 +351,20 @@ namespace Peli
                                     {
                                         XMLNoodi uusiNoodi = new XMLNoodi(tempId, tempLat, tempLon);
                                         XmlNoodit.Add(uusiNoodi);
+<<<<<<< HEAD
                                       // System.Console.WriteLine("noodi tallennettu");
+=======
+                                       // System.Console.WriteLine("noodi tallennettu");
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
                                         lukutyyppi = 0;
                                     }
                                 }
 
+<<<<<<< HEAD
                                 // tapaus == rakennus tai vesi
+=======
+                                // tapaus == rakennus
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
 
                                 if (lukutyyppi == 2)
                                 {
@@ -346,8 +385,13 @@ namespace Peli
                                     {
 
                                         String nimi = "nimeton";
+<<<<<<< HEAD
                                       //  System.Console.WriteLine("se oli talo.. tallennetaan listaan");
                                        // System.Console.WriteLine("id: " + tempId + " refs: " + reftemp.Count);
+=======
+                                        //System.Console.WriteLine("se oli talo.. tallennetaan listaan");
+                                        //System.Console.WriteLine("id: " + tempId + " refs: " + reftemp.Count);
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
 
                                       //  reader.Read();
                                         //i =0;
@@ -364,6 +408,7 @@ namespace Peli
                                         tempId = 0;
                                         muutettava = XmlRakennukset.Count-1;
                                         auki = true;
+<<<<<<< HEAD
                                         vauki = false;
                                     }
 
@@ -383,6 +428,10 @@ namespace Peli
 
 
                                     //TODO: vesi,    nimi ennen päätunnistetta 
+=======
+                                    }
+                                    /*  TODO: vesi,    nimi ennen päätunnistetta 
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
                                     if (reader.Name == "v" && reader.Value.ToString() == "water")  // tallennetaan järvi talon tapaisesti
                                     {
 
@@ -403,11 +452,32 @@ namespace Peli
                                         XMLVesi uusi = new XMLVesi(tempId, reftemp, nimi);
                                         XmlVedet.Add(uusi);
                                         tempId = 0;
+<<<<<<< HEAD
                                         muutettavaV = XmlVedet.Count-1;
                                         auki = false;
                                         vauki = true;
                                     }
                                    
+=======
+                                        muutettava = XmlVedet.Count - 1;
+                                        auki = true;
+                                    }
+                                    */
+
+
+
+                                if (reader.Name == "k" && reader.Value.ToString() == "name" && auki)
+                                {
+                                    reader.MoveToAttribute(i+1);
+                                   //  System.Console.WriteLine(reader.Name + " " + reader.Value.ToString());
+                                     XMLRakennus temp = (XMLRakennus)XmlRakennukset[muutettava];
+                                     temp.muutaNimi(reader.Value.ToString());
+                                     auki = false;
+
+                                }
+
+
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
 
                                 }
                             }
@@ -429,8 +499,12 @@ namespace Peli
                            // System.Console.WriteLine("rakennuksen tiedot loppui");
                             reftemp.Clear();
                             tempId = 0;
+<<<<<<< HEAD
                             vauki = false;
                             auki = false;
+=======
+
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
                         }
 
                         lukutyyppi = 0;
@@ -442,11 +516,18 @@ namespace Peli
             }
 
 
+<<<<<<< HEAD
             XMLData valmisData = new XMLData(XmlNoodit, XmlRakennukset, XmlVedet);
             System.Console.WriteLine("Parsiminen valmis");
             System.Console.WriteLine("noodeja tuli: " + valmisData.annaNoodiLkm());
             System.Console.WriteLine("rakennuksia : " + valmisData.annaRakennusLkm());
             System.Console.WriteLine("vesistöjä : " + valmisData.annaVesiLkm());
+=======
+            XMLData valmisData = new XMLData(XmlNoodit, XmlRakennukset);
+            System.Console.WriteLine("Parsiminen valmis");
+            System.Console.WriteLine("noodeja tuli: " + valmisData.annaNoodiLkm());
+            System.Console.WriteLine("rakennuksia : " + valmisData.annaRakennusLkm());
+>>>>>>> c6c511e293055e641244ee4e4a56238a9aba9769
             return valmisData;
 
         }
