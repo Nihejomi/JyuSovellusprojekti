@@ -5,15 +5,17 @@
     <Grid Height="284">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="226" />
-            <ColumnDefinition Width="91*" />
-            <ColumnDefinition Width="186*" />
+            <ColumnDefinition Width="80*" />
+            <ColumnDefinition Width="16*"/>
+            <ColumnDefinition Width="27*" />
+            <ColumnDefinition Width="168*"/>
         </Grid.ColumnDefinitions>
-        <Canvas Height="Auto" HorizontalAlignment="Left" Margin="-9,24,0,0" Name="canvas1" VerticalAlignment="Top" Width="Auto" MouseUp="canvas1_MouseUp" Grid.ColumnSpan="3">
-          
+        <Canvas Height="Auto" HorizontalAlignment="Left" Margin="-9,24,0,0" Name="canvas1" VerticalAlignment="Top" Width="Auto" MouseUp="canvas1_MouseUp">
+
             <Label Canvas.Left="432" Canvas.Top="33" Content="Label" Height="28" Name="label1" />
             <my:pelaaja Canvas.Left="900" Canvas.Top="900" Name="pelaaja1" />
             <Label Canvas.Left="447" Canvas.Top="271" Content="Label" Height="28" Name="label2" />
         </Canvas>
-        <Slider Height="23" Name="slider1" Width="191" Value="4" Minimum="1" ValueChanged="slider1_ValueChanged" Maximum="60" Grid.Column="1" Margin="59,-15,27,276" Grid.ColumnSpan="2" />
+        <Slider Height="23" Name="slider1" Width="191" Value="1" Minimum="1" ValueChanged="slider1_ValueChanged" Maximum="60" Grid.Column="1" Margin="63,-14,37,275" Grid.ColumnSpan="4" />
     </Grid>
 </Window>

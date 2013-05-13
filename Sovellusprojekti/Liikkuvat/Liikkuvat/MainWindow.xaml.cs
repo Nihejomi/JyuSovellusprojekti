@@ -381,24 +381,30 @@ namespace Liikkuvat
 
         }
 
+
         private void zoomaa()
         {
             double zoomi = slider1.Value;
-            ScaleTransform scaletransform = new ScaleTransform();
-            TranslateTransform translatetransform = new TranslateTransform();
+           ScaleTransform scaletransform = new ScaleTransform();
+           TranslateTransform translatetransform = new TranslateTransform();
 
             TransformGroup yhdiste = new TransformGroup();
 
+            scaletransform.CenterX = this.Width / 2;
+            scaletransform.CenterY = this.Height / 2;
             scaletransform.ScaleX = zoomi;
             scaletransform.ScaleY = zoomi;
-            translatetransform.Y = (-(Canvas.GetTop((UIElement)this.pelaaja1)) * zoomi)   +((this.Height /2 )); // / zoomi);
-            translatetransform.X = (-(Canvas.GetLeft((UIElement)this.pelaaja1)) * zoomi)  +((this.Width * 2)); // / zoomi);
+          
+            translatetransform.Y = ((-(Canvas.GetTop((UIElement)this.pelaaja1)+pelaaja1.ActualHeight/2))   +((this.Height/2))); // / zoomi);
+            double apu = -(Canvas.GetLeft((UIElement)this.pelaaja1)+pelaaja1.ActualWidth/2)+ this.Width/2;
+            translatetransform.X = apu; // / zoomi);
 
-            yhdiste.Children.Add(scaletransform);
+           
             yhdiste.Children.Add(translatetransform);
+            yhdiste.Children.Add(scaletransform);
 
             canvas1.RenderTransform = yhdiste;
-
+          
         }
 
         private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
