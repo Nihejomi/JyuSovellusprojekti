@@ -30,6 +30,7 @@ namespace Liikkuvat
         public double l;
         public double kohdex;
         public double kohdey;
+        public string kaupunki;
         RotateTransform r = new RotateTransform();
        
         public double pelaajakulma;
@@ -42,30 +43,37 @@ namespace Liikkuvat
         public MainWindow()
         {
 
+           
+            
+        }
+
+        private void alusta(string p)
+        {
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
-           
+
 
             InitializeComponent();
             Zombi z = new Zombi(new Vector(100,100));
             
+            Canvas.SetTop(pelaaja1,(this.Height - slider1.ActualHeight) / 2-pelaaja1.ActualHeight/2);
             canvas1.Children.Add(z);
             //z.Name = "testiZombi";
             Canvas.SetTop(z, 100);
             Canvas.SetLeft(z, 100);
             liikuta.Add(z);
-           // piirraViiva(50, 50, 100, 100);
+            // piirraViiva(50, 50, 100, 100);
             testi = new Peli.Peli(62.23407, 25.73577, 62.24372, 25.76086, 2000, 2000);
             //testi = new Peli.Peli(62.24, 25.73, 62.26, 25.75, 2000, 2000);//
-           // testi= new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
-          
-           //rakennukset = testi.annaAlueRakennukset(62.2330, 25.733, 62.2335, 25.7335);
-           piirraRakennukset();
-           piirraVesistot();
+            // testi= new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
+
+            //rakennukset = testi.annaAlueRakennukset(62.2330, 25.733, 62.2335, 25.7335);
+            piirraRakennukset();
+            piirraVesistot();
             dispatcherTimer.Start();
            
-            
         }
+        
 
         private void piirraVesistot()
         {
@@ -382,7 +390,9 @@ namespace Liikkuvat
 
         }
 
-
+        /// <summary>
+        /// zoomaa keskelle lomaketta. Käyttää sliderin asettamaa zoomiarvoa.
+        /// </summary>
         private void zoomaa()
         {
             double zoomi = slider1.Value;
@@ -392,11 +402,11 @@ namespace Liikkuvat
             TransformGroup yhdiste = new TransformGroup();
 
             scaletransform.CenterX = this.Width / 2;
-            scaletransform.CenterY = this.Height / 2;
+            scaletransform.CenterY = (this.Height - slider1.ActualHeight) / 2;
             scaletransform.ScaleX = zoomi;
             scaletransform.ScaleY = zoomi;
           
-            translatetransform.Y = ((-(Canvas.GetTop((UIElement)this.pelaaja1)+pelaaja1.ActualHeight/2))   +((this.Height/2))); // / zoomi);
+            translatetransform.Y = ((-(Canvas.GetTop((UIElement)this.pelaaja1)))   +((this.Height-slider1.ActualHeight)/2)-pelaaja1.ActualHeight/2);
             double apu = -(Canvas.GetLeft((UIElement)this.pelaaja1)+pelaaja1.ActualWidth/2)+ this.Width/2;
             translatetransform.X = apu; // / zoomi);
 
@@ -412,6 +422,31 @@ namespace Liikkuvat
         {
             zoomaa();
         }
+
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key.Equals(Key.Enter)) {
+                kaupunki= syötelokero.Text;
+                syötelokero.Visibility = Visibility.Collapsed;
+                Syöeselite.Visibility = Visibility.Collapsed;
+                Console.Beep();
+                alusta(kaupunki);
+            }
+        }
+        /// <summary>
+        /// Korjataan ui elementtien sijaintia jos ikkunan koko muuttuu. Tällä hetkellä vain korkeussuunnassa.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Canvas.SetTop(slider1, 0);
+            Canvas.SetTop(canvas1,Canvas.GetBottom(slider1));
+            //canvas1.Width = this.Width;
+            //canvas1.Height = this.Height-slider1.Height;
+
+        }
+
 
 
     }
