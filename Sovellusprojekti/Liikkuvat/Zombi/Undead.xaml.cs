@@ -61,10 +61,10 @@ namespace Undying
         {
             if (getDistance(target) < 300)
             {
-            Vector direction = Vector.Subtract(target, position);
-            direction.Normalize();
-            direction = Vector.Multiply(stepMultiplier, direction);
-            position = Vector.Add(position, direction);
+                Vector direction = Vector.Subtract(target, position);
+                direction.Normalize();
+                direction = Vector.Multiply(stepMultiplier, direction);
+                position = Vector.Add(position, direction);
             }
             return position;
         }
