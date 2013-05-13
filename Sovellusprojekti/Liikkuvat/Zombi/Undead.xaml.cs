@@ -41,21 +41,38 @@ namespace Undying
             position = startPos;
         }
 
-
+        /// <summary>
+        /// Calculates Zombies distance from given Vector
+        /// </summary>
+        /// <param name="target">Vector to calculate distance from</param>
+        /// <returns>Distance from the given vector</returns>
         public double getDistance(Vector target)
         {
             return Math.Sqrt((Math.Pow(position.X - target.X, 2)) + (Math.Pow(position.Y - target.Y, 2)));
         }
 
+        /// <summary>
+        /// Calculates new position for Zombie and change Zombies position to it.
+        /// Zombie is moved towards the given vector.
+        /// </summary>
+        /// <param name="target">Vector for Zombie to shamble towards</param>
+        /// <returns>Zombies new position</returns>
         public Vector stepTowards(Vector target)
         {
+            if (getDistance(target) < 300)
+            {
             Vector direction = Vector.Subtract(target, position);
             direction.Normalize();
             direction = Vector.Multiply(stepMultiplier, direction);
             position = Vector.Add(position, direction);
+            }
             return position;
         }
         
+        /// <summary>
+        /// Returns Zombies stepMultiplier, that indicates how far Zombie is moved every tick
+        /// </summary>
+        /// <returns>Zombies current stepMultiplier</returns>
         public double getvectorinpituus(){
             return stepMultiplier;
         }
