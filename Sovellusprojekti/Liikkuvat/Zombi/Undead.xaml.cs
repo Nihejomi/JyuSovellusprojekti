@@ -17,6 +17,11 @@ namespace Undying
     /// <summary>
     /// Interaction logic for Undead.xaml
     /// </summary>
+    /// <remarks>
+    /// Originally created by Henrik Mikkonen
+    /// Completly refactored by Artur Kreisberg
+    /// v. 0.3.1.
+    /// </remarks>
     public partial class Zombi : UserControl, liikkuva
     {
         // Vectors concerning zombies position in the world
