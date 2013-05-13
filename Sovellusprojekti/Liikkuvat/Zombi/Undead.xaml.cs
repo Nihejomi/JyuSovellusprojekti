@@ -12,15 +12,30 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Zombi
+namespace Undying
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for Undead.xaml
     /// </summary>
-    public partial class UserControl1 : UserControl, liikkuva
+    public partial class Zombi : UserControl, liikkuva
     {
+        //Vectors concerning zombies position in the world
+        private Vector position;
+        private Vector facing;
+        private Vector destination;
+        
+        //states:(idle,wander,hunt,charge)(dead,crippled,damaged,fine)
+        //statistics:(tough,aware,aggro,danger)
+
+        public double getDistance(double x, double y)
+        {
+            return Math.Sqrt((Math.Pow(position.X - x, 2)) + (Math.Pow(position.Y - y, 2)));
+        }
+
+        //-----------------------ASD------------------------------//
+
         public double vektorinpituus;
-        public UserControl1()
+        public Zombi()
         {
             InitializeComponent();
             vektorinpituus = 1;

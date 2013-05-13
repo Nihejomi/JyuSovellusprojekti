@@ -1,11 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Liikkuvat", "Liikkuvat\Liikkuvat.csproj", "{A87DFE40-12DD-448C-8831-922F6B32FC1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfControlLibrary1", "WpfControlLibrary1\WpfControlLibrary1.csproj", "{7BEA7332-C24E-46F2-B40A-BBA490F39F7E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pelaaja", "WpfControlLibrary1\Pelaaja.csproj", "{7BEA7332-C24E-46F2-B40A-BBA490F39F7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zombi", "Zombi\Zombi.csproj", "{5F29658F-512B-4C0B-B267-57EE84A81490}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Undying", "Zombi\Undying.csproj", "{5F29658F-512B-4C0B-B267-57EE84A81490}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

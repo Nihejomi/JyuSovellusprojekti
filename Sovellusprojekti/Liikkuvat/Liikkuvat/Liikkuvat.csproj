@@ -58,6 +58,7 @@
     </ApplicationDefinition>
     <Compile Include="OpenStreetMapClient.cs" />
     <Compile Include="xmlrakenne.cs" />
+    <Compile Include="Zombit.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -97,13 +98,13 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WpfControlLibrary1\WpfControlLibrary1.csproj">
+    <ProjectReference Include="..\WpfControlLibrary1\Pelaaja.csproj">
       <Project>{7BEA7332-C24E-46F2-B40A-BBA490F39F7E}</Project>
-      <Name>WpfControlLibrary1</Name>
+      <Name>Pelaaja</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Zombi\Zombi.csproj">
+    <ProjectReference Include="..\Zombi\Undying.csproj">
       <Project>{5F29658F-512B-4C0B-B267-57EE84A81490}</Project>
-      <Name>Zombi</Name>
+      <Name>Undying</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

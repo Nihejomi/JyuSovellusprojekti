@@ -11,8 +11,11 @@ namespace Peli
 {
     /// <summary>
     /// Client for retrieving OpenStreetMap-data from Overpass Api servers.
+    /// Currently can be used to retrieve nodes, relations and ways from given bounding box
+    /// or around the center (defined by users of OpenStreetMap) of given city
+    /// TODO: any sort of exception handling, more functionality
     /// </summary>
-    /// <remarks> created by Artur Kreisberg, v. 0.2 </remarks>
+    /// <remarks> created by Artur Kreisberg, v. 0.3 </remarks>
     class OpenStreetMapClient
     {      
         CultureInfo culture = CultureInfo.CreateSpecificCulture("en-GB"); //Used to enforce correct format when converting double to string
@@ -37,7 +40,7 @@ namespace Peli
          */
 
         /// <summary>
-        /// Downloads OSM xml-file containing nodes inside given coordinates
+        /// Downloads OSM xml-file containing nodes, relations and ways inside given coordinates
         /// </summary>
         /// <param name="minlat">Minimum latitude</param>
         /// <param name="minlon">Minimum longitude</param>
@@ -46,7 +49,19 @@ namespace Peli
         /// <param name="filename">Name for the downloaded file</param>
         public void downloadOSMFile(double minlat, double minlon, double maxlat, double maxlon, string filename)
         {
-            string address = currentServer + queryMap(coordinatesToString(minlat, minlon, maxlat, maxlon)) + email;
+            string address = currentServer + queryMapBBox(coordinatesToString(minlat, minlon, maxlat, maxlon)) + email;
+            client.DownloadFile(address, filename);
+        }
+
+        /// <summary>
+        /// Downloads OSM xml-file containing nodes, relations and ways withing given distance from center of given city
+        /// </summary>
+        /// <param name="cityName">Name of the city, task is performed from the center of the city</param>
+        /// <param name="rangeMeters">Distance from center in meters</param>
+        /// <param name="filename">Name for the downloaded file</param>
+        public void downloadOSMFile(string cityName, int rangeMeters, string filename)
+        {
+            string address = currentServer + queryMapAround(cityName, rangeMeters) + email;
             client.DownloadFile(address, filename);
         }
 
@@ -68,9 +83,21 @@ namespace Peli
         /// </summary>
         /// <param name="coordinates">Bounding box of coordinates</param>
         /// <returns>Useable Overpass map query for given coordinates</returns>
-        private string queryMap(string coordinates)
+        private string queryMapBBox(string coordinates)
         {
-            return string.Format("(node({0});<;);out;", coordinates);
+            return string.Format("(node({0});<;>;);out;", coordinates);
+            //return string.Format("(node({0});<;);out;", coordinates); //use this for testing, it's faster given large query, put omits parts of buildings
+        }
+
+        /// <summary>
+        /// Forms a request to perform a map query relations, nodes and ways around given point
+        /// </summary>
+        /// <param name="rangeMeters">Distance from node in meters, query tries to capture all nodes, relations and ways within</param>
+        /// <param name="cityName">Name of the city, query is performed from a center node found in OSM-database</param>
+        /// <returns></returns>
+        private string queryMapAround(string cityName, int rangeMeters)
+        {         
+            return string.Format("(node[\"name\"=\"{0}\"][\"place\"=\"city\"];node(around:{1});<;>;);out;", cityName, rangeMeters);
         }
     }
 }

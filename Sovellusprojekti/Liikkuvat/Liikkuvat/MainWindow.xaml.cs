@@ -13,10 +13,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
 using System.Collections;
-using Zombi;
+using Undying;
 using Peli;
 
-using WpfControlLibrary1;
+using Pelaaja;
 
 namespace Liikkuvat
 {    
@@ -47,7 +47,7 @@ namespace Liikkuvat
            
 
             InitializeComponent();
-            UserControl1 z = new UserControl1();
+            Zombi z = new Zombi();
             
             canvas1.Children.Add(z);
             //z.Name = "testiZombi";
@@ -55,7 +55,8 @@ namespace Liikkuvat
             Canvas.SetLeft(z, 100);
             liikuta.Add(z);
            // piirraViiva(50, 50, 100, 100);
-            testi = new Peli.Peli(62.24, 25.73, 62.26, 25.75, 2000, 2000);//
+            testi = new Peli.Peli(62.23407, 25.73577, 62.24372, 25.76086, 2000, 2000);
+            //testi = new Peli.Peli(62.24, 25.73, 62.26, 25.75, 2000, 2000);//
            // testi= new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
           
            //rakennukset = testi.annaAlueRakennukset(62.2330, 25.733, 62.2335, 25.7335);
