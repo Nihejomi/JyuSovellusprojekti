@@ -47,7 +47,7 @@ namespace Liikkuvat
            
 
             InitializeComponent();
-            Zombi z = new Zombi();
+            Zombi z = new Zombi(new Vector(100,100));
             
             canvas1.Children.Add(z);
             //z.Name = "testiZombi";
@@ -340,10 +340,11 @@ namespace Liikkuvat
                 if (tarkistaetaisyys(zkorkeutta, zleveytta, korkeutta, leveytta, testi.getvectorinpituus()))
                 {
                     zombikulma = laskeKulma(leveytta - zleveytta, korkeutta - zkorkeutta);
-                    Canvas.SetLeft(testi as UIElement, testi.liikuta(zleveytta, zkorkeutta, zombikulma)[0]);
 
-
-                    Canvas.SetTop(testi as UIElement, testi.liikuta(zleveytta, zkorkeutta, zombikulma)[1]);
+                    Vector playerPos = new Vector(leveytta, korkeutta);
+                    Vector newPos = testi.stepTowards(playerPos);
+                    Canvas.SetLeft(testi as UIElement, newPos.X);
+                    Canvas.SetTop(testi as UIElement, newPos.Y);
                 }
                 //label2.Content = testi.liikuta(leveytta, korkeutta, pelaajakulma)[0] + ":" + pelaajakulma; 
             }

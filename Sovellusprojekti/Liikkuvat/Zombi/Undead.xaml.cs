@@ -19,7 +19,7 @@ namespace Undying
     /// </summary>
     public partial class Zombi : UserControl, liikkuva
     {
-        //Vectors concerning zombies position in the world
+        // Vectors concerning zombies position in the world
         private Vector position;
         private Vector facing;
         private Vector destination;
@@ -27,88 +27,37 @@ namespace Undying
         //states:(idle,wander,hunt,charge)(dead,crippled,damaged,fine)
         //statistics:(tough,aware,aggro,danger)
 
-        public double getDistance(double x, double y)
-        {
-            return Math.Sqrt((Math.Pow(position.X - x, 2)) + (Math.Pow(position.Y - y, 2)));
-        }
+        // stepVector represents minimum distance zombie moves per tick
+        public double stepMultiplier;
 
-        //-----------------------ASD------------------------------//
-
-        public double vektorinpituus;
-        public Zombi()
+        /// <summary>
+        /// Initializes new Zombie
+        /// </summary>
+        /// <param name="startPos">Starting position of walking cadaver</param>
+        public Zombi(Vector startPos)
         {
             InitializeComponent();
-            vektorinpituus = 1;
+            stepMultiplier = 0.5;
+            position = startPos;
+        }
 
-        }
-        public double getvectorinpituus(){
-            return vektorinpituus;
-        }
-        public double[] liikuta(double l, double k, double pelaajakulma)
+
+        public double getDistance(Vector target)
         {
+            return Math.Sqrt((Math.Pow(position.X - target.X, 2)) + (Math.Pow(position.Y - target.Y, 2)));
+        }
 
-            double[] palautus = new double[2];
-            //+x ja +y
-            if (pelaajakulma < Math.PI / 2)
-            {
-                double apux = (vektorinpituus * Math.Cos(pelaajakulma)); //+jakojaannosx;
-
-                //jakojaannosx = apux -  (int)Math.Round(apux);
-                palautus[0] = l + apux;
-                double apuy = (vektorinpituus * Math.Sin(pelaajakulma)); //+jakojaannosy;
-                //jakojaannosy = apuy - (int)Math.Round(apuy);
-                palautus[1] = k + apuy;
-            }
-            else
-            {
-
-                //-x ja +y
-                if (pelaajakulma < Math.PI)
-                {
-                    double apux = -(vektorinpituus * Math.Sin(pelaajakulma - Math.PI / 2));// +jakojaannosx;
-
-                    // jakojaannosx = apux - (int)Math.Round(apux);
-                    palautus[0] = l + apux;
-                    double apuy = (vektorinpituus * Math.Cos(pelaajakulma - Math.PI / 2));//+jakojaannosy);
-                    //jakojaannosy = apuy - (int)Math.Round(apuy);
-                    palautus[1] = k + apuy;
-
-                    //   palautus[0]=l;
-                    //  palautus[1]=k;
-                }
-                else
-                {
-                    //-x ja -y
-                    if (pelaajakulma < 3 * Math.PI / 2)
-                    {
-
-                        double apux = -(vektorinpituus * Math.Cos(pelaajakulma - Math.PI));// +jakojaannosx;
-
-                        //jakojaannosx = apux - (int)Math.Round(apux);
-                        palautus[0] = l + apux;
-                        double apuy = -(vektorinpituus * Math.Sin(pelaajakulma - Math.PI));// +jakojaannosy;
-                        //  jakojaannosy = apuy - (int)(int)Math.Round(apuy);
-                        palautus[1] = k + apuy;
-
-
-                    }
-                    //x ja -y
-                    else
-                    {
-
-                        double apux = (vektorinpituus * Math.Sin(pelaajakulma - 3 * Math.PI / 2));// + jakojaannosx;
-
-                        //jakojaannosx = apux - (int)Math.Round(apux);
-                        palautus[0] = l + apux;
-                        double apuy = -(vektorinpituus * Math.Cos(pelaajakulma - 3 * Math.PI / 2));// + jakojaannosy;
-                        //jakojaannosy = apuy - (int)(int)Math.Round(apuy);
-                        palautus[1] = k + apuy;
-                    }
-
-                }
-            }
-
-            return palautus;
+        public Vector stepTowards(Vector target)
+        {
+            Vector direction = Vector.Subtract(target, position);
+            direction.Normalize();
+            direction = Vector.Multiply(stepMultiplier, direction);
+            position = Vector.Add(position, direction);
+            return position;
+        }
+        
+        public double getvectorinpituus(){
+            return stepMultiplier;
         }
     }
 }

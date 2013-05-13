@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace Undying
 {
 
     public interface liikkuva
     {
-       double getvectorinpituus();
-         double[] liikuta(double x, double y, double kulma);
+        double getvectorinpituus();
+        Vector stepTowards(Vector target);
     }
 }
