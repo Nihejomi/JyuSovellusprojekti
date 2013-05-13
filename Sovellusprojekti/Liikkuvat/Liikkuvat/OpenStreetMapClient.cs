@@ -85,8 +85,8 @@ namespace Peli
         /// <returns>Useable Overpass map query for given coordinates</returns>
         private string queryMapBBox(string coordinates)
         {
-            return string.Format("(node({0});<;>;);out;", coordinates);
-            //return string.Format("(node({0});<;);out;", coordinates); //use this for testing, it's faster given large query, put omits parts of buildings
+            //return string.Format("(node({0});<;>;);out;", coordinates);
+            return string.Format("(node({0});<;);out;", coordinates); //use this for testing, it's faster given large query, put omits parts of buildings
         }
 
         /// <summary>
