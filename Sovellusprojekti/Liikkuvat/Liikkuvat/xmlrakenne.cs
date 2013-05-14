@@ -2,7 +2,7 @@
  *  
  *  XML-Parseri lukemaan xml-tiedostosta pelissä käytettävä karttadata
  *  Palauttaa kaiken karttadatan XMLData tyyppisenä oliona
- *  versio 0.03
+ *  versio 0.04 (lopullinen?)
  *  Joel Kivelä joaakive@student.jyu.fi
  */
 
@@ -106,23 +106,7 @@ namespace Peli
 
     } // endof XMLRakennus
 
-    // TODO: tietyypit 
-    // tasg K = highway, v = footway/cycleway 
-    //public class XMLTie
-    //{
-     //   ArrayList noderefs; // (double)
-     //   String Name; // tags k =name, v = <data>
 
-      //  double id; // tunniste
-        //ArrayList noderefs; // lista noodireferensseistä
-        //String Name;
-
-    //}
-
-
-
-    // TODO: vedet
-    // tasg K = highway, v = footway/cycleway 
     public class XMLVesi
     {
         ArrayList noderefs;
@@ -175,19 +159,139 @@ namespace Peli
         
     }
 
+
+    public class XMLTie
+    {
+        ArrayList noderefs;
+        double id;
+        int tyyppi;
+        String Name;
+
+
+        // konstruktori, ottaa nodetrefenssit parametrinä
+        public XMLTie(double id, ArrayList nodet, String name, int tyyppi)
+        {
+            this.id = id;
+            this.noderefs = new ArrayList(nodet);
+            this.Name = name;
+            this.tyyppi = tyyppi;
+        }
+
+        // palauttaa rakennuksessa olevien noodien lukumäärän
+        public double annaId()
+        {
+            return this.id;
+        }
+
+        public String annaNimi()
+        {
+            return this.Name;
+        }
+        public int annaTyyppi()
+        {
+            return this.tyyppi;
+        }
+
+        public void muutaNimi(String nimi)
+        {
+            this.Name = nimi;
+        }
+        public int annaNoodiLkm()
+        {
+            return this.noderefs.Count;
+        }
+
+        // palauttaa refenssilistasta i:n mukaisen nooditunnisteen
+        public double annaNoodiId(int i)
+        {
+            return (Double)this.noderefs[i];
+        }
+
+
+        // debuggaukseen
+        public void printtaa()
+        {
+            System.Console.WriteLine("tie muistissa:::  id: " + this.id + " nodeja: " + this.noderefs.Count + " nimi:" + this.Name);
+        }
+
+
+    }
+
+
+    public class XMLRuoho
+    {
+        ArrayList noderefs;
+        double id;
+        String Name;
+        int tyyppi;  // 0 = ruohikko, 1 = metsä, 2 = suo
+
+
+        // konstruktori, ottaa nodetrefenssit parametrinä
+        public XMLRuoho(double id, ArrayList nodet, String name, int tyyppi)
+        {
+            this.id = id;
+            this.tyyppi = tyyppi;
+            this.noderefs = new ArrayList(nodet);
+            this.Name = name;
+        }
+
+        // palauttaa rakennuksessa olevien noodien lukumäärän
+        public double annaId()
+        {
+            return this.id;
+        }
+
+        public String annaNimi()
+        {
+            return this.Name;
+        }
+
+
+        public void muutaNimi(String nimi)
+        {
+            this.Name = nimi;
+        }
+        public int annaNoodiLkm()
+        {
+            return this.noderefs.Count;
+        }
+        public int annaTyyppi()
+        {
+            return this.tyyppi;
+        }
+        // palauttaa refenssilistasta i:n mukaisen nooditunnisteen
+        public double annaNoodiId(int i)
+        {
+            return (Double)this.noderefs[i];
+        }
+
+
+        // debuggaukseen
+        public void printtaa()
+        {
+            System.Console.WriteLine("ruohoalue muistissa:::  id: " + this.id + " nodeja: " + this.noderefs.Count + " nimi:" + this.Name);
+        }
+
+
+    }
+
+
     // Varsinainen XML:lstä parsittu data
     public class XMLData
     {
         ArrayList Noodit;
         ArrayList Rakennukset;
         ArrayList Vedet;
-       // ArrayList Tiet;
+        ArrayList Tiet;
+        ArrayList Ruohot;
 
-        public XMLData(ArrayList Noodit, ArrayList Rakennukset, ArrayList Vedet)
+        public XMLData(ArrayList Noodit, ArrayList Rakennukset, ArrayList Vedet, ArrayList Tiet, ArrayList Ruohot)
         {
             this.Noodit = new ArrayList(Noodit);
             this.Rakennukset = new ArrayList(Rakennukset);
             this.Vedet = new ArrayList(Vedet);
+            this.Tiet = new ArrayList(Tiet);
+            this.Ruohot = new ArrayList(Ruohot);
         }
 
 
@@ -206,6 +310,19 @@ namespace Peli
             return Vedet.Count;
         }
 
+       
+
+        public int annaTieLkm()
+        {
+            return Tiet.Count;
+        }
+
+        public int annaRuohoLkm()
+        {
+            return Ruohot.Count;
+        }
+
+
         public XMLNoodi annaNoodi(int i)
         {
             return (XMLNoodi)Noodit[i];
@@ -219,7 +336,14 @@ namespace Peli
         {
             return (XMLVesi)Vedet[i];
         }
-
+        public XMLTie annaTie(int i)
+        {
+            return (XMLTie)Tiet[i];
+        }
+        public XMLRuoho annaRuoho(int i)
+        {
+            return (XMLRuoho)Ruohot[i];
+        }
 
     } // endof XMLData
 
@@ -236,6 +360,8 @@ namespace Peli
             ArrayList XmlNoodit = new ArrayList();
             ArrayList XmlRakennukset = new ArrayList();
             ArrayList XmlVedet = new ArrayList();
+            ArrayList XmlTiet = new ArrayList();
+            ArrayList XmlRuohot = new ArrayList();
 
             ArrayList reftemp = new ArrayList();
 
@@ -247,13 +373,11 @@ namespace Peli
 
 
             double tempId = 0;
-           // bool refluku = false;
             int muutettava =0;
             int muutettavaV = 0;
             bool auki = false;
             bool vauki = false;
             System.Console.WriteLine("aloitetaan xml-tiedoston " + filename + " parsiminen");
-
 
             while (reader.Read())
             {
@@ -265,13 +389,11 @@ namespace Peli
                         {
 
                             lukutyyppi = 1;
-                          //  System.Console.WriteLine("noodin tiedot alkaa");
                         }
 
                         if (reader.Name == "way")
                         {
                             lukutyyppi = 2;
-                           // System.Console.WriteLine("rakennuksen tiedot alkaa");
 
                         }
 
@@ -285,7 +407,6 @@ namespace Peli
                         {
 
                             int attributeCount = reader.AttributeCount;
-                           // System.Console.WriteLine(attributeCount);
                             // luettavien arvoje apumuistit
                             double tempLon = 0;
                             double tempLat = 0;
@@ -320,7 +441,6 @@ namespace Peli
                                     {
                                         XMLNoodi uusiNoodi = new XMLNoodi(tempId, tempLat, tempLon);
                                         XmlNoodit.Add(uusiNoodi);
-                                      // System.Console.WriteLine("noodi tallennettu");
                                         lukutyyppi = 0;
                                     }
                                 }
@@ -340,25 +460,46 @@ namespace Peli
                                         reftemp.Add(tempRef); // lisätään refenssi referenssien temp-listaan
                                         tempRef = 0;
                                     }
-                                    
+
+                                    // tie
+
+                                    if (reader.Name == "k" && reader.Value.ToString() == "highway")
+                                    {
+                                        i++;
+                                        reader.MoveToAttribute(i);
+
+                                        // näitä ehtoja vähentämällä saa laskettua tieolioiden kuormaa 
+                                        if ( (reader.Name == "v" && reader.Value.ToString() == "footway") ||  (reader.Name == "v" && reader.Value.ToString() == "motorway") ||
+                                            (reader.Name == "v" && reader.Value.ToString() == "cycleway") ||  (reader.Name == "v" && reader.Value.ToString() == "residential") ||
+                                            (reader.Name == "v" && reader.Value.ToString() == "secondary" || reader.Name == "v" && reader.Value.ToString() == "tertiary" || reader.Name == "v" && reader.Value.ToString() == "pedestrian"))
+                                        {
+                                            int tyyppi = 0;
+                                            if (reader.Value.ToString() == "motorway" || reader.Value.ToString() == "residential" || reader.Value.ToString() == "secondary" || reader.Value.ToString() == "tertiary")
+                                            {
+                                                tyyppi = 1;
+                                            }
+                                            /*
+                                            if (reader.Value.ToString() == "footway" || reader.Value.ToString() == "cycleway")
+                                            {
+                                                tyyppi = 0;
+                                            }
+                                            */
+                                            String nimi = "nimeton";
+
+                                            XMLTie uusi = new XMLTie(tempId, reftemp, nimi, tyyppi);
+                                            XmlTiet.Add(uusi);
+                                            tempId = 0;
+                                            auki = false;
+                                            vauki = false;
+                                        }
+
+                                    }
+
                                             // luettu elementti oli rakennus, luodaan siis uusi rakennusolio ja tehdään tallennus
                                     if (reader.Name == "k" && reader.Value.ToString() == "building") 
                                     {
 
-                                        String nimi = "nimeton";
-                                      //  System.Console.WriteLine("se oli talo.. tallennetaan listaan");
-                                       // System.Console.WriteLine("id: " + tempId + " refs: " + reftemp.Count);
-
-                                      //  reader.Read();
-                                        //i =0;
-                                        
-                                           // System.Console.WriteLine(reader.Name + " " + reader.Value.ToString());
-                                                                                  
-                                               // reader.MoveToAttribute(1);
-                                               
-                                                //n//imi = reader.Value.ToString();
-                                                //System.Console.WriteLine("löytyi nimi : " + reader.Value.ToString());
-                                                                               
+                                        String nimi = "nimeton";                                                                                                          
                                         XMLRakennus uusi = new XMLRakennus(tempId, reftemp, nimi);                                       
                                         XmlRakennukset.Add(uusi);
                                         tempId = 0;
@@ -367,51 +508,58 @@ namespace Peli
                                         vauki = false;
                                     }
 
-
-                                  
+                                    // rakennukselle nimi                                  
                                    if (reader.Name == "k" && reader.Value.ToString() == "name" && auki && !vauki)
                                    {
-                                       reader.MoveToAttribute(i + 1);
-                                       //System.Console.WriteLine(reader.Name + " " + reader.Value.ToString());
-                                       //System.Console.WriteLine("muutettavan talon id" + muutettava);
+                                       reader.MoveToAttribute(i + 1);                                  
                                        XMLRakennus temp = (XMLRakennus)XmlRakennukset[muutettava];
                                        temp.muutaNimi(reader.Value.ToString());
                                        auki = false;
 
                                    }
-                                  
+
+                                   if ((reader.Name == "v" && reader.Value.ToString() == "meadow") || (reader.Name == "v" && reader.Value.ToString() == "grass")
+                                       || (reader.Name == "v" && reader.Value.ToString() == "forest") || (reader.Name == "v" && reader.Value.ToString() == "park" )
+                                       || (reader.Name == "v" && reader.Value.ToString() == "wood") || (reader.Name == "v" && reader.Value.ToString() == "wetland"))  // tallennetaan ruohoalue talon tapaisesti
+                                   {
+
+                                       String nimi = "nimeton";
 
 
-                                    //TODO: vesi,    nimi ennen päätunnistetta 
+                                       int tyyppi=0;
+
+                                       if (reader.Value.ToString() == "meadow" || reader.Value.ToString() == "grass" || reader.Value.ToString() == "park")
+                                           tyyppi = 0;
+                                       if (reader.Value.ToString() == "forest" || reader.Value.ToString() == "wood")
+                                           tyyppi = 1;
+
+                                       if (reader.Value.ToString() == "wetland" || reader.Value.ToString() == "swamp")
+                                           tyyppi = 2;
+
+                                       XMLRuoho uusi = new XMLRuoho(tempId, reftemp, nimi, tyyppi);
+                                       XmlRuohot.Add(uusi);
+                                       tempId = 0;
+
+                                       //muutettavaV = XmlVedet.Count - 1;
+                                       auki = false;
+                                       vauki = false;
+                                   }         
+
+                                    //vesi,    nimi ennen päätunnistetta 
                                     if (reader.Name == "v" && reader.Value.ToString() == "water")  // tallennetaan järvi talon tapaisesti
                                     {
 
-                                        String nimi = "nimeton";
-                                        //System.Console.WriteLine("se oli talo.. tallennetaan listaan");
-                                        //System.Console.WriteLine("id: " + tempId + " refs: " + reftemp.Count);
-
-                                        //  reader.Read();
-                                        //i =0;
-
-                                        // System.Console.WriteLine(reader.Name + " " + reader.Value.ToString());
-
-                                        // reader.MoveToAttribute(1);
-
-                                        //n//imi = reader.Value.ToString();
-                                        //System.Console.WriteLine("löytyi nimi : " + reader.Value.ToString());
-
+                                        String nimi = "nimeton";                                    
                                         XMLVesi uusi = new XMLVesi(tempId, reftemp, nimi);
                                         XmlVedet.Add(uusi);
                                         tempId = 0;
                                         muutettavaV = XmlVedet.Count-1;
                                         auki = false;
                                         vauki = true;
-                                    }
-                                   
+                                    }                                 
 
                                 }
                             }
-
 
                         }
 
@@ -420,13 +568,11 @@ namespace Peli
 
                     case XmlNodeType.EndElement: // XML-elementin loppu
                         if (reader.Name == "node")
-                        {
-                            //System.Console.WriteLine("noodin tiedot loppui");
+                        {                      
                             tempId = 0;
                         }
                         if (reader.Name == "way")
                         {
-                           // System.Console.WriteLine("rakennuksen tiedot loppui");
                             reftemp.Clear();
                             tempId = 0;
                             vauki = false;
@@ -441,46 +587,17 @@ namespace Peli
 
             }
 
-
-            XMLData valmisData = new XMLData(XmlNoodit, XmlRakennukset, XmlVedet);
+            XMLData valmisData = new XMLData(XmlNoodit, XmlRakennukset, XmlVedet, XmlTiet, XmlRuohot);
             System.Console.WriteLine("Parsiminen valmis");
             System.Console.WriteLine("noodeja tuli: " + valmisData.annaNoodiLkm());
             System.Console.WriteLine("rakennuksia : " + valmisData.annaRakennusLkm());
             System.Console.WriteLine("vesistöjä : " + valmisData.annaVesiLkm());
+            System.Console.WriteLine("teitä : " + valmisData.annaTieLkm());
+            System.Console.WriteLine("ruohoja : " + valmisData.annaRuohoLkm());
             return valmisData;
 
         }
-/*
-        // testi/esimerkki -ohjelma
- * 
-        static void Main(string[] args)
-        {
-            // luetaan xml tiedostosta XMLData tyyppiseen luokkaan materiaalit
 
-            XMLData Data = XMLLukija.LueXML("jkl.osm");
-            
-            System.Console.WriteLine("Parsitaan XML...");
-
-            // tarkistetaan mitä jäi muistiin
-            System.Console.WriteLine("noodeja tuli: " + Data.annaNoodiLkm());
-
-            for (int indexi = 0; indexi < Data.annaNoodiLkm(); indexi++)
-            {
-                XMLNoodi uusio = (XMLNoodi)Data.annaNoodi(indexi);
-                //uusio.printtaa();
-            }
-            System.Console.WriteLine("rakennuksia : " + Data.annaRakennusLkm());
-            for (int indexi = 0; indexi < Data.annaRakennusLkm(); indexi++)
-            {
-                XMLRakennus uusio = (XMLRakennus)Data.annaRakennus(indexi);
-                uusio.printtaa();
-            }
-
-            System.Console.ReadLine();
-
-        }
- * 
- * */
     }
 
 }

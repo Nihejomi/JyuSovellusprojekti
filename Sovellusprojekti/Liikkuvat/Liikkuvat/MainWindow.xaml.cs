@@ -63,11 +63,13 @@ namespace Liikkuvat
             Canvas.SetLeft(z, 100);
             liikuta.Add(z);
             // piirraViiva(50, 50, 100, 100);
-            testi = new Peli.Peli(62.23407, 25.73577, 62.24372, 25.76086, 2000, 2000);
+            testi = new Peli.Peli(62.23407, 25.73577, 62.24372, 25.76086, 2000, 2000, true);  // lisäsin viimeisen parametrin teiden poistoon latauksen nopeuttamiseksi (true = ei teitä, false = tiet mukaan)
             //testi = new Peli.Peli(62.24, 25.73, 62.26, 25.75, 2000, 2000);//
             // testi= new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
 
             //rakennukset = testi.annaAlueRakennukset(62.2330, 25.733, 62.2335, 25.7335);
+            piirraRuohot();
+            piirraTiet();
             piirraRakennukset();
             piirraVesistot();
             dispatcherTimer.Start();
@@ -142,6 +144,91 @@ namespace Liikkuvat
                 }*/
             }
         }
+
+        private void piirraRuohot()
+        {
+            SolidColorBrush vihrea = new SolidColorBrush();
+            vihrea.Color = Colors.ForestGreen;
+            SolidColorBrush tummavihrea = new SolidColorBrush();
+            tummavihrea.Color = Colors.DarkGreen;
+            SolidColorBrush suovihrea = new SolidColorBrush();
+            suovihrea.Color = Colors.DarkOliveGreen;
+
+
+            for (int f = 0; f < testi.annaRuohoLkm() - 1; f++)
+            {
+                Peli.Ruoho kohde = testi.annaRuoho(f);
+
+                PointCollection pisteet = new PointCollection();
+
+                for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
+                {
+                    pisteet.Add(new Point(kohde.annaVektori(i).x, kohde.annaVektori(i).y));
+                    //piirraSeina(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+                    //  piirraViiva(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+                }
+
+                Polygon ruoho = new Polygon();
+                ruoho.Points = pisteet;
+                if (kohde.annaTyyppi() == 0)
+                    ruoho.Fill = vihrea;
+                if (kohde.annaTyyppi() == 1)
+                    ruoho.Fill = tummavihrea;
+                if (kohde.annaTyyppi() == 2)
+                    ruoho.Fill = suovihrea;
+
+
+
+                canvas1.Children.Add(ruoho);
+
+
+                /*  for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
+                  {
+                    
+                      piirraViiva(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+                  }*/
+            }
+        }
+
+        private void piirraTiet()
+        {
+            SolidColorBrush harmaa = new SolidColorBrush();
+            harmaa.Color = Colors.DarkGray;
+            for (int f = 0; f < testi.annaTieLkm() - 1; f++)
+            {
+                Peli.Tie kohde = testi.annaTie(f);
+
+                PointCollection pisteet = new PointCollection();
+
+                for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
+                {
+                    //  
+                    //piirraSeina(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+                  // if(kohde.annaTyyppi() == 0)
+                piirraViiva(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+                 //  if(kohde.annaTyyppi() == 1)
+                   //     pisteet.Add(new Point(kohde.annaVektori(i).x, kohde.annaVektori(i).y));
+                }
+                /*
+                if (kohde.annaTyyppi() == 1)
+                {
+                    System.Console.WriteLine("tiepolygoni");
+                    Polygon tie = new Polygon();
+                    tie.Points = pisteet;
+                    tie.Fill = harmaa;
+                    canvas1.Children.Add(tie);
+              }
+
+                */
+                /*  for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
+                  {
+                    
+                      piirraViiva(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+                  }*/
+            }
+        }
+ 
+
         /// <summary>
         /// tämä ei tällä hetkellä piirrä seinää, mutta tekee sen törmäystarkistusta varten.
         /// </summary>
@@ -380,9 +467,19 @@ namespace Liikkuvat
 
         private void Window_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-     
-            kohdex = e.GetPosition(canvas1).X;
-            kohdey = e.GetPosition(canvas1).Y;
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                kohdex = e.GetPosition(canvas1).X;
+                kohdey = e.GetPosition(canvas1).Y;
+            }
+
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                Ammu(50, e.GetPosition(canvas1).X, e.GetPosition(canvas1).Y);
+
+            }
+
+
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -447,6 +544,75 @@ namespace Liikkuvat
 
         }
 
+        Ellipse CreateEllipse(double width, double height, double desiredCenterX, double desiredCenterY)
+        {
+
+            SolidColorBrush osumavari = new SolidColorBrush();
+            osumavari.Color = Colors.Red;
+            Ellipse ellipse = new Ellipse { Width = width, Height = height };
+            double left = desiredCenterX - (width / 2);
+            double top = desiredCenterY - (height / 2);
+            ellipse.Fill = osumavari;
+            ellipse.Margin = new Thickness(left, top, 0, 0);
+            return ellipse;
+        }
+
+        private void Ammu(double force, double kohdex, double kohdey)
+        {
+
+            // mistä luoti lähtee liikkeelle
+            double alkukorkeutta = Canvas.GetTop((UIElement)this.pelaaja1) + this.pelaaja1.ActualWidth/2;
+            double alkuleveytta = Canvas.GetLeft((UIElement)this.pelaaja1) + this.pelaaja1.ActualHeight/2;
+            double korkeutta = alkukorkeutta;
+            double leveytta = alkuleveytta;
+            
+            // vielä liikkumassa
+            bool moving = true;
+            int movement=0;
+
+            // luodin suuntakulma
+            double ammuskulma = laskeKulma(kohdex - leveytta, kohdey - korkeutta);
+
+            // luoti liikkuu pelaaja-oliona.. 
+
+            pelaaja luoti = new pelaaja();
+
+            // kun luoti vielä liikkuu
+           while(moving)
+            {
+              movement ++;  // liikkuu forcen verran eteenpäin
+               if (movement > force)
+                   break;
+                // paikka muuttuu näin
+               leveytta = luoti.liikuta(leveytta, korkeutta, ammuskulma)[0];
+               korkeutta = luoti.liikuta(leveytta, korkeutta, ammuskulma)[1];
+
+
+               //System.Console.WriteLine("luoti x:" + leveytta + " luoti y:" + korkeutta);
+                 // jos osuu seinään, niin piiretään kohdalle punainen pallo
+               if (tarkistaSeinat(alkuleveytta, alkukorkeutta, leveytta, korkeutta) == true)
+               {
+                   Ellipse pallo = CreateEllipse(10, 10, leveytta, korkeutta);  
+                   canvas1.Children.Add(pallo);
+
+                   System.Console.WriteLine("luoti osui seinään");
+                   break;
+               }
+               // piiretään luodin kulkulinja
+               Line viiva = new Line();
+               viiva.Visibility = Visibility.Visible;
+               viiva.StrokeThickness = 1;
+               viiva.X1 = alkuleveytta;
+               viiva.Y1 = alkukorkeutta;
+               viiva.X2 = leveytta;
+               viiva.Y2 = korkeutta;
+               viiva.Stroke = System.Windows.Media.Brushes.Black;
+               canvas1.Children.Add(viiva);
+               
+            }
+          
+
+        }
 
 
     }

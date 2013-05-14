@@ -1,5 +1,5 @@
 ﻿/*  KMKK-sovellusprojekti: Avointa Dataa hyödyntävä Zombie-selviytymispeli 
- *  versio 0.05
+ *  versio 0.06
  *  Luokat xml-datasta luetuille objekteilla pelimaailmaan
  *  
  *  Lisäsin metodit Maailmakordinaattien maksimien palautukselle Peli-oliosta.
@@ -120,30 +120,92 @@ namespace Peli
 
 
     public class Tie{
-       // String nimi;
-       // ArrayList vektorit;
-       // int tyyppi;
+       String nimi;
+       ArrayList vektorit;
+       int tyyppi;
+
+         public Tie(String nimi, ArrayList vektorit, int tyyppi)
+        {
+            this.nimi = nimi;
+            this.vektorit = new ArrayList(vektorit);
+            this.tyyppi = tyyppi;
+        }
+         public int annaTyyppi()
+         {
+             return this.tyyppi;
+         }
+         public bool tarkistaPiste(Vektori vektori)
+         {
+             return false;
+         }
+
+         public void TulostaKonsoliin()
+         {
+             System.Console.WriteLine("Tien nimi: " + this.nimi + " vektorit: ");
+
+             for (int i = 0; i < this.vektorit.Count; i++)
+             {
+                 Vektori luettuvektori = (Vektori)this.vektorit[i];
+                 System.Console.WriteLine(i + " X: " + luettuvektori.getX() + " Y:" + luettuvektori.getY());
+             }
+         }
+
+         public Vektori annaVektori(int i)
+         {
+             Vektori luettuvektori = (Vektori)this.vektorit[i];
+             return luettuvektori;
+         }
+         public int annaVektoriLkm()
+         {
+             return this.vektorit.Count;
+         }
+
     }
 
+    public class Ruoho
+    {
+        String nimi;
+        ArrayList vektorit;
+        int tyyppi;  // 0 = ruohikko, 1 = metsä, 2 = suo
 
-    public class Pelaaja{
-     //   Vektori paikka;
-     //   Vektori liike;
-        
-     //   String nimi;
-    //    int hp;
-    }
+        public Ruoho(String nimi, ArrayList vektorit, int tyyppi)
+        {
+            this.nimi = nimi;
+            this.vektorit = new ArrayList(vektorit);
+            this.tyyppi = tyyppi;
+        }
 
-    public class Zombie{
-     //   Vektori paikka;
-     //   Vektori liike;
+        public int annaTyyppi()
+        {
+            return this.tyyppi;
+        }
 
-     //   int tila; // esim näkeekö pelaajan vai ei
+        public bool tarkistaPiste(Vektori vektori)
+        {
+            return false;
+        }
 
-       // public void scan();
-        //public void move();
-        // public bool tarkistaPiste(Vektori vektori);
-        
+        public void TulostaKonsoliin()
+        {
+            System.Console.WriteLine("Ruohon nimi: " + this.nimi + " vektorit: ");
+
+            for (int i = 0; i < this.vektorit.Count; i++)
+            {
+                Vektori luettuvektori = (Vektori)this.vektorit[i];
+                System.Console.WriteLine(i + " X: " + luettuvektori.getX() + " Y:" + luettuvektori.getY());
+            }
+        }
+
+        public Vektori annaVektori(int i)
+        {
+            Vektori luettuvektori = (Vektori)this.vektorit[i];
+            return luettuvektori;
+        }
+        public int annaVektoriLkm()
+        {
+            return this.vektorit.Count;
+        }
+
     }
 
 
@@ -158,6 +220,8 @@ namespace Peli
    
         ArrayList Rakennukset;
         ArrayList Vedet;
+        ArrayList Tiet;
+        ArrayList Ruohot;
 
          //ArrayList Tiet;
 
@@ -190,7 +254,7 @@ namespace Peli
 
 
         // Valmis osa: Siirtää rakennusten datan pelisysteemille nopeasti saataville -joel
-        public void LataaData(double minlat, double minlon, double maxlat, double maxlon, int resox, int resoy, XMLData luettudata)
+        public void LataaData(double minlat, double minlon, double maxlat, double maxlon, int resox, int resoy, XMLData luettudata, bool testaus)
         {
 
             this.xreso = resox;
@@ -200,6 +264,7 @@ namespace Peli
             offsety = -minlat;
             scalex = (1 / (maxlon-minlon)) * resox;
             scaley = (1 / (maxlat-minlat)) * resoy;
+
 
 
             System.Console.WriteLine("XML->Peli: Muunnetaan tiedot pelin sisälle...: rakennuksia yhteensä " + luettudata.annaRakennusLkm() );
@@ -274,8 +339,95 @@ namespace Peli
                     Vedet.Add(uusivesi);
                 }
             }
+            if (testaus == false)
+            {
+                System.Console.WriteLine("XML->Peli: Muunnetaan tiedot pelin sisälle..: teitä yhteensä " + luettudata.annaTieLkm());
+                for (int i = 0; i < luettudata.annaTieLkm(); i++)
+                {
+                    XMLTie temptie = (luettudata.annaTie(i));
+                    int tyyppi = 0;
+                    ArrayList tempvektorit = new ArrayList();
+                    for (int k = 0; k < temptie.annaNoodiLkm(); k++)
+                    {
+                        // etsitään rakennuksen noodirefensseille vastaavuudet noodikokoelmasta 
+                        double haettava = temptie.annaNoodiId(k);
 
+                        bool find = false;
+                        int l = 0;
+                        while (!find)
+                        {
 
+                            XMLNoodi tempnoodi = luettudata.annaNoodi(l);
+
+                            if (tempnoodi.getId() == haettava)
+                            {
+                                // tallennetaan rakennusten luokkaan tällaisella kaavalla, TODO: oikeanlainen muunnos jotta saadaan järkevät koordinaatit käyttöön
+                                Vektori tempvektori = new Vektori((tempnoodi.getLon() + this.offsetx) * this.scalex, resoy - ((tempnoodi.getLat() + this.offsety) * this.scaley));
+                                tempvektorit.Add(tempvektori);
+
+                                find = true;
+                            }
+                            l++;
+                            if (l >= luettudata.annaNoodiLkm())
+                            {
+                                break;
+                            }
+
+                        }
+                    }
+
+                    if (tempvektorit.Count != 0)
+                    {
+                        tyyppi = temptie.annaTyyppi();
+                        Tie uusitie = new Tie("tie", tempvektorit, tyyppi);
+                        Tiet.Add(uusitie);
+                    }
+                }
+            }
+            System.Console.WriteLine("XML->Peli: Muunnetaan tiedot pelin sisälle..: ruohoalueita yhteensä " + luettudata.annaRuohoLkm());
+            for (int i = 0; i < luettudata.annaRuohoLkm(); i++)
+            {
+                XMLRuoho tempruoho = (luettudata.annaRuoho(i));
+                int tyyppi = tempruoho.annaTyyppi();
+                ArrayList tempvektorit = new ArrayList();
+                for (int k = 0; k < tempruoho.annaNoodiLkm(); k++)
+                {
+                    // etsitään rakennuksen noodirefensseille vastaavuudet noodikokoelmasta 
+                    double haettava = tempruoho.annaNoodiId(k);
+                    
+                    bool find = false;
+                    int l = 0;
+                    while (!find)
+                    {
+
+                        XMLNoodi tempnoodi = luettudata.annaNoodi(l);
+
+                        if (tempnoodi.getId() == haettava)
+                        {
+                   
+                            // tallennetaan rakennusten luokkaan tällaisella kaavalla, TODO: oikeanlainen muunnos jotta saadaan järkevät koordinaatit käyttöön
+                            Vektori tempvektori = new Vektori((tempnoodi.getLon() + this.offsetx) * this.scalex, resoy - ((tempnoodi.getLat() + this.offsety) * this.scaley));
+                            tempvektorit.Add(tempvektori);
+
+                            find = true;
+                        }
+                        l++;
+                        if (l > luettudata.annaNoodiLkm() -1)
+                        {
+                   
+                            break;
+                        }
+
+                    }
+                }
+
+                if (tempvektorit.Count != 0)
+                {
+                   
+                    Ruoho uusiruoho = new Ruoho("ruoho", tempvektorit, tyyppi);
+                    Ruohot.Add(uusiruoho);
+                }
+            }
            
         }
         public int annaResoX()
@@ -290,6 +442,14 @@ namespace Peli
         public int annaRakennusLkm()
         {
             return this.Rakennukset.Count;
+        }
+        public int annaTieLkm()
+        {
+            return this.Tiet.Count;
+        }
+        public int annaRuohoLkm()
+        {
+            return this.Ruohot.Count;
         }
         public int annaVesiLkm()
         {
@@ -307,6 +467,16 @@ namespace Peli
         {
             Vesi luettuvesi = (Vesi)Vedet[i];
             return luettuvesi;
+        }
+        public Tie annaTie(int i)
+        {
+            Tie luettutie = (Tie)Tiet[i];
+            return luettutie;
+        }
+        public Ruoho annaRuoho(int i)
+        {
+            Ruoho luetturuoho = (Ruoho)Ruohot[i];
+            return luetturuoho;
         }
 
         /// <summary>
@@ -371,7 +541,69 @@ namespace Peli
             return palautus;
         }
 
-    
+        /// <summary>
+        /// palauttaa listan parametrien rajaaman alueen tie-olioista
+        /// </summary>
+        /// <param name="minX"></param>
+        /// <param name="minY"></param>
+        /// <param name="maxX"></param>
+        /// <param name="maxY"></param>
+        /// <returns></returns>
+        public ArrayList annaAlueTiet(double minX, double minY, double maxX, double maxY)
+        {
+            System.Console.WriteLine("ladataan tiet alueelta " + minX + "," + minY + " - " + maxX + "," + maxY + "..");
+            ArrayList palautus = new ArrayList();
+
+            for (int i = 0; i < Tiet.Count; i++)
+            {
+                Tie tsekattava = (Tie)Tiet[i];
+                int k = 0;
+                while (k < tsekattava.annaVektoriLkm())
+                {
+                    Vektori temp = (Vektori)tsekattava.annaVektori(k);
+                    if (temp.getX() > minX && temp.getX() < maxX && temp.getY() > minY && temp.getY() < maxY)
+                    {
+                        palautus.Add(tsekattava);
+                        break;
+                    }
+                    k++;
+                }
+            }
+            return palautus;
+        }
+
+
+        /// <summary>
+        /// palauttaa listan parametrien rajaaman alueen ruoho-olioista
+        /// </summary>
+        /// <param name="minX"></param>
+        /// <param name="minY"></param>
+        /// <param name="maxX"></param>
+        /// <param name="maxY"></param>
+        /// <returns></returns>
+        public ArrayList annaAlueRuohot(double minX, double minY, double maxX, double maxY)
+        {
+            System.Console.WriteLine("ladataan ruohot alueelta " + minX + "," + minY + " - " + maxX + "," + maxY + "..");
+            ArrayList palautus = new ArrayList();
+
+            for (int i = 0; i < Ruohot.Count; i++)
+            {
+                Ruoho tsekattava = (Ruoho)Ruohot[i];
+                int k = 0;
+                while (k < tsekattava.annaVektoriLkm())
+                {
+                    Vektori temp = (Vektori)tsekattava.annaVektori(k);
+                    if (temp.getX() > minX && temp.getX() < maxX && temp.getY() > minY && temp.getY() < maxY)
+                    {
+                        palautus.Add(tsekattava);
+                        break;
+                    }
+                    k++;
+                }
+            }
+            return palautus;
+        }
+
         /// <summary>
         /// luo pelioliokokoelman kordinaattien perusteella netistä apin avulla
         /// </summary>
@@ -381,22 +613,28 @@ namespace Peli
         /// <param name="maxlon"></param>
         /// <param name="resox">luotavan maailman kordinaattien maksimi x</param>
         /// <param name="resoy">luotavan maailman kordinaattien maksimi y</param>
-        public Peli(double minlat, double minlon, double maxlat, double maxlon, int resox, int resoy)
+        /// <param name="testaus"> onko testaus vai ei (jättää tiet lataamatta) </param>
+        public Peli(double minlat, double minlon, double maxlat, double maxlon, int resox, int resoy, bool testaus)
         {
             System.Console.WriteLine("ladataan xml openstreetmapin apista...");
-            OpenStreetMapClient lataaja = new OpenStreetMapClient();
-          lataaja.downloadOSMFile(minlat, minlon, maxlat, maxlon, "temp.osm");
+          OpenStreetMapClient lataaja = new OpenStreetMapClient();
+         lataaja.downloadOSMFile(minlat, minlon, maxlat, maxlon, "temp.osm");
           //lataaja.downloadMapPic(minlat + (maxlat - minlat)/2, minlon + (maxlon - minlon)/2, "testi.png");
 
                XMLData luettudata = XMLLukija.LueXML("temp.osm");
                 
                 Rakennukset = new ArrayList();
                 Vedet = new ArrayList();
+                Tiet = new ArrayList();
+                Ruohot = new ArrayList();
 
-                LataaData(minlat, minlon, maxlat, maxlon, resox, resoy, luettudata);
+                LataaData(minlat, minlon, maxlat, maxlon, resox, resoy, luettudata, testaus);
                 System.Console.WriteLine("Koko Data ladattu sisälle.");
                       
         }
+
+
+
         /// <summary>
         /// luo pelioliokokoelman kordinaattien perusteella xml tiedostosta
         /// </summary>
@@ -407,54 +645,24 @@ namespace Peli
         /// <param name="resox">luotavan maailman kordinaattien maksimi x</param>
         /// <param name="resoy">luotavan maailman kordinaattien maksimi y</param>
         /// <param name="filename">xml tiedoston nimi, ajettavan exen hakemistossa</param>
+        /// <param name="testaus"> onko testaus vai ei (jättää tiet lataamatta) </param>
         
-        public Peli(double minlat, double minlon, double maxlat, double maxlon, int resox, int resoy, string filename)
+        public Peli(double minlat, double minlon, double maxlat, double maxlon, int resox, int resoy, string filename, bool testaus)
         {
             
             XMLData luettudata = XMLLukija.LueXML(filename);
 
             Rakennukset = new ArrayList();
             Vedet = new ArrayList();
+            Tiet = new ArrayList();
+            Ruohot = new ArrayList();
 
-            LataaData(minlat, minlon, maxlat, maxlon, resox, resoy, luettudata);
+            LataaData(minlat, minlon, maxlat, maxlon, resox, resoy, luettudata, testaus);
            System.Console.WriteLine("Koko Data ladattu sisälle.");
           
         }
 
-
-        // keskeisimmät pelilogiikan metodit, joita kutsutaan jollain timerillä luupissa, nämä voisi myös kirjoittaa tähän tiedostoon, vai (?) -joel
-        public void update() { }
-        public void scan() { }
-        public void move() { }
-
-
-        // testiohjelma: ilman viimeistä paramaetriä (tiedostoa), latautuu jyväskylän keskustan alue. tiedosto mukana..
-        /*
-        static void Main(string[] args)
-        {
-                    // esimerkiksi jkl:n: keskustan alue, resoluutiolle 1000x1000. ilman viimeistä parametriä lataa saman alueen suoraan api:sta 
-           Peli testipeli = new Peli(62.23339, 25.71007, 62.25034, 25.75491, 1000, 1000, "keskusta.osm");
-           // ladataan vain alueella 0-300, 0-300 olevat kamat
-           ArrayList talot = testipeli.annaAlueRakennukset(0, 0, 300, 300);
-           ArrayList vedet = testipeli.annaAlueVedet(0, 0, 300, 300);
-           // ja tulostellaan konsoliin 
-           System.Console.WriteLine("alueella " + talot.Count + " rakennusta");
-           for (int i = 0; i < talot.Count; i++)
-           {
-               Rakennus yksi = (Rakennus)talot[i];
-            yksi.TulostaKonsoliin();
-           }
-           System.Console.WriteLine("alueella " + vedet.Count + " vettä");
-           for (int i = 0; i < vedet.Count; i++)
-           {
-               Vesi yksi = (Vesi)vedet[i];
-               yksi.TulostaKonsoliin();
-           }
-
-           System.Console.ReadLine();
-
-        }  
-        */
+       
     }
 
 }
