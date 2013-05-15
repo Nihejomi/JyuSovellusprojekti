@@ -23,12 +23,13 @@ namespace Undying
         private Vector position;
         private Vector facing;
         private Vector destination;
-        
-        //states:(idle,wander,hunt,charge)(dead,crippled,damaged,fine)
-        //statistics:(tough,aware,aggro,danger)
+
+        //Classes that govern Zombies behaviour, reactions and condition
+        private ZombiBehaviour behaviour;
+        private ZombiStatus status;
 
         // stepVector represents minimum distance zombie moves per tick
-        public double stepMultiplier;
+        private double stepMultiplier;
 
         /// <summary>
         /// Initializes new Zombie
@@ -39,6 +40,30 @@ namespace Undying
             InitializeComponent();
             stepMultiplier = 0.5;
             position = startPos;
+            behaviour = new ZombiBehaviour();
+            status = new ZombiStatus();
+        }
+
+
+        /* 
+         * valtiaan sattumanvarainen piste, jota kohti Zombi pyrkii
+         * kun pääse tietylle etäisyydelle valitaan uusipiste
+         * seinät pyrittään kiertämään menemällä seinien suuntaisesti (pathfinding on muun ajan murhe :D:D)
+         * jos pelaaja tietyn etäisyyden päässä, aletaan jahtaamaan
+         * käy kiinni, jos pääsee lähelle
+         * jos muut zombit huomaavat jahtaavan, liittyvät mukaan
+         */
+
+        /// <summary>
+        /// Makes Zombie do stuff and react to players presence.
+        /// </summary>
+        /// <param name="playerPos">Players position vector</param>
+        /// <returns>Zombies new postions in the world</returns>
+        public Vector act(Vector playerPos)
+        {
+            double distance = getDistance(playerPos);
+            if (distance < 300) position = stepTowards(playerPos);
+            return position;
         }
 
         /// <summary>
@@ -57,15 +82,12 @@ namespace Undying
         /// </summary>
         /// <param name="target">Vector for Zombie to shamble towards</param>
         /// <returns>Zombies new position</returns>
-        public Vector stepTowards(Vector target)
+        private Vector stepTowards(Vector target)
         {
-            if (getDistance(target) < 300)
-            {
             Vector direction = Vector.Subtract(target, position);
             direction.Normalize();
             direction = Vector.Multiply(stepMultiplier, direction);
             position = Vector.Add(position, direction);
-            }
             return position;
         }
         
@@ -76,5 +98,17 @@ namespace Undying
         public double getvectorinpituus(){
             return stepMultiplier;
         }
+    }
+
+    //(idle,wander,hunt,charge)(dead,crippled,damaged,fine)
+    public class ZombiBehaviour
+    {
+
+    }
+
+    //(tough,aware,aggro,danger)
+    public class ZombiStatus
+    {
+
     }
 }

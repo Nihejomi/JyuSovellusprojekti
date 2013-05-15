@@ -411,10 +411,12 @@ namespace Liikkuvat
                 else
                 {
                     //pelaaja1.pyorita(pelaajakulma);
-                    Canvas.SetLeft((UIElement)this.pelaaja1, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[0]);
 
+                    leveytta = this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[0];
+                    Canvas.SetLeft((UIElement)this.pelaaja1, leveytta);
 
-                    Canvas.SetTop((UIElement)this.pelaaja1, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[1]);
+                    korkeutta = this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[1];
+                    Canvas.SetTop((UIElement)this.pelaaja1, korkeutta);
 
                     // pitäs saada noiden 10 paikalle user controllin leveys ja korkeus, mutta jostain syystä ei toimi oikein... ottaakohan kuvan korkeuden? Kuva on isompi kuin kontrollli.
                     RotateTransform r = new RotateTransform(pelaajakulma / (Math.PI * 2) * 360 + 90, 10, 10);
@@ -437,7 +439,7 @@ namespace Liikkuvat
                     zombikulma = laskeKulma(leveytta - zleveytta, korkeutta - zkorkeutta);
 
                     Vector playerPos = new Vector(leveytta, korkeutta);
-                    Vector newPos = testi.stepTowards(playerPos);
+                    Vector newPos = testi.act(playerPos);
                     Canvas.SetLeft(testi as UIElement, newPos.X);
                     Canvas.SetTop(testi as UIElement, newPos.Y);
                 }
