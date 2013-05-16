@@ -9,36 +9,36 @@ namespace HTMLParser
 {
     class Parsinta
     {
-       
 
-        static void Main(string[] args)
+        public int zombieMaara;
+        public void Alusta(string mista)//(entinen maini string[] args)
         {
-            
+
             string kunta;
             string asukasluku;
             string saa;
-            int zombieMaara;
-            
+           
+
             List<string> listaKunnista = new List<String>();
             List<string> lista = new List<String>();
 
-            kunta = kysyKysymys();
+            kunta = mista; //kysyKysymys();
 
             lista = haeKunnat(listaKunnista);
             asukasluku = haeAsukasluku(kunta, listaKunnista);
             zombieMaara = zombieLuku(asukasluku);
-            
+
             saa = haeSaa(kunta);
-            tulosta(kunta, asukasluku, saa, zombieMaara);
+           // tulosta(kunta, asukasluku, saa, zombieMaara);
 
         }
 
         private static int zombieLuku(string asukasluku)
         {
-            
+
             int asukasLUKU;
             int.TryParse(asukasluku, out asukasLUKU);
-            
+
             int zombieProsentti = 5;
             int zombieMaara = zombieProsentti * asukasLUKU / 100;
             return zombieMaara;
@@ -55,7 +55,7 @@ namespace HTMLParser
 
         private static List<string> haeKunnat(List<string> listaKunnista)
         {
-            
+
             string htmlKunnat = "http://fi.wikipedia.org/wiki/Luettelo_Suomen_kunnista";
             HtmlDocument doc = new HtmlWeb().Load(htmlKunnat);
             HtmlNodeCollection tables = doc.DocumentNode.SelectNodes("//table");
@@ -66,10 +66,10 @@ namespace HTMLParser
                 HtmlNodeCollection cols = rows[i].SelectNodes(".//td");
 
                 listaKunnista.Add(cols[0].InnerText);
-                
- 
+
+
             }
- 	    
+
             return listaKunnista;
         }
 
@@ -85,15 +85,15 @@ namespace HTMLParser
         private static string haeSaa(string kunta)
         {
 
-             string htmlSaa = "http://www.foreca.fi/Finland/" + kunta;
-             HtmlDocument docX = new HtmlWeb().Load(htmlSaa);
-                                
-             HtmlNodeCollection node = docX.DocumentNode.SelectNodes("//*[contains(concat( ' ', @class, ' ' ), concat( ' ', 'txt-xxlarge', ' '))]");
-             foreach (HtmlNode node1 in node)
-             {
-                 return node1.InnerText;
-             }
-             return "";
+            string htmlSaa = "http://www.foreca.fi/Finland/" + kunta;
+            HtmlDocument docX = new HtmlWeb().Load(htmlSaa);
+
+            HtmlNodeCollection node = docX.DocumentNode.SelectNodes("//*[contains(concat( ' ', @class, ' ' ), concat( ' ', 'txt-xxlarge', ' '))]");
+            foreach (HtmlNode node1 in node)
+            {
+                return node1.InnerText;
+            }
+            return "";
         }
 
         private static string haeAsukasluku(string kunta, List<string> lista)
@@ -102,20 +102,20 @@ namespace HTMLParser
             HtmlDocument doc = new HtmlWeb().Load(htmlKunnat);
             HtmlNodeCollection tables = doc.DocumentNode.SelectNodes("//table");
             HtmlNodeCollection rows = tables[0].SelectNodes(".//tr");
-           
+
 
             if (lista.Contains(kunta))
             {
-                
+
 
                 for (int i = 1; i < rows.Count; ++i)
                 {
-                    
+
                     HtmlNodeCollection cols = rows[i].SelectNodes(".//td");
                     string kunnannimi = cols[0].InnerText;
                     if (kunnannimi == kunta)
                     {
-                        
+
                         string asukasluku = cols[3].InnerText;
                         if (asukasluku.Contains("&#160;"))
                         {
@@ -130,15 +130,15 @@ namespace HTMLParser
 
 
 
-                        
+
                     }
-                    
-                }   
+
+                }
                 return "";
             }
             return "";
         }
-        
+
 
     }
 }

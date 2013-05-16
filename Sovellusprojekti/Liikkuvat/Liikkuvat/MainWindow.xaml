@@ -3,16 +3,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" WindowStyle="None" Height="600" Width="800" xmlns:my="clr-namespace:Pelaaja;assembly=WpfControlLibrary1" PreviewMouseUp="Window_PreviewMouseUp" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged">
     <Grid Margin="0,42,0,-2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="277*"/>
+            <ColumnDefinition Width="515*"/>
+        </Grid.ColumnDefinitions>
 
-        <Canvas Height="Auto" HorizontalAlignment="Left" Margin="-9,24,0,0" Name="canvas1" VerticalAlignment="Top" Width="Auto" MouseUp="canvas1_MouseUp">
-
-            <Label Canvas.Left="432" Canvas.Top="33" Content="Label" Height="28" Name="label1" />
-            <my:pelaaja Canvas.Left="400" Canvas.Top="280" Name="pelaaja1" />
+        <Canvas Height="140" HorizontalAlignment="Right" Margin="-9,-116,282.667,0" Name="canvas1" VerticalAlignment="Top" Width="3" MouseUp="canvas1_MouseUp" RenderTransformOrigin="0.5,0.5">
+            <Canvas.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Canvas.RenderTransform>
+            <my:pelaaja Canvas.Left="400" Canvas.Top="280" Name="pelaaja1" Panel.ZIndex="999998" />
             <Label Canvas.Left="447" Canvas.Top="271" Content="Label" Height="28" Name="label2" />
         </Canvas>
-        <Slider Name="slider1" Value="1" Minimum="1" ValueChanged="slider1_ValueChanged" Maximum="60" Margin="-4,-33,88,556" Grid.ColumnSpan="3" />
-        <TextBox Name="syötelokero" Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="22" Margin="66,62,0,0" TextWrapping="Wrap" Text="Jyväskylä" VerticalAlignment="Top" Width="323" KeyDown="TextBox_KeyDown"/>
-        <TextBlock x:Name ="Syöeselite" HorizontalAlignment="Left" Margin="66,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="3" Width="350" Height="16">
+        <TextBox Name="syötelokero" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="22" Margin="66,62,0,0" TextWrapping="Wrap" Text="Jyväskylä" VerticalAlignment="Top" Width="323" KeyDown="TextBox_KeyDown"/>
+        <TextBlock x:Name ="Syöeselite" HorizontalAlignment="Left" Margin="66,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2" Width="350" Height="16">
             <TextBlock.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>

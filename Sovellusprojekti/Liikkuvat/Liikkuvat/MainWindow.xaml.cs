@@ -46,23 +46,45 @@ namespace Liikkuvat
            
             
         }
-
+        /// <summary>
+        /// Alustetaan kaupunki jossa zombit riehut, zombien määrä kaupungin nimen mukaan.
+        /// Todo hae pakka nimen mukaan
+        /// </summary>
+        /// <param name="p"></param>
         private void alusta(string p)
         {
+            // resot jotka voidaan myöhemmin sito johonkin muuttujaan.
+            int resox = 1000;
+            int resoy = 1000;
+            int zombeja;
+            HTMLParser.Parsinta tietoja = new HTMLParser.Parsinta();
+            tietoja.Alusta(p);
+            zombeja = tietoja.zombieMaara/500;
+                        
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
 
 
             InitializeComponent();
-            Zombi z = new Zombi(new Vector(100,100));
+            // Lisataan zombit
+            Zombit lauma = new Zombit();
             
-            Canvas.SetTop(pelaaja1,(this.Height - slider1.ActualHeight) / 2-pelaaja1.ActualHeight/2);
-            canvas1.Children.Add(z);
-            //z.Name = "testiZombi";
-            Canvas.SetTop(z, 100);
-            Canvas.SetLeft(z, 100);
-            liikuta.Add(z);
-            // piirraViiva(50, 50, 100, 100);
+            for (int i = 0; i < zombeja; i++)
+            {
+
+                int[] ominaisuudet = lauma.arvoZombi(resox, resoy);
+               
+                Zombi z = new Zombi(new Vector(ominaisuudet[0], ominaisuudet[1]));
+
+                Canvas.SetZIndex(z, 9000 + i);
+                //z.Name = "testiZombi";
+                Canvas.SetTop(z, ominaisuudet[1]);
+                Canvas.SetLeft(z, ominaisuudet[0]);
+                canvas1.Children.Add(z);
+                liikuta.Add(z);
+            }
+            Canvas.SetTop(pelaaja1, this.Height  / 2 + pelaaja1.ActualHeight / 2);
+            Canvas.SetLeft(pelaaja1, this.Left / 2 + pelaaja1.ActualWidth / 2);
             testi = new Peli.Peli(62.23407, 25.73577, 62.24372, 25.76086, 2000, 2000, true);  // lisäsin viimeisen parametrin teiden poistoon latauksen nopeuttamiseksi (true = ei teitä, false = tiet mukaan)
             //testi = new Peli.Peli(62.24, 25.73, 62.26, 25.75, 2000, 2000);//
             // testi= new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
@@ -257,7 +279,7 @@ namespace Liikkuvat
             l = Canvas.GetLeft((UIElement)this.pelaaja1);
             double xsuunta= kohdex-l;
             double ysuunta= kohdey-k;
-            label1.Content = xsuunta + ":" + ysuunta + "::" + pelaajakulma;
+          
             pelaajakulma = laskeKulma(xsuunta, ysuunta);
 
       
@@ -410,7 +432,8 @@ namespace Liikkuvat
                 { }
                 else
                 {
-                    //pelaaja1.pyorita(pelaajakulma);
+                    
+                   //pelaaja1.pyorita(pelaajakulma);
 
                     leveytta = this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[0];
                     Canvas.SetLeft((UIElement)this.pelaaja1, leveytta);
@@ -423,7 +446,7 @@ namespace Liikkuvat
 
 
 
-                    label2.Content = pelaajakulma;
+                   
                     pelaaja1.RenderTransform = r;
                     //  pelaaja1.RenderTransform.SetValue
                 }
@@ -494,18 +517,18 @@ namespace Liikkuvat
         /// </summary>
         private void zoomaa()
         {
-            double zoomi = slider1.Value;
+            double zoomi = 1;
            ScaleTransform scaletransform = new ScaleTransform();
            TranslateTransform translatetransform = new TranslateTransform();
 
             TransformGroup yhdiste = new TransformGroup();
 
             scaletransform.CenterX = this.Width / 2;
-            scaletransform.CenterY = (this.Height - slider1.ActualHeight) / 2;
+            scaletransform.CenterY = this.Height/ 2;
             scaletransform.ScaleX = zoomi;
             scaletransform.ScaleY = zoomi;
           
-            translatetransform.Y = ((-(Canvas.GetTop((UIElement)this.pelaaja1)))   +((this.Height-slider1.ActualHeight)/2)-pelaaja1.ActualHeight/2);
+            translatetransform.Y = ((-(Canvas.GetTop((UIElement)this.pelaaja1)))   +((this.Height/2)+pelaaja1.ActualHeight/2));
             double apu = -(Canvas.GetLeft((UIElement)this.pelaaja1)+pelaaja1.ActualWidth/2)+ this.Width/2;
             translatetransform.X = apu; // / zoomi);
 
@@ -528,7 +551,7 @@ namespace Liikkuvat
                 kaupunki= syötelokero.Text;
                 syötelokero.Visibility = Visibility.Collapsed;
                 Syöeselite.Visibility = Visibility.Collapsed;
-                Console.Beep();
+                //Console.Beep();
                 alusta(kaupunki);
             }
         }
@@ -539,8 +562,8 @@ namespace Liikkuvat
         /// <param name="e"></param>
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Canvas.SetTop(slider1, 0);
-            Canvas.SetTop(canvas1,Canvas.GetBottom(slider1));
+          //  Canvas.SetTop(slider1, 0);
+            //Canvas.SetTop(canvas1,Canvas.GetBottom(slider1));
             //canvas1.Width = this.Width;
             //canvas1.Height = this.Height-slider1.Height;
 

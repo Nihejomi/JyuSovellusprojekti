@@ -15,7 +15,7 @@ namespace Peli
         /// <param name="resoy">resolution y</param>
         /// <returns>palauttaa arrayn {xpos, ypos, hp, nopeus}</returns>
 
-        private int[] arvoZombi(int resox, int resoy)
+        public int[] arvoZombi(int resox, int resoy)
         {
             Random rnd = new Random();
             int zombHPMAX = 11;
