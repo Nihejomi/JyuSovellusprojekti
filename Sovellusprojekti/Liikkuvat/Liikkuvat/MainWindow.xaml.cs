@@ -63,11 +63,11 @@ namespace Liikkuvat
             int zombeja;
             HTMLParser.Parsinta tietoja = new HTMLParser.Parsinta();
             tietoja.Alusta(p);
-            zombeja = tietoja.zombieMaara/10;
+            zombeja = tietoja.zombieMaara/500;
                         
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
-
+            label2.Content = zombeja;
 
             InitializeComponent();
             // Lisataan zombit
@@ -524,7 +524,40 @@ namespace Liikkuvat
                     //  pelaaja1.RenderTransform.SetValue
                 }
             }
-            foreach (liikkuva testi in liikuta)
+            for (int m = 0; m < liikuta.Count; m++) 
+            {
+                zkorkeutta = Canvas.GetTop((UIElement)liikuta[m]);
+                zleveytta = Canvas.GetLeft((UIElement)liikuta[m]);
+                Zombi testi = liikuta[m] as Zombi;
+                
+                if (tarkistaetaisyys(zkorkeutta, zleveytta, korkeutta, leveytta, testi.getvectorinpituus()))
+                {
+                    //Console.Beep();
+
+                Vector playerPos = new Vector(leveytta, korkeutta);
+                    Vector newPos = testi.act(playerPos);
+                    zombikulma = laskeKulma(leveytta - zleveytta, korkeutta - zkorkeutta);
+                    UIElement ui = testi as UIElement;
+                    if (tarkistaSeinat(zleveytta, zkorkeutta, newPos.X, newPos.Y)) { }
+                    else
+                    {
+                        
+                        //pelaaja mitat = testi as pelaaja;
+                        
+
+                        Canvas.SetLeft(testi as UIElement, newPos.X);
+                        Canvas.SetTop(testi as UIElement, newPos.Y);
+                        //pitäs saada tämän korkeus jotenkin.
+
+                    }
+                    RotateTransform f = new RotateTransform(zombikulma / (Math.PI * 2) * 360 + 90, 10, 10);
+                    ui.RenderTransform = f;
+            
+
+                }
+            }
+            //foreachissa vikaa? Pitöö kokeilla perinteisella forsilmukalla
+           /* foreach (liikkuva testi in liikuta)
             {
 
                 zkorkeutta = Canvas.GetTop(testi as UIElement);
@@ -532,20 +565,28 @@ namespace Liikkuvat
                 //label2.Content = leveytta + ":" + korkeutta; 
                 if (tarkistaetaisyys(zkorkeutta, zleveytta, korkeutta, leveytta, testi.getvectorinpituus()))
                 {
-                    UIElement ui = testi as UIElement;
-                    pelaaja mitat = testi as pelaaja;
-                    zombikulma = laskeKulma(leveytta - zleveytta, korkeutta - zkorkeutta);
-
-                    Vector playerPos = new Vector(leveytta, korkeutta);
+                                        Vector playerPos = new Vector(leveytta, korkeutta);
                     Vector newPos = testi.act(playerPos);
-                    Canvas.SetLeft(testi as UIElement, newPos.X);
-                    Canvas.SetTop(testi as UIElement, newPos.Y);
-        //pitäs saada tämän korkeus jotenkin.
-                   RotateTransform f = new RotateTransform(zombikulma/ (Math.PI * 2) * 360 + 90,10, 10);
-                   ui.RenderTransform = f;
+                    zombikulma = laskeKulma(leveytta - zleveytta, korkeutta - zkorkeutta);
+                    UIElement ui = testi as UIElement;
+                    if (tarkistaSeinat(zleveytta, zkorkeutta, testi.act(newPos).X, testi.act(newPos).Y)) { }
+                    else
+                    {
+                        
+                        //pelaaja mitat = testi as pelaaja;
+                     
+
+
+                        Canvas.SetLeft(testi as UIElement, newPos.X);
+                        Canvas.SetTop(testi as UIElement, newPos.Y);
+                        //pitäs saada tämän korkeus jotenkin.
+
+                    }
+                    RotateTransform f = new RotateTransform(zombikulma / (Math.PI * 2) * 360 + 90, 10, 10);
+                    ui.RenderTransform = f;
                 }
                 //label2.Content = testi.liikuta(leveytta, korkeutta, pelaajakulma)[0] + ":" + pelaajakulma; 
-            }
+            }*/
         }
         /// <summary>
         /// Mahtuuko liikkumaan?
