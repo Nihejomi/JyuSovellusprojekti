@@ -9,7 +9,6 @@ namespace Undying
 
     public interface liikkuva
     {
-        double getvectorinpituus();
         Vector act(Vector playerPos);
     }
 }
