@@ -31,6 +31,8 @@ namespace Liikkuvat
         public double kohdex;
         public double kohdey;
         public string kaupunki;
+        private double zoomi = 1;
+        
         RotateTransform r = new RotateTransform();
        
         public double pelaajakulma;
@@ -273,7 +275,29 @@ namespace Liikkuvat
         }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-           
+         
+           if(Keyboard.IsKeyDown(Key.Add))
+           {
+               if (zoomi < 5) 
+               {
+                 
+                   
+                       zoomi = zoomi + 0.05;
+                     
+                 
+            
+               }
+           }
+           if (Keyboard.IsKeyDown(Key.Subtract))
+           {
+               if (zoomi > 1)
+               {
+                
+                       zoomi = zoomi - 0.05;
+         
+               }
+           }
+            //Key.Add.
             //Console.Beep();
             k = Canvas.GetTop((UIElement)this.pelaaja1);
             l = Canvas.GetLeft((UIElement)this.pelaaja1);
@@ -517,19 +541,19 @@ namespace Liikkuvat
         /// </summary>
         private void zoomaa()
         {
-            double zoomi = 1;
+          
            ScaleTransform scaletransform = new ScaleTransform();
            TranslateTransform translatetransform = new TranslateTransform();
 
             TransformGroup yhdiste = new TransformGroup();
 
-            scaletransform.CenterX = this.Width / 2;
-            scaletransform.CenterY = this.Height/ 2;
+            //scaletransform.CenterX = this.Width / 2;// (Canvas.GetLeft(this.pelaaja1)); // + pelaaja1.ActualWidth / 2);
+            //scaletransform.CenterY = this.Height/2;//Canvas.GetTop(this.pelaaja1);// +pelaaja1.ActualHeight / 2;
             scaletransform.ScaleX = zoomi;
             scaletransform.ScaleY = zoomi;
-          
-            translatetransform.Y = ((-(Canvas.GetTop((UIElement)this.pelaaja1)))   +((this.Height/2)+pelaaja1.ActualHeight/2));
-            double apu = -(Canvas.GetLeft((UIElement)this.pelaaja1)+pelaaja1.ActualWidth/2)+ this.Width/2;
+
+            translatetransform.Y = scaletransform.CenterY - Canvas.GetTop((UIElement)this.pelaaja1) +this.Height / 2-pelaaja1.ActualHeight/2;
+            double apu = scaletransform.CenterX - Canvas.GetLeft((UIElement)this.pelaaja1) + this.Width / 2-pelaaja1.ActualWidth/2;
             translatetransform.X = apu; // / zoomi);
 
            
@@ -540,10 +564,7 @@ namespace Liikkuvat
           
         }
 
-        private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            zoomaa();
-        }
+
 
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
