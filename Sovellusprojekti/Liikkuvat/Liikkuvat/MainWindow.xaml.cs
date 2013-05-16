@@ -530,20 +530,18 @@ namespace Liikkuvat
                 zkorkeutta = Canvas.GetTop(testi as UIElement);
                 zleveytta = Canvas.GetLeft(testi as UIElement);
                 //label2.Content = leveytta + ":" + korkeutta; 
-                if (tarkistaetaisyys(zkorkeutta, zleveytta, korkeutta, leveytta, testi.getvectorinpituus()))
-                {
-                    UIElement ui = testi as UIElement;
-                    pelaaja mitat = testi as pelaaja;
-                    zombikulma = laskeKulma(leveytta - zleveytta, korkeutta - zkorkeutta);
+                UIElement ui = testi as UIElement;
+                pelaaja mitat = testi as pelaaja;
+                zombikulma = laskeKulma(leveytta - zleveytta, korkeutta - zkorkeutta);
 
-                    Vector playerPos = new Vector(leveytta, korkeutta);
-                    Vector newPos = testi.act(playerPos);
-                    Canvas.SetLeft(testi as UIElement, newPos.X);
-                    Canvas.SetTop(testi as UIElement, newPos.Y);
+                Vector playerPos = new Vector(leveytta, korkeutta);
+                Vector newPos = testi.act(playerPos);
+                Canvas.SetLeft(testi as UIElement, newPos.X);
+                Canvas.SetTop(testi as UIElement, newPos.Y);
         //pitäs saada tämän korkeus jotenkin.
-                   RotateTransform f = new RotateTransform(zombikulma/ (Math.PI * 2) * 360 + 90,10, 10);
-                   ui.RenderTransform = f;
-                }
+                ui.RenderTransformOrigin = new Point(0.5, 0.5);
+                RotateTransform f = new RotateTransform(zombikulma/ (Math.PI * 2) * 360 + 90);
+                ui.RenderTransform = f;
                 //label2.Content = testi.liikuta(leveytta, korkeutta, pelaajakulma)[0] + ":" + pelaajakulma; 
             }
         }

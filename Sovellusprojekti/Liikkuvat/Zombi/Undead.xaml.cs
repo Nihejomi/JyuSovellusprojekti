@@ -62,7 +62,7 @@ namespace Undying
         public Vector act(Vector playerPos)
         {
             double distance = getDistance(playerPos);
-            if (distance < 300) position = stepTowards(playerPos);
+            if (distance > 5 && distance < 300) position = stepTowards(playerPos);
             return position;
         }
 
@@ -89,14 +89,6 @@ namespace Undying
             direction = Vector.Multiply(stepMultiplier, direction);
             position = Vector.Add(position, direction);
             return position;
-        }
-        
-        /// <summary>
-        /// Returns Zombies stepMultiplier, that indicates how far Zombie is moved every tick
-        /// </summary>
-        /// <returns>Zombies current stepMultiplier</returns>
-        public double getvectorinpituus(){
-            return stepMultiplier;
         }
     }
 
