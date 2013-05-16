@@ -31,6 +31,8 @@ namespace Liikkuvat
         public double kohdex;
         public double kohdey;
         public string kaupunki;
+        bool eteen = false;
+        bool taakse = false;
         private double zoomi = 1;
         
         RotateTransform r = new RotateTransform();
@@ -55,7 +57,7 @@ namespace Liikkuvat
         /// <param name="p"></param>
         private void alusta(string p)
         {
-            // resot jotka voidaan myöhemmin sito johonkin muuttujaan.
+            // resot jotka voidaan myöhemmin sitoa johonkin muuttujaan.
             int resox = 1000;
             int resoy = 1000;
             int zombeja;
@@ -297,6 +299,27 @@ namespace Liikkuvat
          
                }
            }
+           if (Keyboard.IsKeyDown(Key.A))
+           {
+               pelaajakulma = pelaajakulma - 0.05;
+           }
+           if (Keyboard.IsKeyDown(Key.D))
+           {
+               pelaajakulma = pelaajakulma + 0.05;
+           }
+           if (Keyboard.IsKeyDown(Key.W))
+           {
+               eteen = true;
+           }
+           else { eteen = false; }
+           if (Keyboard.IsKeyDown(Key.S))
+           {
+               eteen = false;
+               taakse = true;
+           }
+           else {
+               taakse = false;
+           }
             //Key.Add.
             //Console.Beep();
             k = Canvas.GetTop((UIElement)this.pelaaja1);
@@ -304,7 +327,7 @@ namespace Liikkuvat
             double xsuunta= kohdex-l;
             double ysuunta= kohdey-k;
           
-            pelaajakulma = laskeKulma(xsuunta, ysuunta);
+           // pelaajakulma = laskeKulma(xsuunta, ysuunta);
 
       
            /*     
@@ -450,7 +473,9 @@ namespace Liikkuvat
             double zleveytta = 0;
             double korkeutta = Canvas.GetTop((UIElement)this.pelaaja1);
             double leveytta = Canvas.GetLeft((UIElement)this.pelaaja1);
-            if (tarkistaetaisyys(korkeutta, leveytta, kohdex, kohdey, pelaaja1.vektorinpituus))
+            RotateTransform r = new RotateTransform(pelaajakulma / (Math.PI * 2) * 360 + 90, pelaaja1.ActualHeight / 2, pelaaja1.ActualWidth / 2);
+            pelaaja1.RenderTransform = r;
+            if (eteen)
             {
                 if (tarkistaSeinat(Canvas.GetLeft(this.pelaaja1)+pelaaja1.ActualWidth/2, Canvas.GetTop(this.pelaaja1)+pelaaja1.ActualHeight/2, pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[0]+pelaaja1.ActualWidth/2, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[1]+pelaaja1.ActualHeight/2))
                 { }
@@ -466,12 +491,36 @@ namespace Liikkuvat
                     Canvas.SetTop((UIElement)this.pelaaja1, korkeutta);
 
                     // pitäs saada noiden 10 paikalle user controllin leveys ja korkeus, mutta jostain syystä ei toimi oikein... ottaakohan kuvan korkeuden? Kuva on isompi kuin kontrollli.
-                    RotateTransform r = new RotateTransform(pelaajakulma / (Math.PI * 2) * 360 + 90, 10, 10);
+             
+
+
+                   
+                    
+                    //  pelaaja1.RenderTransform.SetValue
+                }
+            }
+            if (taakse)
+            {
+                if (tarkistaSeinat(Canvas.GetLeft(this.pelaaja1) + pelaaja1.ActualWidth / 2, Canvas.GetTop(this.pelaaja1) + pelaaja1.ActualHeight / 2, pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma - Math.PI)[0] + pelaaja1.ActualWidth / 2, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma - Math.PI)[1] + pelaaja1.ActualHeight / 2))
+                { }
+                else
+                {
+
+                    //pelaaja1.pyorita(pelaajakulma);
+
+                    leveytta = this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma - Math.PI)[0];
+                    Canvas.SetLeft((UIElement)this.pelaaja1, leveytta);
+
+                    korkeutta = this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma - Math.PI)[1];
+                    Canvas.SetTop((UIElement)this.pelaaja1, korkeutta);
+
+                    // pitäs saada noiden 10 paikalle user controllin leveys ja korkeus, mutta jostain syystä ei toimi oikein... ottaakohan kuvan korkeuden? Kuva on isompi kuin kontrollli.
+                 
+
 
 
 
                    
-                    pelaaja1.RenderTransform = r;
                     //  pelaaja1.RenderTransform.SetValue
                 }
             }
