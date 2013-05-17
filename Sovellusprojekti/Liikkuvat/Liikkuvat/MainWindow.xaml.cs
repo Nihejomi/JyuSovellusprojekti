@@ -84,6 +84,7 @@ namespace Liikkuvat
                 //z.Name = "testiZombi";
                 Canvas.SetTop(z, ominaisuudet[1]);
                 Canvas.SetLeft(z, ominaisuudet[0]);
+                (z as UIElement).RenderTransformOrigin = new Point(0.5, 0.5);
                 canvas1.Children.Add(z);
                 liikuta.Add(z);
             }
@@ -469,8 +470,6 @@ namespace Liikkuvat
         private void kaikkiliikkuu()
         {
             zoomaa();
-            double zkorkeutta = 0;
-            double zleveytta = 0;
             double korkeutta = Canvas.GetTop((UIElement)this.pelaaja1);
             double leveytta = Canvas.GetLeft((UIElement)this.pelaaja1);
             RotateTransform r = new RotateTransform(pelaajakulma / (Math.PI * 2) * 360 + 90, pelaaja1.ActualHeight / 2, pelaaja1.ActualWidth / 2);
@@ -524,84 +523,29 @@ namespace Liikkuvat
                     //  pelaaja1.RenderTransform.SetValue
                 }
             }
-            for (int m = 0; m < liikuta.Count; m++) 
+            foreach (liikkuva zombie in liikuta) 
             {
-                zkorkeutta = Canvas.GetTop((UIElement)liikuta[m]);
-                zleveytta = Canvas.GetLeft((UIElement)liikuta[m]);
-                Zombi testi = liikuta[m] as Zombi;
-                
-                if (tarkistaetaisyys(zkorkeutta, zleveytta, korkeutta, leveytta, testi.getvectorinpituus()))
-                {
+                UIElement uiZombie = zombie as UIElement;
+                Vector zombiePos = zombie.getPosition();
+
                     //Console.Beep();
 
                 Vector playerPos = new Vector(leveytta, korkeutta);
-                    Vector newPos = testi.act(playerPos);
-                    zombikulma = laskeKulma(leveytta - zleveytta, korkeutta - zkorkeutta);
-                    UIElement ui = testi as UIElement;
-                    if (tarkistaSeinat(zleveytta, zkorkeutta, newPos.X, newPos.Y)) { }
+                Vector newPos = zombie.possibleMove(playerPos);
+                zombikulma = laskeKulma(leveytta - newPos.X, korkeutta - newPos.Y);
+                
+                if (tarkistaSeinat(zombiePos.X, zombiePos.Y, newPos.X, newPos.Y)) { }
                     else
                     {
-                        
                         //pelaaja mitat = testi as pelaaja;
-                        
-
-                        Canvas.SetLeft(testi as UIElement, newPos.X);
-                        Canvas.SetTop(testi as UIElement, newPos.Y);
+                        zombie.move(newPos);
+                        Canvas.SetLeft(uiZombie, newPos.X);
+                        Canvas.SetTop(uiZombie, newPos.Y);
                         //pitäs saada tämän korkeus jotenkin.
-
                     }
-                    RotateTransform f = new RotateTransform(zombikulma / (Math.PI * 2) * 360 + 90, 10, 10);
-                    ui.RenderTransform = f;
-            
-
-                }
+                 RotateTransform f = new RotateTransform(zombikulma / (Math.PI * 2) * 360 + 90);
+                 uiZombie.RenderTransform = f;
             }
-            //foreachissa vikaa? Pitöö kokeilla perinteisella forsilmukalla
-           /* foreach (liikkuva testi in liikuta)
-            {
-
-                zkorkeutta = Canvas.GetTop(testi as UIElement);
-                zleveytta = Canvas.GetLeft(testi as UIElement);
-                //label2.Content = leveytta + ":" + korkeutta; 
-<<<<<<< HEAD
-                if (tarkistaetaisyys(zkorkeutta, zleveytta, korkeutta, leveytta, testi.getvectorinpituus()))
-                {
-                                        Vector playerPos = new Vector(leveytta, korkeutta);
-                    Vector newPos = testi.act(playerPos);
-                    zombikulma = laskeKulma(leveytta - zleveytta, korkeutta - zkorkeutta);
-                    UIElement ui = testi as UIElement;
-                    if (tarkistaSeinat(zleveytta, zkorkeutta, testi.act(newPos).X, testi.act(newPos).Y)) { }
-                    else
-                    {
-                        
-                        //pelaaja mitat = testi as pelaaja;
-                     
-
-
-                        Canvas.SetLeft(testi as UIElement, newPos.X);
-                        Canvas.SetTop(testi as UIElement, newPos.Y);
-                        //pitäs saada tämän korkeus jotenkin.
-
-                    }
-                    RotateTransform f = new RotateTransform(zombikulma / (Math.PI * 2) * 360 + 90, 10, 10);
-                    ui.RenderTransform = f;
-                }
-=======
-                UIElement ui = testi as UIElement;
-                pelaaja mitat = testi as pelaaja;
-                zombikulma = laskeKulma(leveytta - zleveytta, korkeutta - zkorkeutta);
-
-                Vector playerPos = new Vector(leveytta, korkeutta);
-                Vector newPos = testi.act(playerPos);
-                Canvas.SetLeft(testi as UIElement, newPos.X);
-                Canvas.SetTop(testi as UIElement, newPos.Y);
-        //pitäs saada tämän korkeus jotenkin.
-                ui.RenderTransformOrigin = new Point(0.5, 0.5);
-                RotateTransform f = new RotateTransform(zombikulma/ (Math.PI * 2) * 360 + 90);
-                ui.RenderTransform = f;
->>>>>>> 4c6898b8e46c6e0bb7550f4fd224278aeaf5272e
-                //label2.Content = testi.liikuta(leveytta, korkeutta, pelaajakulma)[0] + ":" + pelaajakulma; 
-            }*/
         }
         /// <summary>
         /// Mahtuuko liikkumaan?
