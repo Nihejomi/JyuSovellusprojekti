@@ -52,7 +52,7 @@ namespace Liikkuvat
             
         }
         /// <summary>
-        /// Alustetaan kaupunki jossa zombit riehut, zombien määrä kaupungin nimen mukaan.
+        /// Alustetaan kaupunki jossa zombit riehuu, zombien määrä kaupungin nimen mukaan.
         /// Todo hae pakka nimen mukaan
         /// </summary>
         /// <param name="p"></param>
@@ -68,27 +68,10 @@ namespace Liikkuvat
                         
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
-            label2.Content = zombeja;
+            //label2.Content = zombeja;
 
             InitializeComponent();
-            // Lisataan zombit
-            Zombit lauma = new Zombit();
-            
-            for (int i = 0; i < zombeja; i++)
-            {
 
-                int[] ominaisuudet = lauma.arvoZombi(resox, resoy);
-               
-                Zombi z = new Zombi(new Vector(ominaisuudet[0], ominaisuudet[1]));
-
-                Canvas.SetZIndex(z, 9000 + i);
-                //z.Name = "testiZombi";
-                Canvas.SetTop(z, ominaisuudet[1]);
-                Canvas.SetLeft(z, ominaisuudet[0]);
-                (z as UIElement).RenderTransformOrigin = new Point(0.5, 0.5);
-                canvas1.Children.Add(z);
-                liikuta.Add(z);
-            }
             Canvas.SetTop(pelaaja1, this.Height  / 2 + pelaaja1.ActualHeight / 2);
             Canvas.SetLeft(pelaaja1, this.Left / 2 + pelaaja1.ActualWidth / 2);
             testi = new Peli.Peli(62.23407, 25.73577, 62.24372, 25.76086, 2000, 2000, true);  // lisäsin viimeisen parametrin teiden poistoon latauksen nopeuttamiseksi (true = ei teitä, false = tiet mukaan)
@@ -100,6 +83,34 @@ namespace Liikkuvat
             piirraTiet();
             piirraRakennukset();
             piirraVesistot();
+            // Lisataan zombit
+            Zombit lauma = new Zombit();
+            int zombejasisalla = 0;
+            for (int i = 0; i < zombeja; i++)
+            {
+
+                int[] ominaisuudet = lauma.arvoZombi(resox, resoy);
+                if (!(OnkoRakennuksessa(ominaisuudet[0], ominaisuudet[1])))
+                {
+
+                    Zombi z = new Zombi(new Vector(ominaisuudet[0], ominaisuudet[1]));
+
+                    Canvas.SetZIndex(z, 9000 + i);
+                    //z.Name = "testiZombi";
+                    Canvas.SetTop(z, ominaisuudet[1]);
+                    Canvas.SetLeft(z, ominaisuudet[0]);
+                    (z as UIElement).RenderTransformOrigin = new Point(0.5, 0.5);
+                    canvas1.Children.Add(z);
+                    liikuta.Add(z);
+                }
+                else
+                {
+                    zombejasisalla++;
+
+
+                }
+            }
+            label2.Content = zombejasisalla;
             dispatcherTimer.Start();
            
         }
@@ -544,6 +555,115 @@ namespace Liikkuvat
 
             }
             return kulma;
+        }
+        /// <summary>
+        /// Kertoo onko piste rakennuksen sisalla.
+        /// Todo: voi joutua tarkistelemaan reunaehtoja
+        /// </summary>
+        /// <param name="x2">tarkisettavan pisteen x</param>
+        /// <param name="y2">tarkistettavan pisteen y</param>
+        /// <returns></returns>
+        private bool OnkoRakennuksessa(double x2, double y2) {
+           
+
+            foreach (Rakennus R in rakennukset)
+            {
+                int seinia = 0;
+                double y1 = R.maxy+1;
+                double x1 = R.maxx+1;
+                if ((R.maxx >= x2) && (x2 >= R.minx) && (R.maxy >= y2) && (y2 >= R.miny))
+                {
+                    for (int i = 0; i + 1 < R.annaVektoriLkm(); i++)
+                    {
+                        Line s = new Line();
+                        s.X1 = R.annaVektori(i).x;
+                        s.Y1 = R.annaVektori(i).y;
+                        s.X2 = R.annaVektori(i + 1).x;
+                        s.Y2 = R.annaVektori(i + 1).y;
+
+                        // siirretään piste s.x1 s.y1 origoksi ja otetaan ristitulo vektoreille s.x1 s.y1-> x2 y2
+                        //jos haluaisi jättää else puoliskon pois, pitäisi jana käydä aina samoin päin.
+                        //Nyt sillä ei pitäisi olla merkitystä.
+                        if (ristitulo(x2 - s.X1, y2 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) >= 0)
+                        {
+                            if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) <= 0)
+                            {
+                                //tehdään vastaava tarkastelu toisesta viivasta käsin
+                                if (ristitulo(s.X1 - x1, s.Y1 - y1, x2 - x1, y2 - y1) >= 0)
+                                {
+
+                                    if (ristitulo(s.X2 - x1, s.Y2 - y1, x2 - x1, y2 - y1) <= 0)
+                                    {
+                                        //Console.Beep();
+                                        seinia++;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) >= 0)
+                            {
+
+                                //tehdään vastaava tarkastelu toisesta viivasta käsin
+                                if (ristitulo(s.X1 - x1, s.Y1 - y1, x2 - x1, y2 - y1) <= 0)
+                                {
+
+                                    if (ristitulo(s.X2 - x1, s.Y2 - y1, x2 - x1, y2 - y1) >= 0)
+                                    {
+                                        seinia++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //tehdään viimeinnen linja for silmukan ulkopuolella niin säästyy yksi iffi
+                    Line v = new Line();
+                    v.X1 = R.annaVektori(R.annaVektoriLkm() - 1).x;
+                    v.Y1 = R.annaVektori(R.annaVektoriLkm() - 1).y;
+                    v.X2 = R.annaVektori(0).x;
+                    v.Y2 = R.annaVektori(0).y;
+
+                    if (ristitulo(x2 - v.X1, y2 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) >= 0)
+                    {
+                        if (ristitulo(x1 - v.X1, y1 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) <= 0)
+                        {
+                            //tehdään vastaava tarkastelu toisesta viivasta käsin
+                            if (ristitulo(v.X1 - x1, v.Y1 - y1, x2 - x1, y2 - y1) >= 0)
+                            {
+
+                                if (ristitulo(v.X2 - x1, v.Y2 - y1, x2 - x1, y2 - y1) <= 0)
+                                {
+                                    //Console.Beep();
+                                    seinia++;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (ristitulo(x1 - v.X1, y1 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) >= 0)
+                        {
+
+                            //tehdään vastaava tarkastelu toisesta viivasta käsin
+                            if (ristitulo(v.X1 - x1, v.Y1 - y1, x2 - x1, y2 - y1) <= 0)
+                            {
+
+                                if (ristitulo(v.X2 - x1, v.Y2 - y1, x2 - x1, y2 - y1) >= 0)
+                                {
+                                    seinia++;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (seinia % 2 != 0)
+                {
+                    return true;
+                }
+            }
+        
+            return false;
         }
         /// <summary>
         /// Liikuttaa kaikkia siihen liikkuvat listan komponentteja sekä kaikkia pelaajaa
