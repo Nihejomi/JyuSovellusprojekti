@@ -64,7 +64,7 @@ namespace Liikkuvat
             int zombeja;
             HTMLParser.Parsinta tietoja = new HTMLParser.Parsinta();
             tietoja.Alusta(p);
-            zombeja = tietoja.zombieMaara/500;
+            zombeja = tietoja.zombieMaara/30;
                         
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
@@ -594,14 +594,6 @@ namespace Liikkuvat
                     korkeutta = this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma - Math.PI)[1];
                     Canvas.SetTop((UIElement)this.pelaaja1, korkeutta);
 
-                    // pitäs saada noiden 10 paikalle user controllin leveys ja korkeus, mutta jostain syystä ei toimi oikein... ottaakohan kuvan korkeuden? Kuva on isompi kuin kontrollli.
-                 
-
-
-
-
-                   
-                    //  pelaaja1.RenderTransform.SetValue
                 }
             }
             foreach (liikkuva zombie in liikuta) 
@@ -615,11 +607,13 @@ namespace Liikkuvat
                 Vector newPos = zombie.possibleMove(playerPos);
                 zombikulma = laskeKulma(leveytta - newPos.X, korkeutta - newPos.Y);
                 
-                if (tarkistaSeinat(zombiePos.X, zombiePos.Y, newPos.X, newPos.Y)) { }
+                //pitäs saada dynäämisesti tuo zombin leveys otettua, vois laskea kun tietää canvas elementin koon ja leftin ja rightin, topin ja bottomin
+                if (tarkistaSeinat(zombiePos.X+15, zombiePos.Y+15, newPos.X+15, newPos.Y+15)) { }
                     else
                     {
                         //pelaaja mitat = testi as pelaaja;
                         zombie.move(newPos);
+                    
                         Canvas.SetLeft(uiZombie, newPos.X);
                         Canvas.SetTop(uiZombie, newPos.Y);
                         //pitäs saada tämän korkeus jotenkin.

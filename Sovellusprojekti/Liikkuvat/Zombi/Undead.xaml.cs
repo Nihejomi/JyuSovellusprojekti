@@ -62,7 +62,8 @@ namespace Undying
         public Vector act(Vector playerPos)
         {
             double distance = getDistance(playerPos);
-            position = stepTowards(playerPos);
+           // position = stepTowards(playerPos);
+            //tätä käytettään tarkistuksessa, position asetetaan move- metodilla
             return position;
         }
 
