@@ -44,6 +44,7 @@ namespace Liikkuvat
        ArrayList liikuta = new ArrayList();
        ArrayList Viivat = new ArrayList();
        ArrayList seinat = new ArrayList();
+
         public MainWindow()
         {
 
@@ -142,25 +143,53 @@ namespace Liikkuvat
         {
             SolidColorBrush harmaa = new SolidColorBrush();
             harmaa.Color = Colors.Gray;
+            double maxy;
+            double miny;
+            double maxx;
+            double minx;
            for (int f = 0; f < testi.annaRakennusLkm()-1; f++)
             {
+
                 Peli.Rakennus kohde = testi.annaRakennus(f);
 
-               PointCollection pisteet = new PointCollection();             
-                  for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
-                     
-                     
-   {
+               PointCollection pisteet = new PointCollection();
+               maxx = kohde.annaVektori(0).x;
+               minx = kohde.annaVektori(0).x;
+               maxy = kohde.annaVektori(0).y;
+               miny = kohde.annaVektori(0).y;
+               for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
+                     {
+                   //mitataan hitbox optimointia varten
+                         if (kohde.annaVektori(i).x > maxx) {
+                             maxx = kohde.annaVektori(i).x;
+                         }
+                         if (kohde.annaVektori(i).x < minx)
+                         {
+                             minx = kohde.annaVektori(i).x;
+                         }
+                         if (kohde.annaVektori(i).y > maxy)
+                         {
+                             maxy = kohde.annaVektori(i).y;
+                         }
+                         if (kohde.annaVektori(i).y < miny)
+                         {
+                             miny = kohde.annaVektori(i).y;
+                         }
+
     pisteet.Add(new Point(kohde.annaVektori(i).x,kohde.annaVektori(i).y));
-    piirraSeina(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+    //piirraSeina(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
      //  piirraViiva(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
    }
+               kohde.maxx = maxx;
+               kohde.minx = minx;
+               kohde.maxy = maxy;
+               kohde.miny = miny;
 
                   Polygon talo = new Polygon();
                   talo.Points = pisteet;
 
                   talo.Fill = harmaa;
-
+                  rakennukset.Add(kohde);
                   canvas1.Children.Add(talo);
               
 
@@ -368,44 +397,96 @@ namespace Liikkuvat
         /// <param name="x2">kohteen uuden sijainnin x</param>
         /// <param name="y2">kohteen uuden sijainnin y</param>
         /// <returns>mennäämkö seinän läpi</returns>
-        private bool tarkistaSeinat(double x1, double y1, double x2, double y2) {
-           foreach(Line s in seinat){
-              // siirretään piste s.x1 s.y1 origoksi ja otetaan ristitulo vektoreille s.x1 s.y1-> x2 y2
-              //jos haluaisi jättää else puoliskon pois, pitäisi jana käydä aina samoin päin.
-              //Nyt sillä ei pitäisi olla merkitystä.
-               if (ristitulo(x2 - s.X1, y2 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) > 0)
-               {
-                   if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) < 0) {
-                       //tehdään vastaava tarkastelu toisesta viivasta käsin
-                       if (ristitulo(s.X1-x1,s.Y1-y1, x2-x1, y2- y1) > 0)
-                       {
-                          
-                           if (ristitulo(s.X2-x1, s.Y2-y1, x2 - x1, y2 - y1) < 0)
-                           {
-                               //Console.Beep();
-                               return true;
-                           }
-                       }
-                   }
-               }
-               else
-               {
-                   if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) > 0)
-                   {
-                    
-                       //tehdään vastaava tarkastelu toisesta viivasta käsin
-                       if (ristitulo(s.X1 - x1, s.Y1 - y1, x2 - x1, y2 - y1) < 0)
-                       {
-                          
-                           if (ristitulo(s.X2 - x1, s.Y2 - y1, x2 - x1, y2 - y1) > 0)
-                           {
-                               return true;
-                           }
-                       }
-                   }
-               }
-           }
-      //todo
+        private bool tarkistaSeinat(double x1, double y1, double x2, double y2)
+        {
+            foreach (Rakennus R in rakennukset)
+            {
+                if((R.maxx>=x2)&&(x2>=R.minx)&&(R.maxy>=y2)&&(y2>=R.miny)){
+                for (int i = 0; i+1 < R.annaVektoriLkm(); i++)
+                {
+                    Line s = new Line();
+                    s.X1=R.annaVektori(i).x;
+                    s.Y1=R.annaVektori(i).y;
+                    s.X2=R.annaVektori(i+1).x;
+                    s.Y2=R.annaVektori(i+1).y;
+                  
+                    // siirretään piste s.x1 s.y1 origoksi ja otetaan ristitulo vektoreille s.x1 s.y1-> x2 y2
+                    //jos haluaisi jättää else puoliskon pois, pitäisi jana käydä aina samoin päin.
+                    //Nyt sillä ei pitäisi olla merkitystä.
+                    if (ristitulo(x2 - s.X1, y2 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) > 0)
+                    {
+                        if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) < 0)
+                        {
+                            //tehdään vastaava tarkastelu toisesta viivasta käsin
+                            if (ristitulo(s.X1 - x1, s.Y1 - y1, x2 - x1, y2 - y1) > 0)
+                            {
+
+                                if (ristitulo(s.X2 - x1, s.Y2 - y1, x2 - x1, y2 - y1) < 0)
+                                {
+                                    //Console.Beep();
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) > 0)
+                        {
+
+                            //tehdään vastaava tarkastelu toisesta viivasta käsin
+                            if (ristitulo(s.X1 - x1, s.Y1 - y1, x2 - x1, y2 - y1) < 0)
+                            {
+
+                                if (ristitulo(s.X2 - x1, s.Y2 - y1, x2 - x1, y2 - y1) > 0)
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+                //tehdään viimeinnen linja for silmukan ulkopuolella niin säästyy yksi iffi
+                Line v = new Line();
+                v.X1 = R.annaVektori(R.annaVektoriLkm()-1).x;
+                v.Y1 = R.annaVektori(R.annaVektoriLkm()-1).y;
+                v.X2 = R.annaVektori(0).x;
+                v.Y2 = R.annaVektori(0).y;
+
+                if (ristitulo(x2 - v.X1, y2 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) > 0)
+                {
+                    if (ristitulo(x1 - v.X1, y1 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) < 0)
+                    {
+                        //tehdään vastaava tarkastelu toisesta viivasta käsin
+                        if (ristitulo(v.X1 - x1, v.Y1 - y1, x2 - x1, y2 - y1) > 0)
+                        {
+
+                            if (ristitulo(v.X2 - x1, v.Y2 - y1, x2 - x1, y2 - y1) < 0)
+                            {
+                                //Console.Beep();
+                                return true;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (ristitulo(x1 - v.X1, y1 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) > 0)
+                    {
+
+                        //tehdään vastaava tarkastelu toisesta viivasta käsin
+                        if (ristitulo(v.X1 - x1, v.Y1 - y1, x2 - x1, y2 - y1) < 0)
+                        {
+
+                            if (ristitulo(v.X2 - x1, v.Y2 - y1, x2 - x1, y2 - y1) > 0)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                }
+            }
             return false;
         }
         /// <summary>

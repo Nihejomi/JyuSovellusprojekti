@@ -43,6 +43,11 @@ namespace Peli
 
     public class Rakennus
     {
+        //lisäsin törmäys tarkistuksen optimointia varten
+        public double minx=0;
+        public double maxx=0;
+        public double miny=0;
+        public double maxy=0;
         String nimi;
         //int tyyppi;
         ArrayList vektorit; // Vektorit tulevat niin että ensimmäinen ja vika on samat, piirto todennäköisesti järjestyksessä pitkin. -joel
