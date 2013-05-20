@@ -79,7 +79,14 @@ namespace SoundSystem
         private NAudio.Wave.WaveChannel32 hitrock_channel = null;
 
         // kävelyäänien kanava
-        private NAudio.Wave.WaveChannel32 walk_channel = null;
+        private NAudio.Wave.WaveChannel32 walk1_channel = null;
+        private NAudio.Wave.WaveChannel32 walk2_channel = null;
+        private NAudio.Wave.WaveChannel32 walk3_channel = null;
+        private NAudio.Wave.WaveChannel32 walk4_channel = null;
+        private NAudio.Wave.WaveChannel32 walk5_channel = null;
+        private NAudio.Wave.WaveChannel32 walk6_channel = null;
+        private NAudio.Wave.WaveChannel32 walk7_channel = null;
+        private NAudio.Wave.WaveChannel32 walk8_channel = null;
 
         // zombiäänien kanavat
         private NAudio.Wave.WaveChannel32 zombi1_channel = null;
@@ -164,8 +171,22 @@ namespace SoundSystem
             hitmetal3_channel = new NAudio.Wave.WaveChannel32(hitmetal3);
             hitmetal3_channel.Volume = 0.0f;
 
-            walk_channel = new NAudio.Wave.WaveChannel32(walk1);
-            walk_channel.Volume = 0.0f;
+            walk1_channel = new NAudio.Wave.WaveChannel32(walk1);
+            walk1_channel.Volume = 0.0f;
+            walk2_channel = new NAudio.Wave.WaveChannel32(walk2);
+            walk2_channel.Volume = 0.0f;
+            walk3_channel = new NAudio.Wave.WaveChannel32(walk3);
+            walk3_channel.Volume = 0.0f;
+            walk4_channel = new NAudio.Wave.WaveChannel32(walk4);
+            walk4_channel.Volume = 0.0f;
+            walk5_channel = new NAudio.Wave.WaveChannel32(walk5);
+            walk5_channel.Volume = 0.0f;
+            walk6_channel = new NAudio.Wave.WaveChannel32(walk6);
+            walk6_channel.Volume = 0.0f;
+            walk7_channel = new NAudio.Wave.WaveChannel32(walk7);
+            walk7_channel.Volume = 0.0f;
+            walk8_channel = new NAudio.Wave.WaveChannel32(walk8);
+            walk8_channel.Volume = 0.0f;
 
             zombi1_channel = new NAudio.Wave.WaveChannel32(zombi1);
             zombi1_channel.Volume = 0.0f;
@@ -207,7 +228,14 @@ namespace SoundSystem
             mikseri.AddInputStream(hitrock_channel);
             mikseri.AddInputStream(hitglass_channel);
 
-            mikseri.AddInputStream(walk_channel);
+            mikseri.AddInputStream(walk1_channel);
+            mikseri.AddInputStream(walk2_channel);
+            mikseri.AddInputStream(walk3_channel);
+            mikseri.AddInputStream(walk4_channel);
+            mikseri.AddInputStream(walk5_channel);
+            mikseri.AddInputStream(walk6_channel);
+            mikseri.AddInputStream(walk7_channel);
+            mikseri.AddInputStream(walk8_channel);
 
             mikseri.AddInputStream(zombi1_channel);
             mikseri.AddInputStream(zombi2_channel);
@@ -374,37 +402,44 @@ namespace SoundSystem
 
                 }
                 if (soundi == "walk")
-                {
+                { 
                     int arpa = random.Next(0, 8);
                     switch (arpa)
                     {
                         case 0:
-                            walk_channel = new NAudio.Wave.WaveChannel32(walk1);
+                            walk1_channel.Volume = volume;
+                            walk1_channel.Position = 0;
                             break;
                         case 1:
-                            walk_channel = new NAudio.Wave.WaveChannel32(walk2);
+                            walk2_channel.Volume = volume;
+                            walk2_channel.Position = 0;
                             break;
                         case 2:
-                            walk_channel = new NAudio.Wave.WaveChannel32(walk3);
+                            walk3_channel.Volume = volume;
+                            walk3_channel.Position = 0;
                             break;
                         case 3:
-                            walk_channel = new NAudio.Wave.WaveChannel32(walk4);
+                            walk4_channel.Volume = volume;
+                            walk4_channel.Position = 0;
                             break;
                         case 4:
-                            walk_channel = new NAudio.Wave.WaveChannel32(walk5);
+                            walk5_channel.Volume = volume;
+                            walk5_channel.Position = 0;
                             break;
                         case 5:
-                            walk_channel = new NAudio.Wave.WaveChannel32(walk6);
+                            walk6_channel.Volume = volume;
+                            walk6_channel.Position = 0;
                             break;
                         case 6:
-                            walk_channel = new NAudio.Wave.WaveChannel32(walk7);
+                            walk7_channel.Volume = volume;
+                            walk7_channel.Position = 0;
                             break;
                         case 7:
-                            walk_channel = new NAudio.Wave.WaveChannel32(walk8);
+                            walk8_channel.Volume = volume;
+                            walk8_channel.Position = 0;
                             break;
                     }
-                    walk_channel.Volume = volume;
-                    walk_channel.Position = 0;
+               
                 }
 
             }

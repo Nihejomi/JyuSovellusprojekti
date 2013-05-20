@@ -18,6 +18,7 @@ using Peli;
 using SoundSystem;
 
 using Pelaaja;
+using System.Timers;
 
 namespace Liikkuvat
 {    
@@ -42,12 +43,21 @@ namespace Liikkuvat
         public double zombikulma;
         Peli.Peli testi;
         ArrayList rakennukset = new ArrayList();
-       ArrayList liikuta = new ArrayList();
-       ArrayList Viivat = new ArrayList();
-       ArrayList seinat = new ArrayList();
+        ArrayList liikuta = new ArrayList();
+        ArrayList Viivat = new ArrayList();
+        ArrayList seinat = new ArrayList();
+
+       
+       
+           
+           Soundsystem soundsystem;
+           System.Timers.Timer soundcheck;
+           System.Timers.Timer walksoundtimer;
+           System.Timers.Timer zombiesoundtimer;
 
 
-        Soundsystem soundsystem;
+
+
 
         public MainWindow()
         {
@@ -86,6 +96,26 @@ namespace Liikkuvat
 
 
             soundsystem = new Soundsystem();
+            
+            // tarkistaa 10 sekunnin välein jos ambienssiääni on loppunut, voisi tehdä esim niin että ambienssi vaihtuu alueittan
+            soundcheck = new System.Timers.Timer(10000);
+            soundcheck.Elapsed += new ElapsedEventHandler(soundcheckEvent);
+            soundcheck.Enabled = true;
+            soundcheck.Start();
+
+            // kävelysoundi 500ms, voisi muuttua juostessa yms
+            walksoundtimer = new System.Timers.Timer(500);
+            walksoundtimer.Elapsed += new ElapsedEventHandler(walksoundEvent);
+            walksoundtimer.Enabled = true;
+            walksoundtimer.Start();
+
+            // zombien ölinöitä enintään kerran 5. sekunnissa
+            zombiesoundtimer = new System.Timers.Timer(50000);
+            zombiesoundtimer.Elapsed += new ElapsedEventHandler(zombiesoundEvent);
+            zombiesoundtimer.Enabled = true;
+            zombiesoundtimer.Start();
+
+
 
             piirraRuohot();
             piirraTiet();
@@ -122,8 +152,33 @@ namespace Liikkuvat
             dispatcherTimer.Start();
            
         }
-        
 
+        private void soundcheckEvent(object source, ElapsedEventArgs e)
+        {            
+            soundsystem.check_ambience();
+        }
+        private void walksoundEvent(object source, ElapsedEventArgs e)
+        {            
+            if(eteen || taakse)
+            soundsystem.PlaySound("walk", 1.0f);
+        }
+
+        private void zombiesoundEvent(object source, ElapsedEventArgs e)
+        {
+            Random rand = new Random();
+            int arpa = rand.Next(0, 10);
+
+            foreach (liikkuva zombie in liikuta)
+            {
+                UIElement uiZombie = zombie as UIElement;
+                //if(zombie.get status == jotain ?
+                // 
+                //soundsystem.PlaySound("zombi", 0.7f);
+                //
+            }
+                           
+        }
+        
         private void piirraVesistot()
         {
             SolidColorBrush sininen = new SolidColorBrush();
@@ -326,7 +381,8 @@ namespace Liikkuvat
         }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-         
+
+  
            if(Keyboard.IsKeyDown(Key.Add))
            {
                if (zoomi < 5) 
@@ -358,9 +414,10 @@ namespace Liikkuvat
            }
            if (Keyboard.IsKeyDown(Key.W))
            {
+           
                eteen = true;
            }
-           else { eteen = false; }
+           else { eteen = false;  }
            if (Keyboard.IsKeyDown(Key.S))
            {
                eteen = false;
