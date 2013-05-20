@@ -894,12 +894,49 @@ namespace Liikkuvat
 
                //System.Console.WriteLine("luoti x:" + leveytta + " luoti y:" + korkeutta);
                  // jos osuu seinään, niin piiretään kohdalle punainen pallo
+
+               foreach (liikkuva zombie in liikuta)
+               {
+                   UIElement uiZombie = zombie as UIElement;
+                   Vector zombiePos = zombie.getPosition();
+
+                   if (leveytta > zombiePos.X && leveytta < zombiePos.X + uiZombie.RenderSize.Width && korkeutta > zombiePos.Y && korkeutta < zombiePos.Y + uiZombie.RenderSize.Height)
+                   {
+                       System.Console.WriteLine("osui zombiin");
+                       soundsystem.PlaySound("hit-flesh", 1.0f);
+                       moving = false;
+                       break;
+                      
+                   }
+
+
+               }
+
+
+
                if (tarkistaSeinat(alkuleveytta, alkukorkeutta, leveytta, korkeutta) == true)
                {
                    Ellipse pallo = CreateEllipse(10, 10, leveytta, korkeutta);  
                    canvas1.Children.Add(pallo);
 
-                   soundsystem.PlaySound("hit-glass", 1.0f);  //System.Console.WriteLine("luoti osui seinään");
+
+                   Random rand = new Random();
+
+                   int arpa = rand.Next(0, 3);
+                   switch (arpa)
+                   {
+                       case 0:
+                           soundsystem.PlaySound("hit-glass", 1.0f);
+                           break;
+                       case 1:
+                           soundsystem.PlaySound("hit-metal", 1.0f);
+                           break;
+                       case 2:
+                           soundsystem.PlaySound("hit-rock", 1.0f);
+                           break;
+
+                   }
+                     //System.Console.WriteLine("luoti osui seinään");
                    break;
                }
                // piiretään luodin kulkulinja
