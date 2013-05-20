@@ -27,6 +27,7 @@ namespace Undying
         //Classes that govern Zombies behaviour, reactions and condition
         private ZombiBehaviour behaviour;
         private ZombiStatus status;
+        private bool dead = false;
 
         // stepVector represents minimum distance zombie moves per tick
         private double stepMultiplier;
@@ -65,6 +66,21 @@ namespace Undying
            // position = stepTowards(playerPos);
             //tätä käytettään tarkistuksessa, position asetetaan move- metodilla
             return position;
+        }
+
+        public void die()
+        {
+            dead = true;
+        }
+
+        public bool isDead()
+        {
+            return dead;
+        }
+
+        public bool isAlive()
+        {
+            return !dead;
         }
 
         public Vector possibleMove(Vector target)

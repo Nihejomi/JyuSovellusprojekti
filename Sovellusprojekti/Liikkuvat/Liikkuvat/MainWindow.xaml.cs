@@ -47,6 +47,9 @@ namespace Liikkuvat
         ArrayList Viivat = new ArrayList();
         ArrayList seinat = new ArrayList();
 
+        ArrayList tulivanat = new ArrayList();
+        ArrayList osumat = new ArrayList();
+
        
        
            
@@ -54,6 +57,7 @@ namespace Liikkuvat
            System.Timers.Timer soundcheck;
            System.Timers.Timer walksoundtimer;
            System.Timers.Timer zombiesoundtimer;
+
 
 
 
@@ -114,8 +118,6 @@ namespace Liikkuvat
             zombiesoundtimer.Elapsed += new ElapsedEventHandler(zombiesoundEvent);
             zombiesoundtimer.Enabled = true;
             zombiesoundtimer.Start();
-
-
 
             piirraRuohot();
             piirraTiet();
@@ -784,6 +786,7 @@ namespace Liikkuvat
             }
             foreach (liikkuva zombie in liikuta) 
             {
+                if (zombie.isDead()) continue;
                 UIElement uiZombie = zombie as UIElement;
                 Vector zombiePos = zombie.getPosition();
 
@@ -955,6 +958,7 @@ namespace Liikkuvat
 
                foreach (liikkuva zombie in liikuta)
                {
+                   if (zombie.isDead()) continue;
                    UIElement uiZombie = zombie as UIElement;
                    Vector zombiePos = zombie.getPosition();
 
@@ -962,9 +966,7 @@ namespace Liikkuvat
                    {
                        System.Console.WriteLine("osui zombiin");
                        soundsystem.PlaySound("hit-flesh", 1.0f);
-                       moving = false;
-                       break;
-                      
+                       zombie.die();
                    }
 
 
@@ -997,21 +999,25 @@ namespace Liikkuvat
                      //System.Console.WriteLine("luoti osui seinään");
                    break;
                }
+
                // piiretään luodin kulkulinja
-               Line viiva = new Line();
-               viiva.Visibility = Visibility.Visible;
-               viiva.StrokeThickness = 1;
-               viiva.X1 = alkuleveytta;
-               viiva.Y1 = alkukorkeutta;
-               viiva.X2 = leveytta;
-               viiva.Y2 = korkeutta;
-               viiva.Stroke = System.Windows.Media.Brushes.Black;
-               canvas1.Children.Add(viiva);
                
             }
-          
 
+            Line viiva = new Line();
+            viiva.Visibility = Visibility.Visible;
+            viiva.StrokeThickness = 1;
+            viiva.X1 = alkuleveytta;
+            viiva.Y1 = alkukorkeutta;
+            viiva.X2 = leveytta;
+            viiva.Y2 = korkeutta;
+            viiva.Stroke = System.Windows.Media.Brushes.Black;
+            canvas1.Children.Add(viiva);
+
+          
         }
+
+
 
 
     }
