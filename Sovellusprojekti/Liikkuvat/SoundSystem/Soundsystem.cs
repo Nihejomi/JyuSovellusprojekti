@@ -17,9 +17,10 @@ namespace SoundSystem
     public class Soundsystem
     {
         bool soundson;
+        bool musicon;
 
         private NAudio.Wave.BlockAlignReductionStream ambience = null;
-
+        private NAudio.Wave.BlockAlignReductionStream drone = null;
 
         private NAudio.Wave.DirectSoundOut output = null;
         
@@ -98,6 +99,7 @@ namespace SoundSystem
         private NAudio.Wave.WaveChannel32 zombi7_channel = null;
 
         private NAudio.Wave.WaveChannel32 ambience_channel = null;
+        private NAudio.Wave.WaveChannel32 drone_channel = null;
 
 
         // kanavien mikseri
@@ -112,6 +114,11 @@ namespace SoundSystem
 
             ambience = new NAudio.Wave.BlockAlignReductionStream(pcm);
 
+
+            pcm = NAudio.Wave.WaveFormatConversionStream.CreatePcmStream(
+                new NAudio.Wave.Mp3FileReader("music/zombi-drone.mp3"));
+
+            drone = new NAudio.Wave.BlockAlignReductionStream(pcm);
 
             fire1 = new NAudio.Wave.WaveFileReader("sounds/gun-fire1.wav");
             fire2 = new NAudio.Wave.WaveFileReader("sounds/gun-fire2.wav");
@@ -213,6 +220,10 @@ namespace SoundSystem
             ambience_channel = new NAudio.Wave.WaveChannel32(ambience);
             ambience_channel.Volume = 0.2f;
 
+            drone_channel = new NAudio.Wave.WaveChannel32(drone);
+            drone_channel.Volume = 0.5f;
+
+
    
             mikseri.AddInputStream(fire1_channel);
             mikseri.AddInputStream(fire2_channel);
@@ -248,7 +259,7 @@ namespace SoundSystem
 
             
             mikseri.AddInputStream(ambience_channel);
-
+            mikseri.AddInputStream(drone_channel);
            
             mikseri.AutoStop = false;
 
@@ -266,17 +277,29 @@ namespace SoundSystem
                 ambience_channel.Position = 0;
 
         }
+        public void check_drone()
+        {
+            if (drone_channel.Position >= (drone_channel.Length - 5))
+                drone_channel.Position = 0;
+        }
 
-
-        public void Setoff()
+        public void SoundsOff()
         {
             soundson = false;
         }
-        public void SetOn()
+        public void SoundsOn()
         {
             soundson = true;
         }
-
+        public void MusicOff()
+        {
+            musicon = false;
+        }
+        public void MusicOn()
+        {
+            musicon = true;
+        }
+        
         public void PlaySound(string soundi, float volume)
         {
             if (soundson)
@@ -443,26 +466,8 @@ namespace SoundSystem
                 }
 
             }
-            
-            
-            
+                          
         }
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
-
-
-
 
 }

@@ -97,13 +97,13 @@ namespace Liikkuvat
 
             soundsystem = new Soundsystem();
             
-            // tarkistaa 10 sekunnin välein jos ambienssiääni on loppunut, voisi tehdä esim niin että ambienssi vaihtuu alueittan
-            soundcheck = new System.Timers.Timer(10000);
+            // tarkistaa 5 sekunnin välein jos ambienssiääni/musiikki on loppunut, voisi tehdä niin että esim ambienssi vaihtuu alueittan
+            soundcheck = new System.Timers.Timer(50000);
             soundcheck.Elapsed += new ElapsedEventHandler(soundcheckEvent);
             soundcheck.Enabled = true;
             soundcheck.Start();
 
-            // kävelysoundi 500ms, voisi muuttua juostessa yms
+            // kävelysoundi 500ms, voisi muuttua juostessa nopeammaksi yms
             walksoundtimer = new System.Timers.Timer(500);
             walksoundtimer.Elapsed += new ElapsedEventHandler(walksoundEvent);
             walksoundtimer.Enabled = true;
@@ -156,6 +156,7 @@ namespace Liikkuvat
         private void soundcheckEvent(object source, ElapsedEventArgs e)
         {            
             soundsystem.check_ambience();
+            soundsystem.check_drone();
         }
         private void walksoundEvent(object source, ElapsedEventArgs e)
         {            
