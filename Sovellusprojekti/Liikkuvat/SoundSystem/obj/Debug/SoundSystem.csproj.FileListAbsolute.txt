@@ -1,0 +1,11 @@
+G:\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\bin\Debug\SoundSystem.dll
+G:\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\bin\Debug\SoundSystem.pdb
+G:\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\bin\Debug\NAudio.dll
+G:\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\obj\Debug\ResolveAssemblyReference.cache
+G:\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\obj\Debug\SoundSystem.dll
+G:\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\obj\Debug\SoundSystem.pdb
+C:\Users\Joel\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\bin\Debug\SoundSystem.dll
+C:\Users\Joel\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\bin\Debug\SoundSystem.pdb
+C:\Users\Joel\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Joel\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\obj\Debug\SoundSystem.dll
+C:\Users\Joel\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\obj\Debug\SoundSystem.pdb

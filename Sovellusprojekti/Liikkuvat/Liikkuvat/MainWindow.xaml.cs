@@ -15,6 +15,7 @@ using System.Threading;
 using System.Collections;
 using Undying;
 using Peli;
+using SoundSystem;
 
 using Pelaaja;
 
@@ -44,6 +45,9 @@ namespace Liikkuvat
        ArrayList liikuta = new ArrayList();
        ArrayList Viivat = new ArrayList();
        ArrayList seinat = new ArrayList();
+
+
+        Soundsystem soundsystem;
 
         public MainWindow()
         {
@@ -79,6 +83,10 @@ namespace Liikkuvat
             // testi= new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
 
             //rakennukset = testi.annaAlueRakennukset(62.2330, 25.733, 62.2335, 25.7335);
+
+
+            soundsystem = new Soundsystem();
+
             piirraRuohot();
             piirraTiet();
             piirraRakennukset();
@@ -872,6 +880,7 @@ namespace Liikkuvat
 
             pelaaja luoti = new pelaaja();
 
+            soundsystem.PlaySound("fire1", 1.0f);
             // kun luoti vielä liikkuu
            while(moving)
             {
@@ -890,7 +899,7 @@ namespace Liikkuvat
                    Ellipse pallo = CreateEllipse(10, 10, leveytta, korkeutta);  
                    canvas1.Children.Add(pallo);
 
-                   System.Console.WriteLine("luoti osui seinään");
+                   soundsystem.PlaySound("hit-glass", 1.0f);  //System.Console.WriteLine("luoti osui seinään");
                    break;
                }
                // piiretään luodin kulkulinja
