@@ -39,7 +39,7 @@ namespace Undying
         public Zombi(Vector startPos)
         {
             InitializeComponent();
-            stepMultiplier = 0.5;
+            stepMultiplier = 0.9;
             position = startPos;
             behaviour = new ZombiBehaviour();
             status = new ZombiStatus();

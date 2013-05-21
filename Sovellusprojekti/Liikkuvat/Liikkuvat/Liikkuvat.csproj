@@ -102,6 +102,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SoundSystem\SoundSystem.csproj">
+      <Project>{20D1C1FE-B6DD-4631-B0D8-8EA3053AA2B5}</Project>
+      <Name>SoundSystem</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WpfControlLibrary1\Pelaaja.csproj">
       <Project>{7BEA7332-C24E-46F2-B40A-BBA490F39F7E}</Project>
       <Name>Pelaaja</Name>
