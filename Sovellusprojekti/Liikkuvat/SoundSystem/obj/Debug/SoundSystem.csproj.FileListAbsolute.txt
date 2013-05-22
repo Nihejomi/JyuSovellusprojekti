@@ -9,3 +9,8 @@ C:\Users\Joel\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundS
 C:\Users\Joel\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\Joel\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\obj\Debug\SoundSystem.dll
 C:\Users\Joel\sovellusproj\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\obj\Debug\SoundSystem.pdb
+C:\Users\Henrik\Desktop\SovellusProjektiUusi\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\bin\Debug\SoundSystem.dll
+C:\Users\Henrik\Desktop\SovellusProjektiUusi\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\bin\Debug\SoundSystem.pdb
+C:\Users\Henrik\Desktop\SovellusProjektiUusi\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\obj\Debug\SoundSystem.csprojResolveAssemblyReference.cache
+C:\Users\Henrik\Desktop\SovellusProjektiUusi\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\obj\Debug\SoundSystem.dll
+C:\Users\Henrik\Desktop\SovellusProjektiUusi\JyuSovellusprojekti\Sovellusprojekti\Liikkuvat\SoundSystem\obj\Debug\SoundSystem.pdb
