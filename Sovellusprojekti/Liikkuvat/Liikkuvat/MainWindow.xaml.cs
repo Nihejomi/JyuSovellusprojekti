@@ -64,7 +64,7 @@ namespace Liikkuvat
 
 
            int hitpoints;
-
+           ProgressBar hitBar = new ProgressBar();
 
         public MainWindow()
         {
@@ -100,7 +100,7 @@ namespace Liikkuvat
 
            //testi = new Peli.Peli(61.48035, 23.77334, 61.48891, 23.7254, 2000, 2000, false); // tre
 
-          testi = new Peli.Peli(62.22418, 25.76424, 62.22893, 25.77725, 3000, 3000, false);
+          testi = new Peli.Peli(62.22418, 25.76424, 62.22893, 25.77725, 1000, 1000, false);
             //testi = new Peli.Peli(62.24, 25.73, 62.26, 25.75, 2000, 2000);//
             // testi= new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
 
@@ -159,8 +159,17 @@ namespace Liikkuvat
                 }
             }
 
+            hitpoints = 1000;
+            hitBar.Width = 100;
+            hitBar.Height = 10;
+            hitBar.Foreground = new SolidColorBrush(Colors.Red);
+            hitBar.Maximum = hitpoints;
+            hitBar.Minimum = 0;
+            hitBar.Value = hitpoints;
 
-            hitpoints = 100;
+            canvas1.Children.Add(hitBar);
+            //Canvas.SetTop(hitBar, ??);
+            //Canvas.SetLeft(hitBar, ??);
 
             label2.Content = zombejasisalla;
             dispatcherTimer.Start();
@@ -763,8 +772,6 @@ namespace Liikkuvat
         private void kaikkiliikkuu()
         {
 
-            progressBar1.Value = hitpoints;
-
             zoomaa();
             if (luotiviivat.Count != 0)
             {
@@ -819,6 +826,7 @@ namespace Liikkuvat
 
                 }
             }
+
             kaantyminen--;
             foreach (liikkuva zombie in liikuta)
             {
@@ -847,9 +855,9 @@ namespace Liikkuvat
 
                 double pelaajax = Canvas.GetTop((UIElement)this.pelaaja1) + this.pelaaja1.ActualWidth / 2;
                 double pelaajay = Canvas.GetLeft((UIElement)this.pelaaja1) + this.pelaaja1.ActualHeight / 2;
-                if (zombiePos.X - 15 > pelaajax && zombiePos.X + 15 < pelaajax + this.pelaaja1.ActualWidth / 2 && zombiePos.Y - 5 > pelaajay && zombiePos.Y + 5 < pelaajay + this.pelaaja1.ActualHeight / 2)
+                if (zombie.getDistance(new Vector(leveytta, korkeutta)) < 10)
                 {
-                    hitpoints--;
+                    hitBar.Value--;
                 }
 
                 if (kaantyminen == 0)
@@ -861,7 +869,9 @@ namespace Liikkuvat
                 }
             }
             if (kaantyminen == 0) { kaantyminen = 5; }
-
+            
+            Canvas.SetTop(hitBar, korkeutta - 10);
+            Canvas.SetLeft(hitBar, leveytta - 50);
         }
         /// <summary>
         /// Mahtuuko liikkumaan?

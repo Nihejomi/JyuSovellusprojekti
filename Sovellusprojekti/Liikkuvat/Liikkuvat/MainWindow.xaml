@@ -9,7 +9,6 @@
 
             <my:pelaaja Canvas.Left="400" Canvas.Top="280" Name="pelaaja1" Panel.ZIndex="999998" />
             <Label Canvas.Left="447" Canvas.Top="271" Content="Label" Height="28" Name="label2" />
-            <ProgressBar Canvas.Left="615" Canvas.Top="15" Height="10" Name="progressBar1" Width="172" Foreground="Red" />
         </Canvas>
         <TextBox Name="syötelokero" HorizontalAlignment="Left" Height="22" Margin="66,62,0,0" TextWrapping="Wrap" Text="Jyväskylä" VerticalAlignment="Top" Width="323" KeyDown="TextBox_KeyDown" Grid.RowSpan="2"/>
         <TextBlock x:Name ="Syöeselite" HorizontalAlignment="Left" Margin="66,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="350" Height="16" Grid.RowSpan="2">
