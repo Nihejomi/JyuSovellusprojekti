@@ -64,7 +64,6 @@ namespace Liikkuvat
 
 
            int hitpoints;
-           ProgressBar hitBar = new ProgressBar();
 
         public MainWindow()
         {
@@ -160,14 +159,12 @@ namespace Liikkuvat
             }
 
             hitpoints = 1000;
-            hitBar.Width = 100;
-            hitBar.Height = 10;
-            hitBar.Foreground = new SolidColorBrush(Colors.Red);
             hitBar.Maximum = hitpoints;
-            hitBar.Minimum = 0;
             hitBar.Value = hitpoints;
 
-            canvas1.Children.Add(hitBar);
+            ammoBar.Maximum = lipas;
+            ammoBar.Value = lipas;
+
             //Canvas.SetTop(hitBar, ??);
             //Canvas.SetLeft(hitBar, ??);
 
@@ -434,9 +431,9 @@ namespace Liikkuvat
            }
            if (Keyboard.IsKeyDown(Key.R))
            {
-               if (lipas < 8)
+               if (ammoBar.Value < lipas)
                {
-                   lipas = 8;
+                   ammoBar.Value = lipas;
                    soundsystem.PlaySound("load", 1.0f);
                }
            }
@@ -870,8 +867,6 @@ namespace Liikkuvat
             }
             if (kaantyminen == 0) { kaantyminen = 5; }
             
-            Canvas.SetTop(hitBar, korkeutta - 10);
-            Canvas.SetLeft(hitBar, leveytta - 50);
         }
         /// <summary>
         /// Mahtuuko liikkumaan?
@@ -905,13 +900,13 @@ namespace Liikkuvat
             if (e.ChangedButton == MouseButton.Right)
             {
 
-                if (lipas == 0)
+                if (ammoBar.Value == 0)
                 {
                     soundsystem.PlaySound("empty", 1.0f);
                 }
-                if(lipas >0 ){
+                if(ammoBar.Value > 0 ){
                 Ammu(50, e.GetPosition(canvas1).X, e.GetPosition(canvas1).Y);
-                lipas--;
+                ammoBar.Value--;
                 }
                 
 
