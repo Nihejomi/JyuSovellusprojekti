@@ -33,6 +33,8 @@ namespace Liikkuvat
         public double kohdex;
         public double kohdey;
         public string kaupunki;
+        public bool pelaajakuoli = false;
+        
         bool eteen = false;
         bool taakse = false;
         private double zoomi = 1;
@@ -49,6 +51,8 @@ namespace Liikkuvat
         ArrayList liikuta = new ArrayList();
         ArrayList Viivat = new ArrayList();
         ArrayList seinat = new ArrayList();
+        ArrayList tiet = new ArrayList();// Tähän tiet jos tehdään liikkumis nopeutta käsittelevä metodi joskus
+        ArrayList Muut = new ArrayList();// tänne kaikki grafiikka jolla ei mitään muuta käyttöä
 
         ArrayList tulivanat = new ArrayList();
         ArrayList osumat = new ArrayList();
@@ -78,6 +82,7 @@ namespace Liikkuvat
         /// <param name="p"></param>
         private void alusta(string p)
         {
+            pelaajakuoli = false;
             // resot jotka voidaan myöhemmin sitoa johonkin muuttujaan.
             int resox = 3000;
             int resoy = 3000;
@@ -286,6 +291,7 @@ namespace Liikkuvat
                   talo.Fill = harmaa;
                   rakennukset.Add(kohde);
                   canvas1.Children.Add(talo);
+                  Muut.Add(talo);
               
 
               /*  for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
@@ -331,6 +337,7 @@ namespace Liikkuvat
 
 
                 canvas1.Children.Add(ruoho);
+                Muut.Add(ruoho);
 
 
                 /*  for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
@@ -372,7 +379,7 @@ namespace Liikkuvat
                     if(kohde.annaTyyppi() == 1 )
                     tie.Fill = harmaa;
                     canvas1.Children.Add(tie);
-             
+                    tiet.Add(tie);
 
                 
                 /*  for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
@@ -474,7 +481,49 @@ namespace Liikkuvat
             label2.Content = pelaajakulma / Math.PI * 2 * 360;
             pelaaja1.RenderTransform = r;
             */
-           kaikkiliikkuu();
+            if (hitBar.Value > 0)
+            {
+                kaikkiliikkuu();
+            }
+            else {
+          
+                    peliohi();
+                    pelaajakuoli = true;
+                    dispatcherTimer.Stop();
+            
+                //dispatcherTimer.Stop();
+            }
+        }
+        /// <summary>
+        /// Tässä olis tarkoitus poistella viime pelin oliota kuten zombeja ja grafiikkaa.
+        /// Tämän jälkeen roskien keruu toivottavasti hävittää nämä oliot kun niihin ei enää ole viitteitä
+        /// </summary>
+        private void peliohi()
+        {
+           foreach (object z in liikuta){
+              canvas1.Children.Remove((UIElement)z);
+               
+           
+           }
+           //Huom! rakennusten mukaan piirretyt polygonit poistettaan tässä loopissa;   
+           foreach (object z in Muut)
+           {
+               canvas1.Children.Remove((UIElement)z);
+
+
+           }
+           foreach (object z in tiet)
+           {
+               canvas1.Children.Remove((UIElement)z);
+
+
+           }
+           liikuta = new ArrayList();
+           rakennukset = new ArrayList();
+           Muut = new ArrayList();
+           tiet = new ArrayList();
+            syötelokero.Visibility = Visibility.Visible;
+
         }
         /// <summary>
         /// Piirtää viivan. viiva liataan Viivat- arraylistaan ja Canvas1 lapsiin.
