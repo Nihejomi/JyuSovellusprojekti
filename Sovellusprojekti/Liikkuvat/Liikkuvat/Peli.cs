@@ -230,6 +230,8 @@ namespace Peli
 
          //ArrayList Tiet;
 
+        // clienti, jolla ladataan apista xml-tiedostoja.
+        OpenStreetMapClient lataaja = new OpenStreetMapClient();
 
         // koordinaattivektoreiden muuntelua näillä parametreillä -joel
         double scalex;
@@ -609,6 +611,27 @@ namespace Peli
             return palautus;
         }
 
+
+        public Peli(string kaupunki, int resox, int resoy, bool testaus)
+        {
+            System.Console.WriteLine("ladataa kaupungin node openstreetmap apista...");
+            lataaja.downloadOSMFile(kaupunki, "city.osm");
+            //parsi kordinaatit
+            double[] kord = lataaja.calculateBBox(0, 0, 0.5);
+
+            lataaja.downloadOSMFile(kord[0], kord[1], kord[2], kord[3], "temp.osm");
+            
+            XMLData luettudata = XMLLukija.LueXML("temp.osm");
+
+            Rakennukset = new ArrayList();
+            Vedet = new ArrayList();
+            Tiet = new ArrayList();
+            Ruohot = new ArrayList();
+
+            LataaData(kord[0], kord[1], kord[2], kord[3], resox, resoy, luettudata, testaus);
+            System.Console.WriteLine("Koko Data ladattu sisälle.");
+        }
+
         /// <summary>
         /// luo pelioliokokoelman kordinaattien perusteella netistä apin avulla
         /// </summary>
@@ -622,7 +645,6 @@ namespace Peli
         public Peli(double minlat, double minlon, double maxlat, double maxlon, int resox, int resoy, bool testaus)
         {
             System.Console.WriteLine("ladataan xml openstreetmapin apista...");
-          OpenStreetMapClient lataaja = new OpenStreetMapClient();
          lataaja.downloadOSMFile(minlat, minlon, maxlat, maxlon, "temp.osm");
           //lataaja.downloadMapPic(minlat + (maxlat - minlat)/2, minlon + (maxlon - minlon)/2, "testi.png");
 
