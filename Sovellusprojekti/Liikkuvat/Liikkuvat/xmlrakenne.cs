@@ -469,12 +469,12 @@ namespace Peli
                                         reader.MoveToAttribute(i);
 
                                         // näitä ehtoja vähentämällä saa laskettua tieolioiden kuormaa 
-                                        if ( (reader.Name == "v" && reader.Value.ToString() == "footway") ||  (reader.Name == "v" && reader.Value.ToString() == "motorway") ||
+                                        if ((reader.Name == "v" && reader.Value.ToString() == "footway") || (reader.Name == "v" && reader.Value.ToString() == "motorway") || (reader.Name == "v" && reader.Value.ToString() == "service") ||
                                             (reader.Name == "v" && reader.Value.ToString() == "cycleway") ||  (reader.Name == "v" && reader.Value.ToString() == "residential") ||
                                             (reader.Name == "v" && reader.Value.ToString() == "secondary" || reader.Name == "v" && reader.Value.ToString() == "tertiary" || reader.Name == "v" && reader.Value.ToString() == "pedestrian"))
                                         {
                                             int tyyppi = 0;
-                                            if (reader.Value.ToString() == "motorway" || reader.Value.ToString() == "residential" || reader.Value.ToString() == "secondary" || reader.Value.ToString() == "tertiary")
+                                            if (reader.Value.ToString() == "secondary" || reader.Value.ToString() == "tertriary"  )//|| reader.Value.ToString() == "tertiary")
                                             {
                                                 tyyppi = 1;
                                             }

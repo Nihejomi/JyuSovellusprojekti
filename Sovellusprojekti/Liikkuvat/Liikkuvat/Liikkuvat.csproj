@@ -103,7 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SoundSystem\SoundSystem.csproj">
-      <Project>{20d1c1fe-b6dd-4631-b0d8-8ea3053aa2b5}</Project>
+      <Project>{20D1C1FE-B6DD-4631-B0D8-8EA3053AA2B5}</Project>
       <Name>SoundSystem</Name>
     </ProjectReference>
     <ProjectReference Include="..\WpfControlLibrary1\Pelaaja.csproj">
@@ -114,9 +114,6 @@
       <Project>{5F29658F-512B-4C0B-B267-57EE84A81490}</Project>
       <Name>Undying</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

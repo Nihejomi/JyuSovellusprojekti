@@ -13,5 +13,7 @@ namespace Undying
         Vector getPosition();
         Vector possibleMove(Vector target);
         void move(Vector target);
+        void die();
+        bool isDead();
     }
 }
