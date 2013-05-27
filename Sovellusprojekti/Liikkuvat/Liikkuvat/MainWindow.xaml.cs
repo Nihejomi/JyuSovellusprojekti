@@ -65,7 +65,6 @@ namespace Liikkuvat
 
            int hitpoints;
 
-
         public MainWindow()
         {
 
@@ -100,7 +99,7 @@ namespace Liikkuvat
 
            //testi = new Peli.Peli(61.48035, 23.77334, 61.48891, 23.7254, 2000, 2000, false); // tre
 
-          testi = new Peli.Peli(62.22418, 25.76424, 62.22893, 25.77725, 3000, 3000, false);
+          testi = new Peli.Peli(62.22418, 25.76424, 62.22893, 25.77725, 1000, 1000, false);
             //testi = new Peli.Peli(62.24, 25.73, 62.26, 25.75, 2000, 2000);//
             // testi= new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
 
@@ -159,8 +158,15 @@ namespace Liikkuvat
                 }
             }
 
+            hitpoints = 1000;
+            hitBar.Maximum = hitpoints;
+            hitBar.Value = hitpoints;
 
-            hitpoints = 100;
+            ammoBar.Maximum = lipas;
+            ammoBar.Value = lipas;
+
+            //Canvas.SetTop(hitBar, ??);
+            //Canvas.SetLeft(hitBar, ??);
 
             label2.Content = zombejasisalla;
             dispatcherTimer.Start();
@@ -425,9 +431,9 @@ namespace Liikkuvat
            }
            if (Keyboard.IsKeyDown(Key.R))
            {
-               if (lipas < 8)
+               if (ammoBar.Value < lipas)
                {
-                   lipas = 8;
+                   ammoBar.Value = lipas;
                    soundsystem.PlaySound("load", 1.0f);
                }
            }
@@ -763,8 +769,6 @@ namespace Liikkuvat
         private void kaikkiliikkuu()
         {
 
-            progressBar1.Value = hitpoints;
-
             zoomaa();
             if (luotiviivat.Count != 0)
             {
@@ -819,6 +823,7 @@ namespace Liikkuvat
 
                 }
             }
+
             kaantyminen--;
             foreach (liikkuva zombie in liikuta)
             {
@@ -847,9 +852,9 @@ namespace Liikkuvat
 
                 double pelaajax = Canvas.GetTop((UIElement)this.pelaaja1) + this.pelaaja1.ActualWidth / 2;
                 double pelaajay = Canvas.GetLeft((UIElement)this.pelaaja1) + this.pelaaja1.ActualHeight / 2;
-                if (zombiePos.X - 15 > pelaajax && zombiePos.X + 15 < pelaajax + this.pelaaja1.ActualWidth / 2 && zombiePos.Y - 5 > pelaajay && zombiePos.Y + 5 < pelaajay + this.pelaaja1.ActualHeight / 2)
+                if (zombie.getDistance(new Vector(leveytta, korkeutta)) < 10)
                 {
-                    hitpoints--;
+                    hitBar.Value--;
                 }
 
                 if (kaantyminen == 0)
@@ -861,7 +866,7 @@ namespace Liikkuvat
                 }
             }
             if (kaantyminen == 0) { kaantyminen = 5; }
-
+            
         }
         /// <summary>
         /// Mahtuuko liikkumaan?
@@ -895,13 +900,13 @@ namespace Liikkuvat
             if (e.ChangedButton == MouseButton.Right)
             {
 
-                if (lipas == 0)
+                if (ammoBar.Value == 0)
                 {
                     soundsystem.PlaySound("empty", 1.0f);
                 }
-                if(lipas >0 ){
+                if(ammoBar.Value > 0 ){
                 Ammu(50, e.GetPosition(canvas1).X, e.GetPosition(canvas1).Y);
-                lipas--;
+                ammoBar.Value--;
                 }
                 
 
