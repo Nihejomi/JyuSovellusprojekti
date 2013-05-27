@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Globalization;
 using System.Drawing;
+using System.Windows;
 
 namespace Peli
 {
@@ -54,15 +55,61 @@ namespace Peli
         }
 
         /// <summary>
-        /// Downloads OSM xml-file containing nodes, relations and ways withing given distance from center of given city
+        /// Downloads OSM xml-file containing node at the center of given city
         /// </summary>
-        /// <param name="cityName">Name of the city, task is performed from the center of the city</param>
-        /// <param name="rangeMeters">Distance from center in meters</param>
+        /// <param name="cityName">Name of the city</param>
         /// <param name="filename">Name for the downloaded file</param>
-        public void downloadOSMFile(string cityName, int rangeMeters, string filename)
+        public void downloadOSMFile(string cityName, string filename)
         {
-            string address = currentServer + queryMapAround(cityName, rangeMeters) + email;
+            string address = currentServer + queryCityNode(cityName) + email;
             client.DownloadFile(address, filename);
+        }
+
+
+        public double[] calculateBBox(double lat, double lon, double km)
+        {
+            double radiusEarth = 6371; //radius of earth in meters
+            lat = degreesToRadians(62.2393006);
+            lon = degreesToRadians(25.7459479);
+
+            double right = degreesToRadians(90.0);
+            double left = degreesToRadians(270.0);
+            double up = degreesToRadians(0.0);
+            double down = degreesToRadians(180.0);
+
+            //Math.Asin(Math.sin(lat1)*Math.cos(d/R)+Math.cos(lat1)*Math.Sin(d/R)*Math.Cos(0.25));
+
+            double minlat = radiansToDegrees(Math.Asin(Math.Sin(lat) * Math.Cos(km / radiusEarth) + 
+                Math.Cos(lat) * Math.Sin(km / radiusEarth) * Math.Cos(down)));
+            double minlon = radiansToDegrees(lon + Math.Atan2(Math.Sin(left) * Math.Sin(km / radiusEarth) * Math.Cos(lat),
+                                 Math.Cos(km / radiusEarth) - Math.Sin(lat) * Math.Sin(minlat)));
+            double maxlat = radiansToDegrees(Math.Asin(Math.Sin(lat) * Math.Cos(km / radiusEarth) + 
+                Math.Cos(lat) * Math.Sin(km / radiusEarth) * Math.Cos(up)));
+            double maxlon = radiansToDegrees(lon + Math.Atan2(Math.Sin(right) * Math.Sin(km / radiusEarth) * Math.Cos(lat),
+                                 Math.Cos(km / radiusEarth) - Math.Sin(lat) * Math.Sin(maxlat)));
+            
+            return new double[4] {minlat, minlon, maxlat, maxlon};
+
+        }
+
+        /// <summary>
+        /// Converts degrees to radians
+        /// </summary>
+        /// <param name="degree">Degrees</param>
+        /// <returns>Radians</returns>
+        private double degreesToRadians(double degrees)
+        {
+            return Math.PI * degrees / 180.0;
+        }
+
+        /// <summary>
+        /// Converts radians to degrees
+        /// </summary>
+        /// <param name="radians">Radians</param>
+        /// <returns>Degrees</returns>
+        private double radiansToDegrees(double radians)
+        {
+            return radians * 180.0 / Math.PI;
         }
 
         /// <summary>
@@ -90,14 +137,13 @@ namespace Peli
         }
 
         /// <summary>
-        /// Forms a request to perform a map query relations, nodes and ways around given point
+        /// Forms a request to perform a map query to retrieve node of given city
         /// </summary>
-        /// <param name="rangeMeters">Distance from node in meters, query tries to capture all nodes, relations and ways within</param>
-        /// <param name="cityName">Name of the city, query is performed from a center node found in OSM-database</param>
+        /// <param name="cityName">Name of the city</param>
         /// <returns></returns>
-        private string queryMapAround(string cityName, int rangeMeters)
+        private string queryCityNode(string cityName)
         {         
-            return string.Format("(node[\"name\"=\"{0}\"][\"place\"=\"city\"];node(around:{1});<;>;);out;", cityName, rangeMeters);
+            return string.Format("(node[\"name\"=\"{0}\"][\"place\"=\"city\"];);out;", cityName);
         }
     }
 }
