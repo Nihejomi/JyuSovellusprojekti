@@ -34,6 +34,9 @@ namespace Liikkuvat
         public double kohdey;
         public string kaupunki;
         public bool pelaajakuoli = false;
+        //kaupungin luomiseen käytetty reso
+        public int kaupunginResoX;
+        public int kaupunginResoY;
         
         bool eteen = false;
         bool taakse = false;
@@ -48,6 +51,10 @@ namespace Liikkuvat
         public double zombikulma;
         Peli.Peli testi;
         ArrayList rakennukset = new ArrayList();
+        ArrayList rakennuksetVasenYla = new ArrayList();
+        ArrayList rakennuksetVasenAla = new ArrayList();
+        ArrayList rakennuksetOikeaYla = new ArrayList();
+        ArrayList rakennuksetOikeaAla = new ArrayList();
         ArrayList liikuta = new ArrayList();
         ArrayList Viivat = new ArrayList();
         ArrayList seinat = new ArrayList();
@@ -86,10 +93,12 @@ namespace Liikkuvat
             // resot jotka voidaan myöhemmin sitoa johonkin muuttujaan.
             int resox = 3000;
             int resoy = 3000;
+            kaupunginResoX = resox;
+            kaupunginResoY = resoy;
             int zombeja;
             HTMLParser.Parsinta tietoja = new HTMLParser.Parsinta();
             tietoja.Alusta(p);
-            zombeja = tietoja.zombieMaara/5;
+            zombeja = tietoja.zombieMaara/20;
                         
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
@@ -104,7 +113,7 @@ namespace Liikkuvat
 
            //testi = new Peli.Peli(61.48035, 23.77334, 61.48891, 23.7254, 2000, 2000, false); // tre
 
-          testi = new Peli.Peli(62.22418, 25.76424, 62.22893, 25.77725, 1000, 1000, false);
+          testi = new Peli.Peli(62.22418, 25.76424, 62.22893, 25.77725, resox, resoy, false);
             //testi = new Peli.Peli(62.24, 25.73, 62.26, 25.75, 2000, 2000);//
             // testi= new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
 
@@ -300,6 +309,38 @@ namespace Liikkuvat
 
                   talo.Fill = harmaa;
                   rakennukset.Add(kohde);
+                  if ((kohde.maxx <= kaupunginResoX / 2) && (kohde.maxy <= kaupunginResoY / 2))
+                  {
+                      rakennuksetVasenYla.Add(kohde);
+                  }
+                  if ((kohde.minx <= kaupunginResoX / 2) && (kohde.miny <= kaupunginResoY / 2))
+                  {
+                      rakennuksetVasenYla.Add(kohde);
+                  }
+                  if ((kohde.maxx <= kaupunginResoX / 2) && (kohde.maxy > kaupunginResoY / 2))
+                  {
+                      rakennuksetVasenAla.Add(kohde);
+                  }
+                  if ((kohde.minx <= kaupunginResoX / 2) && (kohde.miny > kaupunginResoY / 2))
+                  {
+                      rakennuksetVasenAla.Add(kohde);
+                  }
+                  if ((kohde.maxx > kaupunginResoX / 2) && (kohde.maxy <= kaupunginResoY / 2))
+                  {
+                      rakennuksetOikeaYla.Add(kohde);
+                  }
+                  if ((kohde.minx > kaupunginResoX / 2) && (kohde.miny <= kaupunginResoY / 2))
+                  {
+                      rakennuksetOikeaYla.Add(kohde);
+                  }
+                  if ((kohde.maxx > kaupunginResoX / 2) && (kohde.maxy > kaupunginResoY / 2))
+                  {
+                      rakennuksetOikeaAla.Add(kohde);
+                  }
+                  if ((kohde.minx > kaupunginResoX / 2) && (kohde.miny > kaupunginResoY / 2))
+                  {
+                      rakennuksetOikeaAla.Add(kohde);
+                  }
                   canvas1.Children.Add(talo);
                   Muut.Add(talo);
               
@@ -532,6 +573,10 @@ namespace Liikkuvat
            rakennukset = new ArrayList();
            Muut = new ArrayList();
            tiet = new ArrayList();
+           rakennuksetVasenYla = new ArrayList();
+           rakennuksetVasenAla = new ArrayList();
+           rakennuksetOikeaYla = new ArrayList();
+           rakennuksetOikeaAla = new ArrayList();
             syötelokero.Visibility = Visibility.Visible;
 
         }
@@ -567,29 +612,104 @@ namespace Liikkuvat
         /// <returns>mennäämkö seinän läpi</returns>
         private bool tarkistaSeinat(double x1, double y1, double x2, double y2)
         {
+            bool palautus=false;
+            if((x2<= kaupunginResoX/2) &&  (y2 <= kaupunginResoY/2)){
+                palautus=tarkistaSeinat(x1, y1, x2, y2, rakennuksetVasenYla);
+            }
+            if ((x2 <= kaupunginResoX / 2) && (y2 > kaupunginResoY / 2) && (palautus== false))
+            {
+                palautus=tarkistaSeinat(x1, y1, x2, y2, rakennuksetVasenAla);
+            }
+            if ((x2 > kaupunginResoX / 2) && (y2 <= kaupunginResoY / 2) && (palautus == false))
+            {
+                palautus=tarkistaSeinat(x1, y1, x2, y2, rakennuksetOikeaYla);
+            }
+            if ((x2 > kaupunginResoX / 2) && (y2 > kaupunginResoY / 2) && (palautus == false))
+            {
+                palautus=tarkistaSeinat(x1, y1, x2, y2, rakennuksetOikeaAla);
+            }
+            
+       
+            return palautus;
+        }
+        /// <summary>
+        /// Arraylista kohtainen TarkistaSeinät metodi.
+        /// </summary>
+        /// <param name="x1">vanhax</param>
+        /// <param name="y1">vanhay</param>
+        /// <param name="x2">uusix</param>
+        /// <param name="y2">uusiy</param>
+        /// <param name="rakennukset"></param>
+        /// <returns></returns>
+        private bool tarkistaSeinat(double x1, double y1, double x2, double y2, ArrayList rakennukset)
+        {
+
+
+
             foreach (Rakennus R in rakennukset)
             {
-                if((R.maxx>=x2)&&(x2>=R.minx)&&(R.maxy>=y2)&&(y2>=R.miny)){
-                for (int i = 0; i+1 < R.annaVektoriLkm(); i++)
+                if ((R.maxx >= x2) && (x2 >= R.minx) && (R.maxy >= y2) && (y2 >= R.miny))
                 {
-                    Line s = new Line();
-                    s.X1=R.annaVektori(i).x;
-                    s.Y1=R.annaVektori(i).y;
-                    s.X2=R.annaVektori(i+1).x;
-                    s.Y2=R.annaVektori(i+1).y;
-                  
-                    // siirretään piste s.x1 s.y1 origoksi ja otetaan ristitulo vektoreille s.x1 s.y1-> x2 y2
-                    //jos haluaisi jättää else puoliskon pois, pitäisi jana käydä aina samoin päin.
-                    //Nyt sillä ei pitäisi olla merkitystä.
-                    if (ristitulo(x2 - s.X1, y2 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) > 0)
+                    for (int i = 0; i + 1 < R.annaVektoriLkm(); i++)
                     {
-                        if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) < 0)
+                        Line s = new Line();
+                        s.X1 = R.annaVektori(i).x;
+                        s.Y1 = R.annaVektori(i).y;
+                        s.X2 = R.annaVektori(i + 1).x;
+                        s.Y2 = R.annaVektori(i + 1).y;
+
+                        // siirretään piste s.x1 s.y1 origoksi ja otetaan ristitulo vektoreille s.x1 s.y1-> x2 y2
+                        //jos haluaisi jättää else puoliskon pois, pitäisi jana käydä aina samoin päin.
+                        //Nyt sillä ei pitäisi olla merkitystä.
+                        if (ristitulo(x2 - s.X1, y2 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) > 0)
                         {
-                            //tehdään vastaava tarkastelu toisesta viivasta käsin
-                            if (ristitulo(s.X1 - x1, s.Y1 - y1, x2 - x1, y2 - y1) > 0)
+                            if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) < 0)
+                            {
+                                //tehdään vastaava tarkastelu toisesta viivasta käsin
+                                if (ristitulo(s.X1 - x1, s.Y1 - y1, x2 - x1, y2 - y1) > 0)
+                                {
+
+                                    if (ristitulo(s.X2 - x1, s.Y2 - y1, x2 - x1, y2 - y1) < 0)
+                                    {
+                                        //Console.Beep();
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) > 0)
                             {
 
-                                if (ristitulo(s.X2 - x1, s.Y2 - y1, x2 - x1, y2 - y1) < 0)
+                                //tehdään vastaava tarkastelu toisesta viivasta käsin
+                                if (ristitulo(s.X1 - x1, s.Y1 - y1, x2 - x1, y2 - y1) < 0)
+                                {
+
+                                    if (ristitulo(s.X2 - x1, s.Y2 - y1, x2 - x1, y2 - y1) > 0)
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //tehdään viimeinnen linja for silmukan ulkopuolella niin säästyy yksi iffi
+                    Line v = new Line();
+                    v.X1 = R.annaVektori(R.annaVektoriLkm() - 1).x;
+                    v.Y1 = R.annaVektori(R.annaVektoriLkm() - 1).y;
+                    v.X2 = R.annaVektori(0).x;
+                    v.Y2 = R.annaVektori(0).y;
+
+                    if (ristitulo(x2 - v.X1, y2 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) > 0)
+                    {
+                        if (ristitulo(x1 - v.X1, y1 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) < 0)
+                        {
+                            //tehdään vastaava tarkastelu toisesta viivasta käsin
+                            if (ristitulo(v.X1 - x1, v.Y1 - y1, x2 - x1, y2 - y1) > 0)
+                            {
+
+                                if (ristitulo(v.X2 - x1, v.Y2 - y1, x2 - x1, y2 - y1) < 0)
                                 {
                                     //Console.Beep();
                                     return true;
@@ -599,60 +719,20 @@ namespace Liikkuvat
                     }
                     else
                     {
-                        if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) > 0)
+                        if (ristitulo(x1 - v.X1, y1 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) > 0)
                         {
 
                             //tehdään vastaava tarkastelu toisesta viivasta käsin
-                            if (ristitulo(s.X1 - x1, s.Y1 - y1, x2 - x1, y2 - y1) < 0)
+                            if (ristitulo(v.X1 - x1, v.Y1 - y1, x2 - x1, y2 - y1) < 0)
                             {
 
-                                if (ristitulo(s.X2 - x1, s.Y2 - y1, x2 - x1, y2 - y1) > 0)
+                                if (ristitulo(v.X2 - x1, v.Y2 - y1, x2 - x1, y2 - y1) > 0)
                                 {
                                     return true;
                                 }
                             }
                         }
                     }
-                }
-                //tehdään viimeinnen linja for silmukan ulkopuolella niin säästyy yksi iffi
-                Line v = new Line();
-                v.X1 = R.annaVektori(R.annaVektoriLkm()-1).x;
-                v.Y1 = R.annaVektori(R.annaVektoriLkm()-1).y;
-                v.X2 = R.annaVektori(0).x;
-                v.Y2 = R.annaVektori(0).y;
-
-                if (ristitulo(x2 - v.X1, y2 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) > 0)
-                {
-                    if (ristitulo(x1 - v.X1, y1 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) < 0)
-                    {
-                        //tehdään vastaava tarkastelu toisesta viivasta käsin
-                        if (ristitulo(v.X1 - x1, v.Y1 - y1, x2 - x1, y2 - y1) > 0)
-                        {
-
-                            if (ristitulo(v.X2 - x1, v.Y2 - y1, x2 - x1, y2 - y1) < 0)
-                            {
-                                //Console.Beep();
-                                return true;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if (ristitulo(x1 - v.X1, y1 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) > 0)
-                    {
-
-                        //tehdään vastaava tarkastelu toisesta viivasta käsin
-                        if (ristitulo(v.X1 - x1, v.Y1 - y1, x2 - x1, y2 - y1) < 0)
-                        {
-
-                            if (ristitulo(v.X2 - x1, v.Y2 - y1, x2 - x1, y2 - y1) > 0)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
                 }
             }
             return false;
@@ -1008,7 +1088,11 @@ namespace Liikkuvat
         }
 
 
-
+        /// <summary>
+        /// Tämä tehdääm jos joku painaa entteria kun syöttölokerolla on focus.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key.Equals(Key.Enter)) {
