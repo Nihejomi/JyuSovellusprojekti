@@ -100,7 +100,7 @@ namespace Undying
         }
 
         public bool isGhost() { return etheral; }
-        public bool isNope() { return turn; }
+        public bool isNope() { return dont; }
 
         public Vector possibleMove(Vector target)
         {

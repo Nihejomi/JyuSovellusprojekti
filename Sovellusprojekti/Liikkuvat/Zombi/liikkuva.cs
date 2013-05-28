@@ -18,7 +18,7 @@ namespace Undying
         void die();
         void live();
         void nope();
-        void turn();
+        void ghost();
         bool isDead();
         bool isAlive();
         bool isGhost();
