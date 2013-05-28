@@ -98,7 +98,7 @@ namespace Liikkuvat
             int zombeja;
             HTMLParser.Parsinta tietoja = new HTMLParser.Parsinta();
             tietoja.Alusta(p);
-            zombeja = tietoja.zombieMaara/20;
+            zombeja = tietoja.zombieMaara/30;
                         
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
@@ -166,9 +166,10 @@ namespace Liikkuvat
                     //z.Name = "testiZombi";
                     Canvas.SetTop(z, ominaisuudet[1]);
                     Canvas.SetLeft(z, ominaisuudet[0]);
+                    z.Opacity = 1;
                     z.kaannosvuoro = zombinvuoro;
                     
-                    //z.ghost();
+                    z.ghost();
                     //z.die();
                     //z.nope();
                     
@@ -817,6 +818,111 @@ namespace Liikkuvat
             return false;
         }
         /// <summary>
+        ///Tarkistaa osuuko piirretty viiva taloon. Ei huomio hitboxeja joten soveltuu paremmin pitkien viivojen kuten lineofsightin tai ammusten törmäystarkistusta varten.
+        ///Arrayliskohtainen.
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <param name="rakennukset"></param>
+        /// <returns></returns>
+        private bool tarkistaSeinatIlmanhiboxia(double x1, double y1, double x2, double y2, ArrayList rakennukset)
+        {
+
+
+
+            foreach (Rakennus R in rakennukset)
+            {
+
+                    for (int i = 0; i + 1 < R.annaVektoriLkm(); i++)
+                    {
+                        Line s = new Line();
+                        s.X1 = R.annaVektori(i).x;
+                        s.Y1 = R.annaVektori(i).y;
+                        s.X2 = R.annaVektori(i + 1).x;
+                        s.Y2 = R.annaVektori(i + 1).y;
+
+                        // siirretään piste s.x1 s.y1 origoksi ja otetaan ristitulo vektoreille s.x1 s.y1-> x2 y2
+                        //jos haluaisi jättää else puoliskon pois, pitäisi jana käydä aina samoin päin.
+                        //Nyt sillä ei pitäisi olla merkitystä.
+                        if (ristitulo(x2 - s.X1, y2 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) > 0)
+                        {
+                            if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) < 0)
+                            {
+                                //tehdään vastaava tarkastelu toisesta viivasta käsin
+                                if (ristitulo(s.X1 - x1, s.Y1 - y1, x2 - x1, y2 - y1) > 0)
+                                {
+
+                                    if (ristitulo(s.X2 - x1, s.Y2 - y1, x2 - x1, y2 - y1) < 0)
+                                    {
+                                        //Console.Beep();
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (ristitulo(x1 - s.X1, y1 - s.Y1, s.X2 - s.X1, s.Y2 - s.Y1) > 0)
+                            {
+
+                                //tehdään vastaava tarkastelu toisesta viivasta käsin
+                                if (ristitulo(s.X1 - x1, s.Y1 - y1, x2 - x1, y2 - y1) < 0)
+                                {
+
+                                    if (ristitulo(s.X2 - x1, s.Y2 - y1, x2 - x1, y2 - y1) > 0)
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //tehdään viimeinnen linja for silmukan ulkopuolella niin säästyy yksi iffi
+                    Line v = new Line();
+                    v.X1 = R.annaVektori(R.annaVektoriLkm() - 1).x;
+                    v.Y1 = R.annaVektori(R.annaVektoriLkm() - 1).y;
+                    v.X2 = R.annaVektori(0).x;
+                    v.Y2 = R.annaVektori(0).y;
+
+                    if (ristitulo(x2 - v.X1, y2 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) > 0)
+                    {
+                        if (ristitulo(x1 - v.X1, y1 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) < 0)
+                        {
+                            //tehdään vastaava tarkastelu toisesta viivasta käsin
+                            if (ristitulo(v.X1 - x1, v.Y1 - y1, x2 - x1, y2 - y1) > 0)
+                            {
+
+                                if (ristitulo(v.X2 - x1, v.Y2 - y1, x2 - x1, y2 - y1) < 0)
+                                {
+                                    //Console.Beep();
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (ristitulo(x1 - v.X1, y1 - v.Y1, v.X2 - v.X1, v.Y2 - v.Y1) > 0)
+                        {
+
+                            //tehdään vastaava tarkastelu toisesta viivasta käsin
+                            if (ristitulo(v.X1 - x1, v.Y1 - y1, x2 - x1, y2 - y1) < 0)
+                            {
+
+                                if (ristitulo(v.X2 - x1, v.Y2 - y1, x2 - x1, y2 - y1) > 0)
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                
+            }
+            return false;
+        }
+        /// <summary>
         /// palauttaa kahden vektorin välisen ristitulon 3 komponentin
         /// Z komponentti on merkattu nollaksi koska ollaan 2 ulotteisessa avaruudessa
         /// tämäntakia palauttaa yhden doublen
@@ -988,6 +1094,30 @@ namespace Liikkuvat
         {
 
             zoomaa();
+            
+            double korkeutta = Canvas.GetTop((UIElement)this.pelaaja1);
+            double leveytta = Canvas.GetLeft((UIElement)this.pelaaja1);
+            Vector playerPos = new Vector(leveytta, korkeutta);
+            foreach(Zombi l in liikuta){
+                if (l.getKaantovuoro() == kaantyminen)
+                {
+                    if (l.getDistance(playerPos) < 500)
+                        if (tarkistaSeinatIlmanhiboxia(leveytta+10, korkeutta+10, l.getPosition().X+15, l.getPosition().Y+15, rakennukset))
+                        {
+                            l.Opacity = 0; // l.Visibility= Visibility.Hidden;
+                        }
+                        else
+                        {
+                            l.Opacity = 1;
+                           // l.Visibility = Visibility.Visible;
+                        }
+                    else 
+                    {
+                        l.Opacity = 1;
+                        //l.Visibility = Visibility.Hidden;
+                    }
+                }
+            }
             if (luotiviivat.Count != 0)
             {
                 System.Console.WriteLine("luotiviivoja: " + luotiviivat.Count);
@@ -1000,8 +1130,6 @@ namespace Liikkuvat
                 // System.Console.WriteLine("luotiviivoja: " + luotiviivat.Capacity);
             }
 
-            double korkeutta = Canvas.GetTop((UIElement)this.pelaaja1);
-            double leveytta = Canvas.GetLeft((UIElement)this.pelaaja1);
             RotateTransform r = new RotateTransform(pelaajakulma / (Math.PI * 2) * 360 + 90, pelaaja1.ActualHeight / 2, pelaaja1.ActualWidth / 2);
             pelaaja1.RenderTransform = r;
             if (eteen)
@@ -1043,18 +1171,18 @@ namespace Liikkuvat
             }
 
             kaantyminen--;
+            
             foreach (liikkuva zombie in liikuta)
             {
 
                 if (zombie.isDead()) continue;
                 
-                Vector playerPos = new Vector(leveytta, korkeutta);
+               
                 if (zombie.getDistance(playerPos) > 300) continue;
                 
                 UIElement uiZombie = zombie as UIElement;
                 Vector zombiePos = zombie.getPosition();
 
-                //Console.Beep();
 
                 Vector newPos = zombie.possibleMove(playerPos);
                 zombikulma = laskeKulma(leveytta - newPos.X, korkeutta - newPos.Y);
@@ -1070,7 +1198,7 @@ namespace Liikkuvat
 
                 //pitäs saada dynäämisesti tuo zombin leveys otettua, vois laskea kun tietää canvas elementin koon ja leftin ja rightin, topin ja bottomin
                 if (!zombie.isGhost() | tarkistaSeinat(zombiePos.X + 15, zombiePos.Y + 15, newPos.X + 15, newPos.Y + 15)) { }
-                else
+               else
                 {
                     //pelaaja mitat = testi as pelaaja;
                     zombie.move(newPos);
@@ -1090,6 +1218,30 @@ namespace Liikkuvat
             if (kaantyminen == 0) { kaantyminen = 6; }
             
         }
+/*
+        private bool tarkistaSeinatIlmanhiboxia(double x1, double y1, double x2, double y2)
+        {
+            bool palautus = false;
+            if ((x2 <= kaupunginResoX / 2) && (y2 <= kaupunginResoY / 2))
+            {
+                palautus = tarkistaSeinatIlmanhiboxia(x1, y1, x2, y2, rakennuksetVasenYla);
+            }
+            if ((x2 <= kaupunginResoX / 2) && (y2 > kaupunginResoY / 2) && (palautus == false))
+            {
+                palautus = tarkistaSeinatIlmanhiboxia(x1, y1, x2, y2, rakennuksetVasenAla);
+            }
+            if ((x2 > kaupunginResoX / 2) && (y2 <= kaupunginResoY / 2) && (palautus == false))
+            {
+                palautus = tarkistaSeinatIlmanhiboxia(x1, y1, x2, y2, rakennuksetOikeaYla);
+            }
+            if ((x2 > kaupunginResoX / 2) && (y2 > kaupunginResoY / 2) && (palautus == false))
+            {
+                palautus = tarkistaSeinatIlmanhiboxia(x1, y1, x2, y2, rakennuksetOikeaAla);
+            }
+
+
+            return palautus;
+        }*/
         /// <summary>
         /// Mahtuuko liikkumaan?
         /// </summary>
