@@ -313,34 +313,112 @@ namespace Liikkuvat
                   {
                       rakennuksetVasenYla.Add(kohde);
                   }
-                  if ((kohde.minx <= kaupunginResoX / 2) && (kohde.miny <= kaupunginResoY / 2))
+                  else
                   {
-                      rakennuksetVasenYla.Add(kohde);
+                      if ((kohde.minx <= kaupunginResoX / 2) && (kohde.miny <= kaupunginResoY / 2))
+                      {
+                          rakennuksetVasenYla.Add(kohde);
+                      }
+                      else 
+                      {
+                          if ((kohde.minx <= kaupunginResoX / 2) && (kohde.maxy <= kaupunginResoY / 2))
+                          {
+                              rakennuksetVasenYla.Add(kohde);
+                          }
+                          else 
+                          {
+                              if ((kohde.maxx <= kaupunginResoX / 2) && (kohde.miny <= kaupunginResoY / 2))
+                              {
+                                  rakennuksetVasenYla.Add(kohde);
+                              }
+                          }
+                      }
                   }
+
+
                   if ((kohde.maxx <= kaupunginResoX / 2) && (kohde.maxy > kaupunginResoY / 2))
                   {
                       rakennuksetVasenAla.Add(kohde);
                   }
-                  if ((kohde.minx <= kaupunginResoX / 2) && (kohde.miny > kaupunginResoY / 2))
+                  else 
                   {
-                      rakennuksetVasenAla.Add(kohde);
+                      if ((kohde.minx <= kaupunginResoX / 2) && (kohde.miny > kaupunginResoY / 2))
+                      {
+                          rakennuksetVasenAla.Add(kohde);
+                      }
+                      else 
+                      {
+                          if ((kohde.minx <= kaupunginResoX / 2) && (kohde.maxy > kaupunginResoY / 2))
+                          {
+                              rakennuksetVasenAla.Add(kohde);
+                          }
+                          else 
+                          {
+                              if ((kohde.maxx <= kaupunginResoX / 2) && (kohde.miny > kaupunginResoY / 2))
+                              {
+                                  rakennuksetVasenAla.Add(kohde);
+                              }
+                          }
+                      }
                   }
+
+
+
                   if ((kohde.maxx > kaupunginResoX / 2) && (kohde.maxy <= kaupunginResoY / 2))
                   {
                       rakennuksetOikeaYla.Add(kohde);
                   }
-                  if ((kohde.minx > kaupunginResoX / 2) && (kohde.miny <= kaupunginResoY / 2))
+                  else 
                   {
-                      rakennuksetOikeaYla.Add(kohde);
+                      if ((kohde.minx > kaupunginResoX / 2) && (kohde.miny <= kaupunginResoY / 2))
+                      {
+                          rakennuksetOikeaYla.Add(kohde);
+                      }
+                      else 
+                      {
+                          if ((kohde.maxx > kaupunginResoX / 2) && (kohde.miny <= kaupunginResoY / 2))
+                          {
+                              rakennuksetOikeaYla.Add(kohde);
+                          }
+                          else 
+                          {
+                              if ((kohde.minx > kaupunginResoX / 2) && (kohde.maxy <= kaupunginResoY / 2))
+                              {
+                                  rakennuksetOikeaYla.Add(kohde);
+                              }
+                          }
+                      }
                   }
+
+
+
                   if ((kohde.maxx > kaupunginResoX / 2) && (kohde.maxy > kaupunginResoY / 2))
                   {
                       rakennuksetOikeaAla.Add(kohde);
                   }
-                  if ((kohde.minx > kaupunginResoX / 2) && (kohde.miny > kaupunginResoY / 2))
+                  else 
                   {
-                      rakennuksetOikeaAla.Add(kohde);
+                      if ((kohde.minx > kaupunginResoX / 2) && (kohde.miny > kaupunginResoY / 2))
+                      {
+                          rakennuksetOikeaAla.Add(kohde);
+                      }
+                      else 
+                      {
+                          if ((kohde.maxx > kaupunginResoX / 2) && (kohde.miny > kaupunginResoY / 2))
+                          {
+                              rakennuksetOikeaAla.Add(kohde);
+                          }
+                          else 
+                          {
+                              if ((kohde.minx > kaupunginResoX / 2) && (kohde.maxy > kaupunginResoY / 2))
+                              {
+                                  rakennuksetOikeaAla.Add(kohde);
+                              }
+                          }
+                      }
                   }
+
+
                   canvas1.Children.Add(talo);
                   Muut.Add(talo);
               
