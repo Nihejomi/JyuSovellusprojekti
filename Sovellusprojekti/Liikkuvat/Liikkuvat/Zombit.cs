@@ -7,7 +7,8 @@ namespace Peli
 {
     class Zombit
     {
-       
+
+        Random rnd = new Random();
         /// <summary>
         /// Arvoo zombin positionin reson avulla ja samalla arpoo zombin ominaisuudet kuten HP ja nopeus.
         /// </summary>
@@ -17,7 +18,7 @@ namespace Peli
 
         public int[] arvoZombi(int resox, int resoy)
         {
-            Random rnd = new Random();
+
             int zombHPMAX = 11;
             int zombHPMIN = 1;
             int zombieSpeedMAX = 100;
@@ -28,6 +29,7 @@ namespace Peli
             //int posy = rnd.Next(0, resoy + 1);
             return ominaisuudet;
         }
+
        
 
     }
