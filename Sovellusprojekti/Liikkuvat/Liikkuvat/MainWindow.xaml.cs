@@ -168,6 +168,10 @@ namespace Liikkuvat
                     Canvas.SetLeft(z, ominaisuudet[0]);
                     z.kaannosvuoro = zombinvuoro;
                     
+                    //z.ghost();
+                    //z.die();
+                    //z.nope();
+                    
                     ///zombivuoro=0;
                     //}
                     (z as UIElement).RenderTransformOrigin = new Point(0.5, 0.5);
@@ -188,9 +192,6 @@ namespace Liikkuvat
 
             ammoBar.Maximum = lipas;
             ammoBar.Value = lipas;
-
-            //Canvas.SetTop(hitBar, ??);
-            //Canvas.SetLeft(hitBar, ??);
 
             label2.Content = zombejasisalla;
             dispatcherTimer.Start();
@@ -1046,17 +1047,29 @@ namespace Liikkuvat
             {
 
                 if (zombie.isDead()) continue;
+                
+                Vector playerPos = new Vector(leveytta, korkeutta);
+                if (zombie.getDistance(playerPos) > 300) continue;
+                
                 UIElement uiZombie = zombie as UIElement;
                 Vector zombiePos = zombie.getPosition();
 
                 //Console.Beep();
 
-                Vector playerPos = new Vector(leveytta, korkeutta);
                 Vector newPos = zombie.possibleMove(playerPos);
                 zombikulma = laskeKulma(leveytta - newPos.X, korkeutta - newPos.Y);
 
+                if (zombie.isNope()) continue;
+                if (kaantyminen == zombie.getKaantovuoro())
+                {
+
+                    RotateTransform f = new RotateTransform(zombikulma / (Math.PI * 2) * 360 + 90);
+                    uiZombie.RenderTransform = f;
+
+                }
+
                 //pitäs saada dynäämisesti tuo zombin leveys otettua, vois laskea kun tietää canvas elementin koon ja leftin ja rightin, topin ja bottomin
-                if (tarkistaSeinat(zombiePos.X + 15, zombiePos.Y + 15, newPos.X + 15, newPos.Y + 15)) { }
+                if (!zombie.isGhost() | tarkistaSeinat(zombiePos.X + 15, zombiePos.Y + 15, newPos.X + 15, newPos.Y + 15)) { }
                 else
                 {
                     //pelaaja mitat = testi as pelaaja;
@@ -1072,14 +1085,6 @@ namespace Liikkuvat
                 if (zombie.getDistance(new Vector(leveytta, korkeutta)) < 10)
                 {
                     hitBar.Value--;
-                }
-
-                if (kaantyminen == zombie.getKaantovuoro())
-                {
-
-                    RotateTransform f = new RotateTransform(zombikulma / (Math.PI * 2) * 360 + 90);
-                    uiZombie.RenderTransform = f;
-
                 }
             }
             if (kaantyminen == 0) { kaantyminen = 6; }

@@ -16,6 +16,12 @@ namespace Undying
         int getKaantovuoro();
         double getDistance(Vector target);
         void die();
+        void live();
+        void nope();
+        void turn();
         bool isDead();
+        bool isAlive();
+        bool isGhost();
+        bool isNope();
     }
 }

@@ -37,6 +37,9 @@ namespace Undying
         private ZombiBehaviour behaviour;
         private ZombiStatus status;
         private bool dead = false;
+        private bool dont = false;
+        private bool etheral = false;
+
 
         // stepVector represents minimum distance zombie moves per tick
         private double stepMultiplier;
@@ -82,6 +85,10 @@ namespace Undying
             dead = true;
         }
 
+        public void live() { dead = false; }
+        public void ghost() { etheral = true; }
+        public void nope() { dont = true; }
+
         public bool isDead()
         {
             return dead;
@@ -91,6 +98,9 @@ namespace Undying
         {
             return !dead;
         }
+
+        public bool isGhost() { return etheral; }
+        public bool isNope() { return turn; }
 
         public Vector possibleMove(Vector target)
         {
