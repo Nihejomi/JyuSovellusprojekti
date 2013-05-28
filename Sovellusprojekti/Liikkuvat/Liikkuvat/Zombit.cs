@@ -22,7 +22,7 @@ namespace Peli
             int zombHPMIN = 1;
             int zombieSpeedMAX = 100;
             int zombieSpeedMIN = 10; 
-
+          
             int [] ominaisuudet = new int[4] {rnd.Next(0,resox + 1), rnd.Next(0,resoy +1 ), rnd.Next(zombHPMIN, zombHPMAX), rnd.Next(zombieSpeedMIN, zombieSpeedMAX) };
             //int posx = rnd.Next(0, resox + 1);
             //int posy = rnd.Next(0, resoy + 1);

@@ -138,19 +138,29 @@ namespace Liikkuvat
             // Lisataan zombit
             Zombit lauma = new Zombit();
             int zombejasisalla = 0;
+            int zombinvuoro = 0;
             for (int i = 0; i < zombeja; i++)
             {
 
                 int[] ominaisuudet = lauma.arvoZombi(resox, resoy);
                 if (!(OnkoRakennuksessa(ominaisuudet[0], ominaisuudet[1])))
                 {
-
+                    if (zombinvuoro == 5)
+                    { zombinvuoro = 0; }
+                    else
+                    {
+                    zombinvuoro++;
+                    }
                     Zombi z = new Zombi(new Vector(ominaisuudet[0], ominaisuudet[1]));
 
                     Canvas.SetZIndex(z, 9000 + i);
                     //z.Name = "testiZombi";
                     Canvas.SetTop(z, ominaisuudet[1]);
                     Canvas.SetLeft(z, ominaisuudet[0]);
+                    z.kaannosvuoro = zombinvuoro;
+                    
+                    ///zombivuoro=0;
+                    //}
                     (z as UIElement).RenderTransformOrigin = new Point(0.5, 0.5);
                     canvas1.Children.Add(z);
                     liikuta.Add(z);
@@ -906,7 +916,7 @@ namespace Liikkuvat
                     hitBar.Value--;
                 }
 
-                if (kaantyminen == 0)
+                if (kaantyminen == zombie.getKaantovuoro())
                 {
 
                     RotateTransform f = new RotateTransform(zombikulma / (Math.PI * 2) * 360 + 90);
@@ -914,7 +924,7 @@ namespace Liikkuvat
 
                 }
             }
-            if (kaantyminen == 0) { kaantyminen = 5; }
+            if (kaantyminen == 0) { kaantyminen = 6; }
             
         }
         /// <summary>

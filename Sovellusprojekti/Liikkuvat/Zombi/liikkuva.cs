@@ -13,6 +13,7 @@ namespace Undying
         Vector getPosition();
         Vector possibleMove(Vector target);
         void move(Vector target);
+        int getKaantovuoro();
         double getDistance(Vector target);
         void die();
         bool isDead();

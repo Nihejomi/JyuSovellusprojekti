@@ -23,6 +23,15 @@ namespace Undying
         private Vector position;
         private Vector facing;
         private Vector destination;
+        public int kaannosvuoro;
+        
+        /// <summary>
+        /// palauttaa kaantovuoron
+        /// </summary>
+        /// <returns></returns>
+        public int getKaantovuoro(){
+        return kaannosvuoro;
+        }
 
         //Classes that govern Zombies behaviour, reactions and condition
         private ZombiBehaviour behaviour;
