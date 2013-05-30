@@ -108,15 +108,15 @@ namespace Liikkuvat
 
             Canvas.SetTop(pelaaja1, this.Height  / 2 + pelaaja1.ActualHeight / 2);
             Canvas.SetLeft(pelaaja1, this.Left / 2 + pelaaja1.ActualWidth / 2);
-                                                                                                // lisäsin viimeisen parametrin teiden poistoon latauksen nopeuttamiseksi (true = ei teitä, false = tiet mukaan)
+                                                                                 // lisäsin viimeisen parametrin teiden poistoon latauksen nopeuttamiseksi (true = ei teitä, false = tiet mukaan)
             //testi = new Peli.Peli(62.23407, 25.73577, 62.24372, 25.76086, 2000, 2000, false); // jkl
 
            //testi = new Peli.Peli(61.48035, 23.77334, 61.48891, 23.7254, 2000, 2000, false); // tre
 
-          testi = new Peli.Peli(62.22418, 25.76424, 62.22893, 25.77725, resox, resoy, false);
-            //testi = new Peli.Peli(62.24, 25.73, 62.26, 25.75, 2000, 2000);//
-            // testi= new Peli.Peli(62.2330, 25.733, 62.2335, 25.7335,(int)this.Width,(int)this.Height);
+        testi = new Peli.Peli(62.22418, 25.76424, 62.22893, 25.77725, resox, resoy, false);  // jkl:n kuokkala (nopeasti latautuva pieni testialue)
 
+         // testi = new Peli.Peli(62.24605, 25.69715, 62.25452, 25.71957, resox, resoy, false); // kortepohja
+          
             //rakennukset = testi.annaAlueRakennukset(62.2330, 25.733, 62.2335, 25.7335);
 
 
@@ -458,6 +458,9 @@ namespace Liikkuvat
             tummavihrea.Color = Colors.DarkGreen;
             SolidColorBrush suovihrea = new SolidColorBrush();
             suovihrea.Color = Colors.DarkOliveGreen;
+            SolidColorBrush pihavari = new SolidColorBrush();
+            pihavari.Color = Colors.PaleGreen;
+
 
 
             for (int f = 0; f < testi.annaRuohoLkm() - 1; f++)
@@ -468,9 +471,7 @@ namespace Liikkuvat
 
                 for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
                 {
-                    pisteet.Add(new Point(kohde.annaVektori(i).x, kohde.annaVektori(i).y));
-                    //piirraSeina(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
-                    //  piirraViiva(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+                    pisteet.Add(new Point(kohde.annaVektori(i).x, kohde.annaVektori(i).y));                 
                 }
 
                 Polygon ruoho = new Polygon();
@@ -481,7 +482,8 @@ namespace Liikkuvat
                     ruoho.Fill = tummavihrea;
                 if (kohde.annaTyyppi() == 2)
                     ruoho.Fill = suovihrea;
-
+                if (kohde.annaTyyppi() == 3)
+                    ruoho.Fill = pihavari;
 
 
                 canvas1.Children.Add(ruoho);
@@ -508,16 +510,11 @@ namespace Liikkuvat
 
                 for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
                 {
-                    //  
-                    //piirraSeina(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
-                  // if(kohde.annaTyyppi() == 0)
-               // piirraViiva(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
-                 //  if(kohde.annaTyyppi() == 1)
+                
                         pisteet.Add(new Point(kohde.annaVektori(i).x, kohde.annaVektori(i).y));
                 }
                 
-              
-             
+
                     Polyline tie = new Polyline();
                     tie.Points = pisteet;
                     tie.StrokeThickness = 10.0;
@@ -528,13 +525,8 @@ namespace Liikkuvat
                     tie.Fill = harmaa;
                     canvas1.Children.Add(tie);
                     tiet.Add(tie);
-
-                
-                /*  for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
-                  {
-                    
-                      piirraViiva(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
-                  }*/
+  
+              
             }
         }
  

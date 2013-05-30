@@ -478,12 +478,7 @@ namespace Peli
                                             {
                                                 tyyppi = 1;
                                             }
-                                            /*
-                                            if (reader.Value.ToString() == "footway" || reader.Value.ToString() == "cycleway")
-                                            {
-                                                tyyppi = 0;
-                                            }
-                                            */
+                                         
                                             String nimi = "nimeton";
 
                                             XMLTie uusi = new XMLTie(tempId, reftemp, nimi, tyyppi);
@@ -518,32 +513,44 @@ namespace Peli
 
                                    }
 
-                                   if ((reader.Name == "v" && reader.Value.ToString() == "meadow") || (reader.Name == "v" && reader.Value.ToString() == "grass")
-                                       || (reader.Name == "v" && reader.Value.ToString() == "forest") || (reader.Name == "v" && reader.Value.ToString() == "park" )
-                                       || (reader.Name == "v" && reader.Value.ToString() == "wood") || (reader.Name == "v" && reader.Value.ToString() == "wetland"))  // tallennetaan ruohoalue talon tapaisesti
-                                   {
+                                   if (reader.Name == "k" && reader.Value.ToString() == "landuse" || reader.Name == "k" && reader.Value.ToString() == "natural")
+                                  {
+                                       i++;
+                                      reader.MoveToAttribute(i);
 
-                                       String nimi = "nimeton";
+                                       if ((reader.Name == "v" && reader.Value.ToString() == "meadow") || (reader.Name == "v" && reader.Value.ToString() == "grass")
+                                           || (reader.Name == "v" && reader.Value.ToString() == "forest") || (reader.Name == "v" && reader.Value.ToString() == "park")
+                                           || (reader.Name == "v" && reader.Value.ToString() == "wood") || (reader.Name == "v" && reader.Value.ToString() == "wetland")
+                                           || (reader.Name == "v" && reader.Value.ToString() == "residential") || (reader.Name == "v" && reader.Value.ToString() == "retail") )  // tallennetaan ruohoalue talon tapaisesti
+                                       {
+
+                                           String nimi = "nimeton";
 
 
-                                       int tyyppi=0;
+                                           int tyyppi = 0;
 
-                                       if (reader.Value.ToString() == "meadow" || reader.Value.ToString() == "grass" || reader.Value.ToString() == "park")
-                                           tyyppi = 0;
-                                       if (reader.Value.ToString() == "forest" || reader.Value.ToString() == "wood")
-                                           tyyppi = 1;
+                                           if (reader.Value.ToString() == "meadow" || reader.Value.ToString() == "grass" || reader.Value.ToString() == "park")
+                                               tyyppi = 0;
+                                           if (reader.Value.ToString() == "forest" || reader.Value.ToString() == "wood")
+                                               tyyppi = 1;
 
-                                       if (reader.Value.ToString() == "wetland" || reader.Value.ToString() == "swamp")
-                                           tyyppi = 2;
+                                           if (reader.Value.ToString() == "wetland" || reader.Value.ToString() == "swamp")
+                                               tyyppi = 2;
 
-                                       XMLRuoho uusi = new XMLRuoho(tempId, reftemp, nimi, tyyppi);
-                                       XmlRuohot.Add(uusi);
-                                       tempId = 0;
+                                           if (reader.Value.ToString() == "residential" || reader.Value.ToString() == "retail")
+                                               tyyppi = 3;
 
-                                       //muutettavaV = XmlVedet.Count - 1;
-                                       auki = false;
-                                       vauki = false;
-                                   }         
+
+                                           XMLRuoho uusi = new XMLRuoho(tempId, reftemp, nimi, tyyppi);
+                                           XmlRuohot.Add(uusi);
+                                           tempId = 0;
+
+                                           //muutettavaV = XmlVedet.Count - 1;
+                                           auki = false;
+                                           vauki = false;
+                                       }
+
+                                 }
 
                                     //vesi,    nimi ennen p‰‰tunnistetta 
                                     if (reader.Name == "v" && reader.Value.ToString() == "water")  // tallennetaan j‰rvi talon tapaisesti
