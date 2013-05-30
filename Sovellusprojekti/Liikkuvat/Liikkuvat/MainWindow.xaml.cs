@@ -44,7 +44,7 @@ namespace Liikkuvat
         int kaantyminen=5;
 
         int lipas = 8;
-
+        bool justshot = false;
         RotateTransform r = new RotateTransform();
        
         public double pelaajakulma;
@@ -208,6 +208,8 @@ namespace Liikkuvat
         {            
             if(eteen || taakse)
             soundsystem.PlaySound("walk", 1.0f);
+            if (justshot)
+                justshot = false;
         }
 
         private void zombiesoundEvent(object source, ElapsedEventArgs e)
@@ -1296,9 +1298,10 @@ namespace Liikkuvat
                 {
                     soundsystem.PlaySound("empty", 1.0f);
                 }
-                if(ammoBar.Value > 0 ){
+                if(ammoBar.Value > 0 && !justshot){
                 Ammu(50, e.GetPosition(canvas1).X, e.GetPosition(canvas1).Y);
                 ammoBar.Value--;
+                justshot = true;
                 }
                 
 
@@ -1424,17 +1427,20 @@ namespace Liikkuvat
                    UIElement uiZombie = zombie as UIElement;
                    Vector zombiePos = zombie.getPosition();
 
-                   if (leveytta > zombiePos.X && leveytta < zombiePos.X + uiZombie.RenderSize.Width && korkeutta > zombiePos.Y && korkeutta < zombiePos.Y + uiZombie.RenderSize.Height)
+                   if (leveytta > zombiePos.X && 
+                       leveytta < zombiePos.X + uiZombie.RenderSize.Width && 
+                       korkeutta > zombiePos.Y && 
+                       korkeutta < zombiePos.Y + uiZombie.RenderSize.Height && moving)
                    {
                        System.Console.WriteLine("osui zombiin");
                        soundsystem.PlaySound("hit-flesh", 1.0f);
                        zombie.die();
+                       moving = false;
+                       
                    }
 
 
                }
-
-
 
                if (tarkistaSeinat(alkuleveytta, alkukorkeutta, leveytta, korkeutta) == true)
                {
@@ -1458,7 +1464,7 @@ namespace Liikkuvat
                            break;
 
                    }
-                     //System.Console.WriteLine("luoti osui seinään");
+                   
                    break;
                }
 
