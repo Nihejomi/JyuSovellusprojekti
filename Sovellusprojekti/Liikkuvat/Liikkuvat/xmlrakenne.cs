@@ -513,7 +513,7 @@ namespace Peli
 
                                    }
 
-                                   if (reader.Name == "k" && reader.Value.ToString() == "landuse" || reader.Name == "k" && reader.Value.ToString() == "natural")
+                                   if (reader.Name == "k" && reader.Value.ToString() == "landuse" || reader.Name == "k" && reader.Value.ToString() == "natural" || reader.Name == "k" && reader.Value.ToString() == "leisure")
                                   {
                                        i++;
                                       reader.MoveToAttribute(i);
@@ -521,7 +521,8 @@ namespace Peli
                                        if ((reader.Name == "v" && reader.Value.ToString() == "meadow") || (reader.Name == "v" && reader.Value.ToString() == "grass")
                                            || (reader.Name == "v" && reader.Value.ToString() == "forest") || (reader.Name == "v" && reader.Value.ToString() == "park")
                                            || (reader.Name == "v" && reader.Value.ToString() == "wood") || (reader.Name == "v" && reader.Value.ToString() == "wetland")
-                                           || (reader.Name == "v" && reader.Value.ToString() == "residential") || (reader.Name == "v" && reader.Value.ToString() == "retail") )  // tallennetaan ruohoalue talon tapaisesti
+                                           || (reader.Name == "v" && reader.Value.ToString() == "residential") || (reader.Name == "v" && reader.Value.ToString() == "retail")
+                                            || (reader.Name == "v" && reader.Value.ToString() == "playground") )  // tallennetaan ruohoalue talon tapaisesti
                                        {
 
                                            String nimi = "nimeton";
@@ -529,7 +530,7 @@ namespace Peli
 
                                            int tyyppi = 0;
 
-                                           if (reader.Value.ToString() == "meadow" || reader.Value.ToString() == "grass" || reader.Value.ToString() == "park")
+                                           if (reader.Value.ToString() == "meadow" || reader.Value.ToString() == "grass" || reader.Value.ToString() == "park" || reader.Value.ToString() == "playground")
                                                tyyppi = 0;
                                            if (reader.Value.ToString() == "forest" || reader.Value.ToString() == "wood")
                                                tyyppi = 1;
