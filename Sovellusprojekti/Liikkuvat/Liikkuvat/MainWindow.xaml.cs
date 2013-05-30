@@ -123,7 +123,7 @@ namespace Liikkuvat
             soundsystem = new Soundsystem();
             
             // tarkistaa 5 sekunnin välein jos ambienssiääni/musiikki on loppunut, voisi tehdä niin että esim ambienssi vaihtuu alueittan
-            soundcheck = new System.Timers.Timer(50000);
+            soundcheck = new System.Timers.Timer(5000);
             soundcheck.Elapsed += new ElapsedEventHandler(soundcheckEvent);
             soundcheck.Enabled = true;
             soundcheck.Start();
@@ -135,7 +135,7 @@ namespace Liikkuvat
             walksoundtimer.Start();
 
             // zombien ölinöitä enintään kerran 5. sekunnissa
-            zombiesoundtimer = new System.Timers.Timer(50000);
+            zombiesoundtimer = new System.Timers.Timer(5000);
             zombiesoundtimer.Elapsed += new ElapsedEventHandler(zombiesoundEvent);
             zombiesoundtimer.Enabled = true;
             zombiesoundtimer.Start();
@@ -212,16 +212,33 @@ namespace Liikkuvat
 
         private void zombiesoundEvent(object source, ElapsedEventArgs e)
         {
+            int aanietaisyys= 400;
             Random rand = new Random();
             int arpa = rand.Next(0, 10);
+           
+            double pelaajax=0;
+            double pelaajay=0;
+           
+
+            Dispatcher.Invoke((Action)(() =>
+        {
+
+            pelaajax = Canvas.GetTop((UIElement)pelaaja1); 
+            pelaajay = Canvas.GetLeft((UIElement)pelaaja1); 
+        }));
 
             foreach (liikkuva zombie in liikuta)
             {
+                
                 UIElement uiZombie = zombie as UIElement;
-                //if(zombie.get status == jotain ?
-                // 
-                //soundsystem.PlaySound("zombi", 0.7f);
-                //
+                
+                Vector zombipos = zombie.getPosition();
+
+                double distancex = Math.Abs(zombipos.X - pelaajax);
+                double distancey = Math.Abs(zombipos.Y - pelaajay);                               
+                if((zombie.isAlive() ) && (distancex < aanietaisyys) && (distancey <aanietaisyys)) 
+                soundsystem.PlaySound("zombi", 0.5f);
+                
             }
                            
         }
