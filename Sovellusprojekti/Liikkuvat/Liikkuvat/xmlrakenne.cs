@@ -473,7 +473,7 @@ namespace Peli
 
                                     // tie
 
-                                    if (reader.Name == "k" && reader.Value.ToString() == "highway")
+                                    if (reader.Name == "k" && reader.Value.ToString() == "highway" && !tauki && !auki && !vauki)
                                     {
                                         i++;
                                         reader.MoveToAttribute(i);
@@ -484,10 +484,11 @@ namespace Peli
                                             (reader.Name == "v" && reader.Value.ToString() == "secondary" || reader.Name == "v" && reader.Value.ToString() == "tertiary" || reader.Name == "v" && reader.Value.ToString() == "pedestrian"))
                                         {
                                             int tyyppi = 0;
-                                            if (reader.Value.ToString() == "secondary" || reader.Value.ToString() == "tertriary"  )//|| reader.Value.ToString() == "tertiary")
-                                            {
-                                                tyyppi = 1;
-                                            }
+
+                                            //if (reader.Value.ToString() == "secondary" || reader.Value.ToString() == "tertriary"  )//|| reader.Value.ToString() == "tertiary")
+                                            //{
+                                              //  tyyppi = 1;
+                                            //}
                                          
                                             String nimi = " ";
 
@@ -503,7 +504,7 @@ namespace Peli
                                     }
 
 
-                                    if (reader.Name == "k" && reader.Value.ToString() == "name" && tauki && !vauki && !auki)
+                                    if (reader.Name == "k" && reader.Value.ToString() == "name" && tauki)
                                     {
                                         reader.MoveToAttribute(i + 1);
                                         XMLTie temp = (XMLTie)XmlTiet[muutettava];
@@ -513,12 +514,8 @@ namespace Peli
                                     }
 
 
-
-
-
-
                                             // luettu elementti oli rakennus, luodaan siis uusi rakennusolio ja tehd‰‰n tallennus
-                                    if (reader.Name == "k" && reader.Value.ToString() == "building") 
+                                    if (reader.Name == "k" && reader.Value.ToString() == "building" && !auki && !vauki && !tauki)  
                                     {
                                         int tyyppi=0; // oletuksena tavallinen talo
                                         String nimi = " ";
@@ -540,7 +537,7 @@ namespace Peli
                                     }
 
                                     // rakennukselle nimi                                  
-                                   if (reader.Name == "k" && reader.Value.ToString() == "name" && auki && !vauki)
+                                   if (reader.Name == "k" && reader.Value.ToString() == "name" && auki && !vauki && !tauki)
                                    {
                                        reader.MoveToAttribute(i + 1);                                  
                                        XMLRakennus temp = (XMLRakennus)XmlRakennukset[muutettava];
@@ -549,19 +546,28 @@ namespace Peli
 
                                    }
 
-                                 
 
-        
-                                   if (reader.Name == "k" && reader.Value.ToString() == "landuse" || reader.Name == "k" && reader.Value.ToString() == "natural" || reader.Name == "k" && reader.Value.ToString() == "leisure")
+
+
+                                   if (reader.Name == "k" && reader.Value.ToString() == "landuse" || 
+                                       reader.Name == "k" && reader.Value.ToString() == "natural" || 
+                                       reader.Name == "k" && reader.Value.ToString() == "leisure" || 
+                                       reader.Name == "k" && reader.Value.ToString() == "amenity")
                                   {
                                        i++;
                                       reader.MoveToAttribute(i);
 
-                                       if ((reader.Name == "v" && reader.Value.ToString() == "meadow") || (reader.Name == "v" && reader.Value.ToString() == "grass")
-                                           || (reader.Name == "v" && reader.Value.ToString() == "forest") || (reader.Name == "v" && reader.Value.ToString() == "park")
-                                           || (reader.Name == "v" && reader.Value.ToString() == "wood") || (reader.Name == "v" && reader.Value.ToString() == "wetland")
-                                           || (reader.Name == "v" && reader.Value.ToString() == "residential") || (reader.Name == "v" && reader.Value.ToString() == "retail")
-                                            || (reader.Name == "v" && reader.Value.ToString() == "playground") )  // tallennetaan ruohoalue talon tapaisesti
+                                       if ((reader.Name == "v" && reader.Value.ToString() == "meadow") || 
+                                           (reader.Name == "v" && reader.Value.ToString() == "grass") || 
+                                           (reader.Name == "v" && reader.Value.ToString() == "forest") || 
+                                           (reader.Name == "v" && reader.Value.ToString() == "park") || 
+                                           (reader.Name == "v" && reader.Value.ToString() == "wood") || 
+                                           (reader.Name == "v" && reader.Value.ToString() == "wetland") || 
+                                           (reader.Name == "v" && reader.Value.ToString() == "residential") || 
+                                           (reader.Name == "v" && reader.Value.ToString() == "retail") || 
+                                           (reader.Name == "v" && reader.Value.ToString() == "playground") ||
+                                           (reader.Name == "v" && reader.Value.ToString() == "parking") ||
+                                           (reader.Name == "v" && reader.Value.ToString() == "school"))  
                                        {
 
                                            String nimi = "nimeton";
@@ -579,6 +585,9 @@ namespace Peli
 
                                            if (reader.Value.ToString() == "residential" || reader.Value.ToString() == "retail")
                                                tyyppi = 3;
+                                           if (reader.Value.ToString() == "parking" || reader.Value.ToString() == "school")
+                                               tyyppi = 4;
+
 
 
                                            XMLRuoho uusi = new XMLRuoho(tempId, reftemp, nimi, tyyppi);

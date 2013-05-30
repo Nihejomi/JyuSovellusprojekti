@@ -113,9 +113,9 @@ namespace Liikkuvat
 
            //testi = new Peli.Peli(61.48035, 23.77334, 61.48891, 23.7254, 2000, 2000, false); // tre
 
-        testi = new Peli.Peli(62.22418, 25.76424, 62.22893, 25.77725, resox, resoy, false);  // jkl:n kuokkala (nopeasti latautuva pieni testialue)
+       testi = new Peli.Peli(62.22418, 25.76424, 62.22893, 25.77725, resox, resoy, false);  // jkl:n kuokkala (nopeasti latautuva pieni testialue)
 
-         // testi = new Peli.Peli(62.24605, 25.69715, 62.25452, 25.71957, resox, resoy, false); // kortepohja
+        //  testi = new Peli.Peli(62.24605, 25.69715, 62.25452, 25.71957, resox, resoy, false); // kortepohja
           
             //rakennukset = testi.annaAlueRakennukset(62.2330, 25.733, 62.2335, 25.7335);
 
@@ -139,7 +139,8 @@ namespace Liikkuvat
             zombiesoundtimer.Elapsed += new ElapsedEventHandler(zombiesoundEvent);
             zombiesoundtimer.Enabled = true;
             zombiesoundtimer.Start();
-
+            
+            PiirraPohja();
             piirraRuohot();
             piirraTiet();
             piirraRakennukset();
@@ -244,7 +245,24 @@ namespace Liikkuvat
             }
                            
         }
-        
+
+        private void PiirraPohja()
+        {
+            SolidColorBrush taustavari = new SolidColorBrush();
+            taustavari.Color = Colors.DarkSlateGray;
+            PointCollection pisteet = new PointCollection();
+            pisteet.Add(new Point(0, 0));
+            pisteet.Add(new Point(0, kaupunginResoX));
+            pisteet.Add(new Point(kaupunginResoY, kaupunginResoX));
+            pisteet.Add(new Point(kaupunginResoY, 0));
+             pisteet.Add(new Point(0, 0));
+            Polygon pohja = new Polygon();
+            pohja.Points = pisteet;
+            pohja.Fill = taustavari;
+            canvas1.Children.Add(pohja);
+        }
+
+
         private void piirraVesistot()
         {
             SolidColorBrush sininen = new SolidColorBrush();
@@ -483,7 +501,8 @@ namespace Liikkuvat
             suovihrea.Color = Colors.DarkOliveGreen;
             SolidColorBrush pihavari = new SolidColorBrush();
             pihavari.Color = Colors.PaleGreen;
-
+            SolidColorBrush parkkivari = new SolidColorBrush();
+            parkkivari.Color = Colors.DarkGray;
 
 
             for (int f = 0; f < testi.annaRuohoLkm() - 1; f++)
@@ -507,7 +526,8 @@ namespace Liikkuvat
                     ruoho.Fill = suovihrea;
                 if (kohde.annaTyyppi() == 3)
                     ruoho.Fill = pihavari;
-
+                if (kohde.annaTyyppi() == 4)
+                    ruoho.Fill = parkkivari;
 
                 canvas1.Children.Add(ruoho);
                 Muut.Add(ruoho);
