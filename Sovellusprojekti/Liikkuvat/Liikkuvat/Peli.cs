@@ -64,6 +64,10 @@ namespace Peli
         public bool tarkistaPiste(Vektori vektori){
             return false;
         }
+        public String annaNimi()
+        {
+            return this.nimi;
+        }
 
         public void TulostaKonsoliin()
         {
@@ -144,6 +148,10 @@ namespace Peli
          public int annaTyyppi()
          {
              return this.tyyppi;
+         }
+         public String annaNimi()
+         {
+             return this.nimi;
          }
          public bool tarkistaPiste(Vektori vektori)
          {
@@ -393,7 +401,7 @@ namespace Peli
                     if (tempvektorit.Count != 0)
                     {
                         tyyppi = temptie.annaTyyppi();
-                        Tie uusitie = new Tie("tie", tempvektorit, tyyppi);
+                        Tie uusitie = new Tie(temptie.annaNimi(), tempvektorit, tyyppi);
                         Tiet.Add(uusitie);
                     }
                 }

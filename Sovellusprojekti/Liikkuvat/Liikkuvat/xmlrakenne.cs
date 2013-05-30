@@ -386,6 +386,7 @@ namespace Peli
             int muutettavaV = 0;
             bool auki = false;
             bool vauki = false;
+            bool tauki = false;
             System.Console.WriteLine("aloitetaan xml-tiedoston " + filename + " parsiminen");
 
             while (reader.Read())
@@ -488,22 +489,39 @@ namespace Peli
                                                 tyyppi = 1;
                                             }
                                          
-                                            String nimi = "nimeton";
+                                            String nimi = " ";
 
                                             XMLTie uusi = new XMLTie(tempId, reftemp, nimi, tyyppi);
                                             XmlTiet.Add(uusi);
                                             tempId = 0;
+                                            tauki = true;
                                             auki = false;
                                             vauki = false;
+                                            muutettava = XmlTiet.Count - 1;
                                         }
 
                                     }
+
+
+                                    if (reader.Name == "k" && reader.Value.ToString() == "name" && tauki && !vauki && !auki)
+                                    {
+                                        reader.MoveToAttribute(i + 1);
+                                        XMLTie temp = (XMLTie)XmlTiet[muutettava];
+                                        temp.muutaNimi(reader.Value.ToString());
+                                        tauki = false;
+
+                                    }
+
+
+
+
+
 
                                             // luettu elementti oli rakennus, luodaan siis uusi rakennusolio ja tehd‰‰n tallennus
                                     if (reader.Name == "k" && reader.Value.ToString() == "building") 
                                     {
                                         int tyyppi=0; // oletuksena tavallinen talo
-                                        String nimi = "nimeton";
+                                        String nimi = " ";
                                         i++;
                                         
                                         reader.MoveToAttribute(i);
@@ -606,6 +624,7 @@ namespace Peli
                             tempId = 0;
                             vauki = false;
                             auki = false;
+                            tauki = false;
                         }
 
                         lukutyyppi = 0;

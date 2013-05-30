@@ -448,10 +448,22 @@ namespace Liikkuvat
                       }
                   }
 
+                    
+                  Point nimikohta = pisteet[0];
+               
+                  Label talonnimi = new Label();
+                  talonnimi.Content = kohde.annaNimi();
+                  
+                  Canvas.SetLeft(talonnimi, nimikohta.X);
+                  Canvas.SetTop(talonnimi, nimikohta.Y);
+                  
+                  
+                   
 
                   canvas1.Children.Add(talo);
                   Muut.Add(talo);
-              
+                  if (kohde.annaNimi().Length > 2)
+                  canvas1.Children.Add(talonnimi);
 
               /*  for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
                 {
@@ -536,8 +548,16 @@ namespace Liikkuvat
                     tie.Fill = harmaa;
                     canvas1.Children.Add(tie);
                     tiet.Add(tie);
-  
-              
+
+                    Point nimikohta = pisteet[0];
+
+                    Label tiennimi = new Label();
+                    tiennimi.Content = kohde.annaNimi();
+
+                    Canvas.SetLeft(tiennimi, nimikohta.X);
+                    Canvas.SetTop(tiennimi, nimikohta.Y);
+                    if (kohde.annaNimi().Length > 2)
+                    canvas1.Children.Add(tiennimi);
             }
         }
  
