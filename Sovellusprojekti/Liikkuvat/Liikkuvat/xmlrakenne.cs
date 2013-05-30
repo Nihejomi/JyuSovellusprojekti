@@ -59,15 +59,17 @@ namespace Peli
     public class XMLRakennus
     {
         double id; // tunniste
+        int tyyppi;
         ArrayList noderefs; // lista noodireferensseist‰
         String Name; // TODO: xmlss‰ rakennuksen nimi on tag ="name", v=  <data>
 
         // konstruktori, ottaa nodetrefenssit parametrin‰
-        public XMLRakennus(double id, ArrayList nodet, String name)
+        public XMLRakennus(double id, ArrayList nodet, String name, int tyyppi)
         {
             this.id = id;
             this.noderefs = new ArrayList(nodet);
             this.Name = name;
+            this.tyyppi = tyyppi;
         }
 
         // palauttaa rakennuksessa olevien noodien lukum‰‰r‰n
@@ -90,7 +92,14 @@ namespace Peli
         {
             return this.noderefs.Count;
         }
-
+        public int annaTyyppi()
+        {
+            return this.tyyppi;
+        }
+        public void muutaTyyppi(int vaihto)
+        {
+           this.tyyppi = vaihto;
+        }
         // palauttaa refenssilistasta i:n mukaisen nooditunnisteen
         public double annaNoodiId(int i)
         {   
@@ -493,9 +502,18 @@ namespace Peli
                                             // luettu elementti oli rakennus, luodaan siis uusi rakennusolio ja tehd‰‰n tallennus
                                     if (reader.Name == "k" && reader.Value.ToString() == "building") 
                                     {
+                                        int tyyppi=0; // oletuksena tavallinen talo
+                                        String nimi = "nimeton";
+                                        i++;
+                                        
+                                        reader.MoveToAttribute(i);
+                                        if (reader.Name == "v" && reader.Value.ToString() == "hospital")
+                                            tyyppi = 1;
+                                         
 
-                                        String nimi = "nimeton";                                                                                                          
-                                        XMLRakennus uusi = new XMLRakennus(tempId, reftemp, nimi);                                       
+
+
+                                        XMLRakennus uusi = new XMLRakennus(tempId, reftemp, nimi, tyyppi);                                       
                                         XmlRakennukset.Add(uusi);
                                         tempId = 0;
                                         muutettava = XmlRakennukset.Count-1;
@@ -513,6 +531,9 @@ namespace Peli
 
                                    }
 
+                                 
+
+        
                                    if (reader.Name == "k" && reader.Value.ToString() == "landuse" || reader.Name == "k" && reader.Value.ToString() == "natural" || reader.Name == "k" && reader.Value.ToString() == "leisure")
                                   {
                                        i++;

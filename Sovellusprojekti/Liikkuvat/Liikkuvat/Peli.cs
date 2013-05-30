@@ -48,11 +48,14 @@ namespace Peli
         public double maxx=0;
         public double miny=0;
         public double maxy=0;
+
+        int tyyppi;
         String nimi;
         //int tyyppi;
         ArrayList vektorit; // Vektorit tulevat niin että ensimmäinen ja vika on samat, piirto todennäköisesti järjestyksessä pitkin. -joel
-        public Rakennus(String nimi, ArrayList vektorit)
+        public Rakennus(String nimi, ArrayList vektorit, int tyyppi)
         {
+            this.tyyppi = tyyppi;
             this.nimi = nimi;
             this.vektorit = new ArrayList(vektorit);          
         }
@@ -80,7 +83,10 @@ namespace Peli
         public int annaVektoriLkm(){
                return this.vektorit.Count;
         }
-
+        public int annaTyyppi()
+        {
+            return this.tyyppi;
+        }
 
     }
 
@@ -277,9 +283,10 @@ namespace Peli
             System.Console.WriteLine("XML->Peli: Muunnetaan tiedot pelin sisälle...: rakennuksia yhteensä " + luettudata.annaRakennusLkm() );
             for (int i = 0; i < luettudata.annaRakennusLkm(); i++)
             {
+                int tyyppi;
                 XMLRakennus temprakennus = (luettudata.annaRakennus(i));
                 ArrayList tempvektorit = new ArrayList();
-
+                tyyppi = temprakennus.annaTyyppi();
                 for (int k = 0; k < temprakennus.annaNoodiLkm(); k++)
                 {
                     // etsitään rakennuksen noodirefensseille vastaavuudet noodikokoelmasta 
@@ -305,7 +312,7 @@ namespace Peli
                 }
                 if (tempvektorit.Count != 0)
                 {
-                    Rakennus uusirakennus = new Rakennus(temprakennus.annaNimi(), tempvektorit);
+                    Rakennus uusirakennus = new Rakennus(temprakennus.annaNimi(), tempvektorit, tyyppi);
                     Rakennukset.Add(uusirakennus);
                 }
             }

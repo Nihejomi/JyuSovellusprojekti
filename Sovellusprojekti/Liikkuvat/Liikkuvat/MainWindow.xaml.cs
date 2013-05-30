@@ -281,6 +281,10 @@ namespace Liikkuvat
         {
             SolidColorBrush harmaa = new SolidColorBrush();
             harmaa.Color = Colors.Gray;
+
+            SolidColorBrush sairaala = new SolidColorBrush();
+            sairaala.Color = Colors.Red;
+
             double maxy;
             double miny;
             double maxx;
@@ -315,8 +319,7 @@ namespace Liikkuvat
                          }
 
     pisteet.Add(new Point(kohde.annaVektori(i).x,kohde.annaVektori(i).y));
-    //piirraSeina(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
-     //  piirraViiva(kohde.annaVektori(i).x, kohde.annaVektori(i).y, kohde.annaVektori(i + 1).x, kohde.annaVektori(i + 1).y);
+    
    }
                kohde.maxx = maxx;
                kohde.minx = minx;
@@ -325,8 +328,14 @@ namespace Liikkuvat
 
                   Polygon talo = new Polygon();
                   talo.Points = pisteet;
-
+                
+                    if(kohde.annaTyyppi() == 0)
                   talo.Fill = harmaa;
+                    if (kohde.annaTyyppi() == 1) // sairaala
+                        talo.Fill = sairaala;
+
+
+
                   rakennukset.Add(kohde);
                   if ((kohde.maxx <= kaupunginResoX / 2) && (kohde.maxy <= kaupunginResoY / 2))
                   {
