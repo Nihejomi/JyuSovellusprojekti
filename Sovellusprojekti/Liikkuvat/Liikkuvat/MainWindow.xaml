@@ -1,12 +1,18 @@
 ﻿<Window x:Class="Liikkuvat.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ZombieFinland" WindowStyle="SingleBorderWindow" Height="600" Width="800" xmlns:my="clr-namespace:Pelaaja;assembly=WpfControlLibrary1" PreviewMouseUp="Window_PreviewMouseUp" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged">
+        Title="ZombieFinland" WindowStyle="SingleBorderWindow" Height="600" Width="800" xmlns:my="clr-namespace:Pelaaja;assembly=WpfControlLibrary1" PreviewMouseUp="Window_PreviewMouseUp" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged" MaxHeight="3000" MaxWidth="3000">
     <Grid Margin="0,0,0,0">
 
 
-        <Canvas Height="600" HorizontalAlignment="Right" Margin="-3,0,2,-8" Name="canvas1" VerticalAlignment="Top" Width="793" MouseUp="canvas1_MouseUp" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="2">
-
+        <Canvas Height="600" HorizontalAlignment="Right" Margin="-3,0,2,-8" Name="canvas1" VerticalAlignment="Top" Width="793" MouseUp="canvas1_MouseUp" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="2" MaxHeight="3000" MaxWidth="3000">
+            <Canvas.Clip>
+                <PathGeometry>
+                    <PathFigure StartPoint="0,0" IsClosed="True" IsFilled="True">                    
+                        <PolyLineSegment Points="3000 0, 3000 3000, 0 3000"> </PolyLineSegment>                     
+                    </PathFigure>
+                 </PathGeometry>                                                                
+            </Canvas.Clip>
             <my:pelaaja Canvas.Left="400" Canvas.Top="280" Name="pelaaja1" Panel.ZIndex="999998" />
             <Label Canvas.Left="447" Canvas.Top="271" Content="Label" Height="28" Name="label2" />
         </Canvas>
@@ -15,9 +21,9 @@
             <TextBlock.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
-                    <SkewTransform AngleY="0.551"/>
+                    <SkewTransform AngleY="0.0"/>
                     <RotateTransform/>
-                    <TranslateTransform Y="0.24"/>
+                    <TranslateTransform Y="0.0"/>
                 </TransformGroup>
             </TextBlock.RenderTransform><Run Language="fi-fi" Text="Kirjoita kaupungin nimi ja paina enter"/></TextBlock>
         <StatusBar Name="statusBar1" Height="21" VerticalAlignment="Bottom" Visibility="Visible" />

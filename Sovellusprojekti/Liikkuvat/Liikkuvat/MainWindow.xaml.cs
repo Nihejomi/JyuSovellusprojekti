@@ -40,6 +40,7 @@ namespace Liikkuvat
         
         bool eteen = false;
         bool taakse = false;
+        bool zoomataan = false;
         private double zoomi = 1;
         int kaantyminen=5;
 
@@ -65,8 +66,10 @@ namespace Liikkuvat
         ArrayList osumat = new ArrayList();
 
         ArrayList luotiviivat = new ArrayList();
-       
-           
+
+        Polygon pohja = new Polygon();
+        
+
            Soundsystem soundsystem;
            System.Timers.Timer soundcheck;
            System.Timers.Timer walksoundtimer;
@@ -98,7 +101,7 @@ namespace Liikkuvat
             int zombeja;
             HTMLParser.Parsinta tietoja = new HTMLParser.Parsinta();
             tietoja.Alusta(p);
-            zombeja = tietoja.zombieMaara/30;
+            zombeja = 10; // tietoja.zombieMaara / 30;
                         
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
@@ -113,9 +116,12 @@ namespace Liikkuvat
 
            //testi = new Peli.Peli(61.48035, 23.77334, 61.48891, 23.7254, 2000, 2000, false); // tre
 
-       testi = new Peli.Peli(62.22418, 25.76424, 62.22893, 25.77725, resox, resoy, false);  // jkl:n kuokkala (nopeasti latautuva pieni testialue)
+      testi = new Peli.Peli(62.22418, 25.76424, 62.22893, 25.77725, resox, resoy, false);  // jkl:n kuokkala (nopeasti latautuva pieni testialue)
+  
 
-        //  testi = new Peli.Peli(62.24605, 25.69715, 62.25452, 25.71957, resox, resoy, false); // kortepohja
+    //   testi = new Peli.Peli(62.24605, 25.69715, 62.25452, 25.71957, resox, resoy, false); // kortepohja
+
+          //testi = new Peli.Peli(62.2243, 25.6666, 62.2623, 25.7708, resox, resoy, false); // koko jyväskylä (älä edes yritä)
           
             //rakennukset = testi.annaAlueRakennukset(62.2330, 25.733, 62.2335, 25.7335);
 
@@ -145,6 +151,13 @@ namespace Liikkuvat
             piirraTiet();
             piirraRakennukset();
             piirraVesistot();
+
+            //klipataan alue
+
+
+   
+            
+
             // Lisataan zombit
             Zombit lauma = new Zombit();
             int zombejasisalla = 0;
@@ -255,8 +268,7 @@ namespace Liikkuvat
             pisteet.Add(new Point(0, kaupunginResoX));
             pisteet.Add(new Point(kaupunginResoY, kaupunginResoX));
             pisteet.Add(new Point(kaupunginResoY, 0));
-             pisteet.Add(new Point(0, 0));
-            Polygon pohja = new Polygon();
+            pisteet.Add(new Point(0, 0));       
             pohja.Points = pisteet;
             pohja.Fill = taustavari;
             canvas1.Children.Add(pohja);
@@ -610,23 +622,27 @@ namespace Liikkuvat
            {
                if (zoomi < 5) 
                {
-                 
-                   
+                       
+                        
                        zoomi = zoomi + 0.05;
-                     
+                      
                  
             
                }
            }
            if (Keyboard.IsKeyDown(Key.Subtract))
            {
-               if (zoomi > 1)
+               if (zoomi > -3)
                {
-                
+                   
+
                        zoomi = zoomi - 0.05;
+                       
          
                }
            }
+         
+ 
            if (Keyboard.IsKeyDown(Key.R))
            {
                if (ammoBar.Value < lipas)
@@ -1154,6 +1170,7 @@ namespace Liikkuvat
         {
 
             zoomaa();
+           // skrollaa();
             
             double korkeutta = Canvas.GetTop((UIElement)this.pelaaja1);
             double leveytta = Canvas.GetLeft((UIElement)this.pelaaja1);
@@ -1375,13 +1392,22 @@ namespace Liikkuvat
             double apu = scaletransform.CenterX - Canvas.GetLeft((UIElement)this.pelaaja1) + this.Width / 2-pelaaja1.ActualWidth/2;
             translatetransform.X = apu; // / zoomi);
 
-           
             yhdiste.Children.Add(translatetransform);
-            yhdiste.Children.Add(scaletransform);
+            //if (zoomataan)
+           // {
+                
+                yhdiste.Children.Add(scaletransform);
+                
+           // }
 
             canvas1.RenderTransform = yhdiste;
+            
           
         }
+
+
+
+   
 
 
         /// <summary>
