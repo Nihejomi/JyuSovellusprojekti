@@ -69,24 +69,27 @@ namespace Peli
         public double[] calculateBBox(double lat, double lon, double km)
         {
             double radiusEarth = 6371; //radius of earth in meters
-            lat = degreesToRadians(62.2393006);
-            lon = degreesToRadians(25.7459479);
 
             double right = degreesToRadians(90.0);
             double left = degreesToRadians(270.0);
             double up = degreesToRadians(0.0);
             double down = degreesToRadians(180.0);
 
-            //Math.Asin(Math.sin(lat1)*Math.cos(d/R)+Math.cos(lat1)*Math.Sin(d/R)*Math.Cos(0.25));
+            double latRadian = degreesToRadians(lat);
+            double lonRadian = degreesToRadians(lon);
 
-            double minlat = radiansToDegrees(Math.Asin(Math.Sin(lat) * Math.Cos(km / radiusEarth) + 
-                Math.Cos(lat) * Math.Sin(km / radiusEarth) * Math.Cos(down)));
-            double minlon = radiansToDegrees(lon + Math.Atan2(Math.Sin(left) * Math.Sin(km / radiusEarth) * Math.Cos(lat),
-                                 Math.Cos(km / radiusEarth) - Math.Sin(lat) * Math.Sin(minlat)));
-            double maxlat = radiansToDegrees(Math.Asin(Math.Sin(lat) * Math.Cos(km / radiusEarth) + 
-                Math.Cos(lat) * Math.Sin(km / radiusEarth) * Math.Cos(up)));
-            double maxlon = radiansToDegrees(lon + Math.Atan2(Math.Sin(right) * Math.Sin(km / radiusEarth) * Math.Cos(lat),
-                                 Math.Cos(km / radiusEarth) - Math.Sin(lat) * Math.Sin(maxlat)));
+            //φ2 = asin( sin(φ1)*cos(d/R) + cos(φ1)*sin(d/R)*cos(θ) )
+            //λ2 = λ1 + atan2( sin(θ)*sin(d/R)*cos(φ1), cos(d/R)−sin(φ1)*sin(φ2) )
+
+            double minlat = radiansToDegrees(Math.Asin( Math.Sin(latRadian) * Math.Cos(km/radiusEarth) + 
+                Math.Cos(latRadian) * Math.Sin(km/radiusEarth) * Math.Cos(down)));
+
+            double minlon = radiansToDegrees(lonRadian + Math.Atan2(Math.Sin(left) * Math.Sin(km / radiusEarth) * Math.Cos(latRadian),
+                                 Math.Cos(km / radiusEarth) - Math.Sin(latRadian) * Math.Sin(minlat)));
+            double maxlat = radiansToDegrees(Math.Asin(Math.Sin(latRadian) * Math.Cos(km / radiusEarth) + 
+                Math.Cos(latRadian) * Math.Sin(km / radiusEarth) * Math.Cos(up)));
+            double maxlon = radiansToDegrees(lonRadian + Math.Atan2(Math.Sin(right) * Math.Sin(km / radiusEarth) * Math.Cos(latRadian),
+                                 Math.Cos(km / radiusEarth) - Math.Sin(latRadian) * Math.Sin(maxlat)));
             
             return new double[4] {minlat, minlon, maxlat, maxlon};
 
@@ -122,7 +125,8 @@ namespace Peli
         /// <returns>Bounding box in string format</returns>
         private string coordinatesToString(double minlat, double minlon, double maxlat, double maxlon)
         {
-            return string.Format("{0},{1},{2},{3}", minlat.ToString(culture), minlon.ToString(culture), maxlat.ToString(culture), maxlon.ToString(culture));
+            return string.Format("{0:0.000000},{1:0.000000},{2:0.000000},{3:0.000000}",
+                minlat, minlon, maxlat, maxlon);
         }
 
         /// <summary>

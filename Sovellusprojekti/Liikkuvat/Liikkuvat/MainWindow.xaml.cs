@@ -116,8 +116,8 @@ namespace Liikkuvat
 
            //testi = new Peli.Peli(61.48035, 23.77334, 61.48891, 23.7254, 2000, 2000, false); // tre
 
-      testi = new Peli.Peli(62.22418, 25.76424, 62.22893, 25.77725, resox, resoy, false);  // jkl:n kuokkala (nopeasti latautuva pieni testialue)
-  
+      //testi = new Peli.Peli(62.22418, 25.76424, 62.22893, 25.77725, resox, resoy, false);  // jkl:n kuokkala (nopeasti latautuva pieni testialue)
+      testi = new Peli.Peli(kaupunki, resox, resoy, 1, false);
 
     //   testi = new Peli.Peli(62.24605, 25.69715, 62.25452, 25.71957, resox, resoy, false); // kortepohja
 

@@ -627,16 +627,20 @@ namespace Peli
         }
 
 
-        public Peli(string kaupunki, int resox, int resoy, bool testaus)
+        public Peli(string kaupunki, int resox, int resoy, double size, bool testaus)
         {
             System.Console.WriteLine("ladataa kaupungin node openstreetmap apista...");
             lataaja.downloadOSMFile(kaupunki, "city.osm");
             //parsi kordinaatit
-            double[] kord = lataaja.calculateBBox(0, 0, 0.5);
+            XMLData luettudata = XMLLukija.LueXML("city.osm");
+            double latitude = luettudata.annaNoodi(0).getLat();
+            double longitude = luettudata.annaNoodi(0).getLon();
+
+            double[] kord = lataaja.calculateBBox(latitude, longitude, size);
 
             lataaja.downloadOSMFile(kord[0], kord[1], kord[2], kord[3], "temp.osm");
             
-            XMLData luettudata = XMLLukija.LueXML("temp.osm");
+            luettudata = XMLLukija.LueXML("temp.osm");
 
             Rakennukset = new ArrayList();
             Vedet = new ArrayList();
