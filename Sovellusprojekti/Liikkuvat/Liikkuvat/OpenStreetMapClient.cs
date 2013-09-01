@@ -51,7 +51,8 @@ namespace Peli
         public void downloadOSMFile(double minlat, double minlon, double maxlat, double maxlon, string filename)
         {
             string address = currentServer + queryMapBBox(coordinatesToString(minlat, minlon, maxlat, maxlon)) + email;
-            client.DownloadFile(address, filename);
+            
+            //client.DownloadFile(address, filename);<-- ei toiminut, kokeilen valmista temppiä.  Henrik
         }
 
         /// <summary>

@@ -27,23 +27,30 @@ namespace Liikkuvat
     /// </summary>
     public partial class MainWindow : Window
     {
+       
         System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
         public double k;
         public double l;
         public double kohdex;
         public double kohdey;
         public string kaupunki;
+        public bool paused;
         public bool pelaajakuoli = false;
+        public bool Inputmenu;
+        public bool pausepohjassa;
         //kaupungin luomiseen käytetty reso
         public int kaupunginResoX;
         public int kaupunginResoY;
-        
+        public Key eteennappi = Key.W;
+        public Key taaksenappi = Key.S;
+        public Key oikeallenappi = Key.D;
+        public Key vasemmallenappi = Key.A;
         bool eteen = false;
         bool taakse = false;
         bool zoomataan = false;
         private double zoomi = 1;
         int kaantyminen=5;
-
+        
         int lipas = 8;
         bool justshot = false;
         RotateTransform r = new RotateTransform();
@@ -61,7 +68,6 @@ namespace Liikkuvat
         ArrayList seinat = new ArrayList();
         ArrayList tiet = new ArrayList();// Tähän tiet jos tehdään liikkumis nopeutta käsittelevä metodi joskus
         ArrayList Muut = new ArrayList();// tänne kaikki grafiikka jolla ei mitään muuta käyttöä
-
         ArrayList tulivanat = new ArrayList();
         ArrayList osumat = new ArrayList();
 
@@ -94,18 +100,18 @@ namespace Liikkuvat
         {
             pelaajakuoli = false;
             // resot jotka voidaan myöhemmin sitoa johonkin muuttujaan.
-            int resox = 3000;
-            int resoy = 3000;
+            int resox = 4000;
+            int resoy = 4000;
             kaupunginResoX = resox;
             kaupunginResoY = resoy;
             int zombeja;
             HTMLParser.Parsinta tietoja = new HTMLParser.Parsinta();
             tietoja.Alusta(p);
-            zombeja = 10; // tietoja.zombieMaara / 30;
-                        
+            zombeja =  tietoja.zombieMaara / 100;
+
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
-            //label2.Content = zombeja;
+           //label2.Content = zombeja;
 
             InitializeComponent();
 
@@ -201,14 +207,14 @@ namespace Liikkuvat
                 }
             }
 
-            hitpoints = 1000;
+            hitpoints = 100;
             hitBar.Maximum = hitpoints;
             hitBar.Value = hitpoints;
 
             ammoBar.Maximum = lipas;
             ammoBar.Value = lipas;
 
-            label2.Content = zombejasisalla;
+            //label2.Content = zombejasisalla;
             dispatcherTimer.Start();
            
         }
@@ -272,6 +278,7 @@ namespace Liikkuvat
             pohja.Points = pisteet;
             pohja.Fill = taustavari;
             canvas1.Children.Add(pohja);
+            Muut.Add(pohja);
         }
 
 
@@ -483,7 +490,7 @@ namespace Liikkuvat
                
                   Label talonnimi = new Label();
                   talonnimi.Content = kohde.annaNimi();
-                  
+                  Muut.Add(talonnimi);
                   Canvas.SetLeft(talonnimi, nimikohta.X);
                   Canvas.SetTop(talonnimi, nimikohta.Y);
                   
@@ -494,7 +501,7 @@ namespace Liikkuvat
                   Muut.Add(talo);
                   if (kohde.annaNimi().Length > 2)
                   canvas1.Children.Add(talonnimi);
-
+                  Muut.Add(talonnimi);
               /*  for (int i = 0; i < kohde.annaVektoriLkm() - 1; i++)
                 {
                     
@@ -590,6 +597,7 @@ namespace Liikkuvat
                     Canvas.SetTop(tiennimi, nimikohta.Y);
                     if (kohde.annaNimi().Length > 2)
                     canvas1.Children.Add(tiennimi);
+                    Muut.Add(tiennimi);
             }
         }
  
@@ -641,8 +649,38 @@ namespace Liikkuvat
          
                }
            }
-         
- 
+
+           if (Keyboard.IsKeyDown(Key.Escape))
+           {
+               if (pausepohjassa) { }
+               else {
+                   pausepohjassa = true;
+                   if (paused)
+                   {
+
+                       paused = false;
+                       menunappi.Visibility = Visibility.Collapsed;
+                       LiikkumisAsetukset.Visibility = Visibility.Collapsed;
+                       ohjenappi.Visibility = Visibility.Collapsed;
+                       lopetusnappi.Visibility = Visibility.Collapsed;
+                       Inputmenu = false;
+                   }
+                   else
+                   {
+                       
+                       paused = true;
+                       ohjenappi.Visibility = Visibility.Visible;
+                       lopetusnappi.Visibility = Visibility.Visible;   
+                       menunappi.Visibility = Visibility.Visible;
+                       ohjenappi.Visibility = Visibility.Visible;
+                   }
+               }
+           }
+           else 
+           {
+               pausepohjassa = false;
+           }
+
            if (Keyboard.IsKeyDown(Key.R))
            {
                if (ammoBar.Value < lipas)
@@ -651,21 +689,21 @@ namespace Liikkuvat
                    soundsystem.PlaySound("load", 1.0f);
                }
            }
-           if (Keyboard.IsKeyDown(Key.A))
+           if (Keyboard.IsKeyDown(vasemmallenappi))
            {
                pelaajakulma = pelaajakulma - 0.05;
            }
-           if (Keyboard.IsKeyDown(Key.D))
+           if (Keyboard.IsKeyDown(oikeallenappi))
            {
                pelaajakulma = pelaajakulma + 0.05;
            }
-           if (Keyboard.IsKeyDown(Key.W))
+           if (Keyboard.IsKeyDown(eteennappi))
            {
            
                eteen = true;
            }
            else { eteen = false;  }
-           if (Keyboard.IsKeyDown(Key.S))
+           if (Keyboard.IsKeyDown(taaksenappi))
            {
                eteen = false;
                taakse = true;
@@ -707,6 +745,9 @@ namespace Liikkuvat
         /// </summary>
         private void peliohi()
         {
+            soundcheck.Stop();
+            walksoundtimer.Stop();
+            zombiesoundtimer.Stop();
            foreach (object z in liikuta){
               canvas1.Children.Remove((UIElement)z);
                
@@ -725,6 +766,7 @@ namespace Liikkuvat
 
 
            }
+
            liikuta = new ArrayList();
            rakennukset = new ArrayList();
            Muut = new ArrayList();
@@ -734,7 +776,8 @@ namespace Liikkuvat
            rakennuksetOikeaYla = new ArrayList();
            rakennuksetOikeaAla = new ArrayList();
             syötelokero.Visibility = Visibility.Visible;
-
+            menunappi.Visibility = Visibility.Visible;
+            ohjenappi.Visibility = Visibility.Visible;
         }
         /// <summary>
         /// Piirtää viivan. viiva liataan Viivat- arraylistaan ja Canvas1 lapsiin.
@@ -1168,132 +1211,137 @@ namespace Liikkuvat
         /// </summary>
         private void kaikkiliikkuu()
         {
+            if (paused) { }
+            else
+            {
 
-            zoomaa();
-           // skrollaa();
-            
-            double korkeutta = Canvas.GetTop((UIElement)this.pelaaja1);
-            double leveytta = Canvas.GetLeft((UIElement)this.pelaaja1);
-            Vector playerPos = new Vector(leveytta, korkeutta);
-            foreach(Zombi l in liikuta){
-                if (l.getKaantovuoro() == kaantyminen)
+                zoomaa();
+                // skrollaa();
+
+                double korkeutta = Canvas.GetTop((UIElement)this.pelaaja1);
+                double leveytta = Canvas.GetLeft((UIElement)this.pelaaja1);
+                Vector playerPos = new Vector(leveytta, korkeutta);
+                foreach (Zombi l in liikuta)
                 {
-                    if (l.getDistance(playerPos) < 500)
-                        if (tarkistaSeinatIlmanhiboxia(leveytta+10, korkeutta+10, l.getPosition().X+15, l.getPosition().Y+15, rakennukset))
-                        {
-                            l.Opacity = 0; // l.Visibility= Visibility.Hidden;
-                        }
+                    if (l.getKaantovuoro() == kaantyminen)
+                    {
+                        if (l.getDistance(playerPos) < 500)
+                            if (tarkistaSeinatIlmanhiboxia(leveytta + 10, korkeutta + 10, l.getPosition().X + 15, l.getPosition().Y + 15, rakennukset))
+                            {
+                                l.Opacity = 0; // l.Visibility= Visibility.Hidden;
+                            }
+                            else
+                            {
+                                l.Opacity = 1;
+                                // l.Visibility = Visibility.Visible;
+                            }
                         else
                         {
                             l.Opacity = 1;
-                           // l.Visibility = Visibility.Visible;
+                            //l.Visibility = Visibility.Hidden;
                         }
-                    else 
-                    {
-                        l.Opacity = 1;
-                        //l.Visibility = Visibility.Hidden;
                     }
                 }
+                if (luotiviivat.Count != 0)
+                {
+                    System.Console.WriteLine("luotiviivoja: " + luotiviivat.Count);
+                    for (int i = 0; i < luotiviivat.Count - 1; i++)
+                    {
+                        // DependencyObject parent = VisualTreeHelper.GetParent(control);
+                        canvas1.Children.Remove((UIElement)luotiviivat[i]);
+                    }
+                    luotiviivat.Clear();
+                    // System.Console.WriteLine("luotiviivoja: " + luotiviivat.Capacity);
+                }
+
+                RotateTransform r = new RotateTransform(pelaajakulma / (Math.PI * 2) * 360 + 90, pelaaja1.ActualHeight / 2, pelaaja1.ActualWidth / 2);
+                pelaaja1.RenderTransform = r;
+                if (eteen)
+                {
+                    if (tarkistaSeinat(Canvas.GetLeft(this.pelaaja1) + pelaaja1.ActualWidth / 2, Canvas.GetTop(this.pelaaja1) + pelaaja1.ActualHeight / 2, pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[0] + pelaaja1.ActualWidth / 2, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[1] + pelaaja1.ActualHeight / 2))
+                    { }
+                    else
+                    {
+
+                        //pelaaja1.pyorita(pelaajakulma);
+
+                        leveytta = this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[0];
+                        Canvas.SetLeft((UIElement)this.pelaaja1, leveytta);
+
+                        korkeutta = this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[1];
+                        Canvas.SetTop((UIElement)this.pelaaja1, korkeutta);
+
+                        // pitäs saada noiden 10 paikalle user controllin leveys ja korkeus, mutta jostain syystä ei toimi oikein... ottaakohan kuvan korkeuden? Kuva on isompi kuin kontrollli.
+
+                        //  pelaaja1.RenderTransform.SetValue
+                    }
+                }
+                if (taakse)
+                {
+                    if (tarkistaSeinat(Canvas.GetLeft(this.pelaaja1) + pelaaja1.ActualWidth / 2, Canvas.GetTop(this.pelaaja1) + pelaaja1.ActualHeight / 2, pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma - Math.PI)[0] + pelaaja1.ActualWidth / 2, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma - Math.PI)[1] + pelaaja1.ActualHeight / 2))
+                    { }
+                    else
+                    {
+
+                        //pelaaja1.pyorita(pelaajakulma);
+
+                        leveytta = this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma - Math.PI)[0];
+                        Canvas.SetLeft((UIElement)this.pelaaja1, leveytta);
+
+                        korkeutta = this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma - Math.PI)[1];
+                        Canvas.SetTop((UIElement)this.pelaaja1, korkeutta);
+
+                    }
+                }
+
+                kaantyminen--;
+
+                foreach (liikkuva zombie in liikuta)
+                {
+
+                    if (zombie.isDead()) continue;
+
+
+                    if (zombie.getDistance(playerPos) > 300) continue;
+
+                    UIElement uiZombie = zombie as UIElement;
+                    Vector zombiePos = zombie.getPosition();
+
+
+                    Vector newPos = zombie.possibleMove(playerPos);
+                    zombikulma = laskeKulma(leveytta - newPos.X, korkeutta - newPos.Y);
+
+                    if (zombie.isNope()) continue;
+                    if (kaantyminen == zombie.getKaantovuoro())
+                    {
+
+                        RotateTransform f = new RotateTransform(zombikulma / (Math.PI * 2) * 360 + 90);
+                        uiZombie.RenderTransform = f;
+
+                    }
+
+                    //pitäs saada dynäämisesti tuo zombin leveys otettua, vois laskea kun tietää canvas elementin koon ja leftin ja rightin, topin ja bottomin
+                    if (!zombie.isGhost() | tarkistaSeinat(zombiePos.X + 15, zombiePos.Y + 15, newPos.X + 15, newPos.Y + 15)) { }
+                    else
+                    {
+                        //pelaaja mitat = testi as pelaaja;
+                        zombie.move(newPos);
+
+                        Canvas.SetLeft(uiZombie, newPos.X);
+                        Canvas.SetTop(uiZombie, newPos.Y);
+                        //pitäs saada tämän korkeus jotenkin.
+                    }
+
+                    double pelaajax = Canvas.GetTop((UIElement)this.pelaaja1) + this.pelaaja1.ActualWidth / 2;
+                    double pelaajay = Canvas.GetLeft((UIElement)this.pelaaja1) + this.pelaaja1.ActualHeight / 2;
+                    if (zombie.getDistance(new Vector(leveytta, korkeutta)) < 10)
+                    {
+                        hitBar.Value--;
+                    }
+                }
+                if (kaantyminen == 0) { kaantyminen = 6; }
+
             }
-            if (luotiviivat.Count != 0)
-            {
-                System.Console.WriteLine("luotiviivoja: " + luotiviivat.Count);
-                for (int i = 0; i < luotiviivat.Count - 1; i++)
-                {
-                    // DependencyObject parent = VisualTreeHelper.GetParent(control);
-                    canvas1.Children.Remove((UIElement)luotiviivat[i]);
-                }
-                luotiviivat.Clear();
-                // System.Console.WriteLine("luotiviivoja: " + luotiviivat.Capacity);
-            }
-
-            RotateTransform r = new RotateTransform(pelaajakulma / (Math.PI * 2) * 360 + 90, pelaaja1.ActualHeight / 2, pelaaja1.ActualWidth / 2);
-            pelaaja1.RenderTransform = r;
-            if (eteen)
-            {
-                if (tarkistaSeinat(Canvas.GetLeft(this.pelaaja1) + pelaaja1.ActualWidth / 2, Canvas.GetTop(this.pelaaja1) + pelaaja1.ActualHeight / 2, pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[0] + pelaaja1.ActualWidth / 2, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[1] + pelaaja1.ActualHeight / 2))
-                { }
-                else
-                {
-
-                    //pelaaja1.pyorita(pelaajakulma);
-
-                    leveytta = this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[0];
-                    Canvas.SetLeft((UIElement)this.pelaaja1, leveytta);
-
-                    korkeutta = this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma)[1];
-                    Canvas.SetTop((UIElement)this.pelaaja1, korkeutta);
-
-                    // pitäs saada noiden 10 paikalle user controllin leveys ja korkeus, mutta jostain syystä ei toimi oikein... ottaakohan kuvan korkeuden? Kuva on isompi kuin kontrollli.
-
-                    //  pelaaja1.RenderTransform.SetValue
-                }
-            }
-            if (taakse)
-            {
-                if (tarkistaSeinat(Canvas.GetLeft(this.pelaaja1) + pelaaja1.ActualWidth / 2, Canvas.GetTop(this.pelaaja1) + pelaaja1.ActualHeight / 2, pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma - Math.PI)[0] + pelaaja1.ActualWidth / 2, this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma - Math.PI)[1] + pelaaja1.ActualHeight / 2))
-                { }
-                else
-                {
-
-                    //pelaaja1.pyorita(pelaajakulma);
-
-                    leveytta = this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma - Math.PI)[0];
-                    Canvas.SetLeft((UIElement)this.pelaaja1, leveytta);
-
-                    korkeutta = this.pelaaja1.liikuta(leveytta, korkeutta, pelaajakulma - Math.PI)[1];
-                    Canvas.SetTop((UIElement)this.pelaaja1, korkeutta);
-
-                }
-            }
-
-            kaantyminen--;
-            
-            foreach (liikkuva zombie in liikuta)
-            {
-
-                if (zombie.isDead()) continue;
-                
-               
-                if (zombie.getDistance(playerPos) > 300) continue;
-                
-                UIElement uiZombie = zombie as UIElement;
-                Vector zombiePos = zombie.getPosition();
-
-
-                Vector newPos = zombie.possibleMove(playerPos);
-                zombikulma = laskeKulma(leveytta - newPos.X, korkeutta - newPos.Y);
-
-                if (zombie.isNope()) continue;
-                if (kaantyminen == zombie.getKaantovuoro())
-                {
-
-                    RotateTransform f = new RotateTransform(zombikulma / (Math.PI * 2) * 360 + 90);
-                    uiZombie.RenderTransform = f;
-
-                }
-
-                //pitäs saada dynäämisesti tuo zombin leveys otettua, vois laskea kun tietää canvas elementin koon ja leftin ja rightin, topin ja bottomin
-                if (!zombie.isGhost() | tarkistaSeinat(zombiePos.X + 15, zombiePos.Y + 15, newPos.X + 15, newPos.Y + 15)) { }
-               else
-                {
-                    //pelaaja mitat = testi as pelaaja;
-                    zombie.move(newPos);
-
-                    Canvas.SetLeft(uiZombie, newPos.X);
-                    Canvas.SetTop(uiZombie, newPos.Y);
-                    //pitäs saada tämän korkeus jotenkin.
-                }
-
-                double pelaajax = Canvas.GetTop((UIElement)this.pelaaja1) + this.pelaaja1.ActualWidth / 2;
-                double pelaajay = Canvas.GetLeft((UIElement)this.pelaaja1) + this.pelaaja1.ActualHeight / 2;
-                if (zombie.getDistance(new Vector(leveytta, korkeutta)) < 10)
-                {
-                    hitBar.Value--;
-                }
-            }
-            if (kaantyminen == 0) { kaantyminen = 6; }
-            
         }
 /*
         private bool tarkistaSeinatIlmanhiboxia(double x1, double y1, double x2, double y2)
@@ -1342,34 +1390,38 @@ namespace Liikkuvat
 
         private void Window_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                kohdex = e.GetPosition(canvas1).X;
-                kohdey = e.GetPosition(canvas1).Y;
-            }
-
-            if (e.ChangedButton == MouseButton.Right)
-            {
-
-                if (ammoBar.Value == 0)
+            if (paused)
+            {}
+            else{
+                if (e.ChangedButton == MouseButton.Left)
                 {
-                    soundsystem.PlaySound("empty", 1.0f);
+                    kohdex = e.GetPosition(canvas1).X;
+                    kohdey = e.GetPosition(canvas1).Y;
                 }
-                if(ammoBar.Value > 0 && !justshot){
-                Ammu(50, e.GetPosition(canvas1).X, e.GetPosition(canvas1).Y);
-                ammoBar.Value--;
-                justshot = true;
+
+                if (e.ChangedButton == MouseButton.Right)
+                {
+
+                    if (ammoBar.Value == 0)
+                    {
+                        soundsystem.PlaySound("empty", 1.0f);
+                    }
+                    if (ammoBar.Value > 0 && !justshot)
+                    {
+                        Ammu(50, e.GetPosition(canvas1).X, e.GetPosition(canvas1).Y);
+                        ammoBar.Value--;
+                        justshot = true;
+                    }
+
+
                 }
-                
 
             }
-
-
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            LiikkumisAsetukset.Visibility = Visibility.Collapsed;
         }
 
         /// <summary>
@@ -1421,7 +1473,12 @@ namespace Liikkuvat
                 kaupunki= syötelokero.Text;
                 syötelokero.Visibility = Visibility.Collapsed;
                 Syöeselite.Visibility = Visibility.Collapsed;
+                ohjenappi.Visibility = Visibility.Collapsed;
+                LiikkumisAsetukset.Visibility = Visibility.Collapsed;
+                lopetusnappi.Visibility = Visibility.Collapsed;
                 //Console.Beep();
+                Inputmenu = false;
+                menunappi.Visibility = Visibility.Collapsed;
                 alusta(kaupunki);
             }
         }
@@ -1552,6 +1609,61 @@ namespace Liikkuvat
 
             canvas1.Children.Add(luotiviiva);
               */
+        }
+
+        private void TextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            ylösboksi.Text = e.Key.ToString();
+            eteennappi = e.Key;
+        }
+
+        private void TextBox_KeyUp_1(object sender, KeyEventArgs e)
+        {
+            alasboksi.Text = e.Key.ToString();
+            taaksenappi = e.Key;
+        }
+
+        private void vasemmalleboksi_KeyUp(object sender, KeyEventArgs e)
+        {
+            vasemmalleboksi.Text = e.Key.ToString();
+            vasemmallenappi = e.Key;
+        }
+
+        private void oikealleboksi_KeyUp(object sender, KeyEventArgs e)
+        {
+            oikealleboksi.Text = e.Key.ToString();
+            oikeallenappi = e.Key;
+        }
+
+        private void TextBox_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void menunappi_Click(object sender, RoutedEventArgs e)
+        {
+            
+            if (Inputmenu)
+            {
+                Inputmenu = false;
+                LiikkumisAsetukset.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                Inputmenu = true;
+                LiikkumisAsetukset.Visibility = Visibility.Visible;
+                
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void ohjenappi_Click(object sender, RoutedEventArgs e)
+        {
+            LiikkumisAsetukset.Visibility = Visibility.Collapsed;
         }
 
 

@@ -8,24 +8,38 @@
         <Canvas Height="600" HorizontalAlignment="Right" Margin="-3,0,2,-8" Name="canvas1" VerticalAlignment="Top" Width="793" MouseUp="canvas1_MouseUp" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="2" MaxHeight="3000" MaxWidth="3000">
             <Canvas.Clip>
                 <PathGeometry>
-                    <PathFigure StartPoint="0,0" IsClosed="True" IsFilled="True">                    
-                        <PolyLineSegment Points="3000 0, 3000 3000, 0 3000"> </PolyLineSegment>                     
+                    <PathFigure StartPoint="0,0" IsClosed="True" IsFilled="True">
+                        <PolyLineSegment Points="3000 0, 3000 3000, 0 3000"></PolyLineSegment>
                     </PathFigure>
-                 </PathGeometry>                                                                
+                </PathGeometry>
             </Canvas.Clip>
             <my:pelaaja Canvas.Left="400" Canvas.Top="280" Name="pelaaja1" Panel.ZIndex="999998" />
-            <Label Canvas.Left="447" Canvas.Top="271" Content="Label" Height="28" Name="label2" />
+
+
+
+
+
         </Canvas>
+        <Button x:Name="ohjenappi" Content="Ohje" Canvas.Left="277" Canvas.Top="278" Margin="274,273,368,269" Click="ohjenappi_Click"/>
+        <Button x:Name="lopetusnappi" Content="Sulje peli" Canvas.Left="69" Canvas.Top="295" Margin="274,329,368,213" Click="Button_Click"/>
+        <Button x:Name="menunappi" Content="napit" Canvas.Left="71" Canvas.Top="90" Margin="274,301,368,241" MouseUp="TextBox_MouseUp" Click="menunappi_Click" RenderTransformOrigin="0.5,0.5">
+
+        </Button>
+        <ListBox x:Name="LiikkumisAsetukset" Height="166" Canvas.Left="69" Canvas.Top="118" Margin="66,106,113,298">
+            <TextBlock TextWrapping="Wrap"><Run Language="fi-fi" Text="Ylös"/></TextBlock>
+            <TextBox x:Name="ylösboksi" Height="23" TextWrapping="Wrap" Text="w" Width="31" KeyUp="TextBox_KeyUp"/>
+            <TextBlock TextWrapping="Wrap"><Run Language="fi-fi" Text="Alas"/></TextBlock>
+            <TextBox x:Name="alasboksi" Height="23" TextWrapping="Wrap" Text="s" Width="31" KeyUp="TextBox_KeyUp_1"/>
+            <TextBlock TextWrapping="Wrap"><Run Language="fi-fi" Text="Vasemmalle"/></TextBlock>
+            <TextBox x:Name="vasemmalleboksi" Height="23" TextWrapping="Wrap" Text="a" Width="31" KeyUp="vasemmalleboksi_KeyUp"/>
+            <TextBlock TextWrapping="Wrap"><Run Language="fi-fi" Text="Oikealle"/></TextBlock>
+            <TextBox x:Name="oikealleboksi" Height="23" TextWrapping="Wrap" Text="d" Width="31" KeyUp="oikealleboksi_KeyUp"/>
+
+        </ListBox>
         <TextBox Name="syötelokero" HorizontalAlignment="Left" Height="22" Margin="66,62,0,0" TextWrapping="Wrap" Text="Jyväskylä" VerticalAlignment="Top" Width="323" KeyDown="TextBox_KeyDown" Grid.RowSpan="2"/>
         <TextBlock x:Name ="Syöeselite" HorizontalAlignment="Left" Margin="66,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="350" Height="16" Grid.RowSpan="2">
-            <TextBlock.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleY="0.0"/>
-                    <RotateTransform/>
-                    <TranslateTransform Y="0.0"/>
-                </TransformGroup>
-            </TextBlock.RenderTransform><Run Language="fi-fi" Text="Kirjoita kaupungin nimi ja paina enter"/></TextBlock>
+
+            <Run Language="fi-fi" Text="Kirjoita kaupungin nimi ja paina enter"/></TextBlock>
         <StatusBar Name="statusBar1" Height="21" VerticalAlignment="Bottom" Visibility="Visible" />
         <ProgressBar HorizontalAlignment="Left" Name="hitBar" Width="100" Height="10" VerticalAlignment="Bottom" Margin="0,0,0,10" Foreground="Red" />
         <ProgressBar Height="10" Name="ammoBar" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="Orange" SnapsToDevicePixels="False" />
