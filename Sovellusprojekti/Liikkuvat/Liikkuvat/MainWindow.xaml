@@ -19,21 +19,27 @@
 
 
 
-        </Canvas>
-        <Button x:Name="ohjenappi" Content="Ohje" Canvas.Left="277" Canvas.Top="278" Margin="274,273,368,269" Click="ohjenappi_Click"/>
-        <Button x:Name="lopetusnappi" Content="Sulje peli" Canvas.Left="69" Canvas.Top="295" Margin="274,329,368,213" Click="Button_Click"/>
-        <Button x:Name="menunappi" Content="napit" Canvas.Left="71" Canvas.Top="90" Margin="274,301,368,241" MouseUp="TextBox_MouseUp" Click="menunappi_Click" RenderTransformOrigin="0.5,0.5">
 
+        </Canvas>
+        <TextBlock x:Name="Ohje" Canvas.Left="70" TextWrapping="Wrap" Text="Liiku ympärikaupunkia ja tapa zombeja. Paina Esc pysäyttääksesi peli." Canvas.Top="107" Height="168" Width="611" Margin="66,105,115,297"/>
+        <Button x:Name="ohjenappi" Content="Ohje" Canvas.Left="277" Canvas.Top="278" Margin="274,341,368,201" Click="ohjenappi_Click"/>
+        <Button x:Name="lopetusnappi" Content="Sulje peli" Canvas.Left="69" Canvas.Top="295" Margin="274,397,368,145" Click="Button_Click"/>
+        <Button x:Name="menunappi" Content="napit" Canvas.Left="71" Canvas.Top="90" Margin="274,369,368,173" MouseUp="TextBox_MouseUp" Click="menunappi_Click" RenderTransformOrigin="0.5,0.5">
+         
         </Button>
-        <ListBox x:Name="LiikkumisAsetukset" Height="166" Canvas.Left="69" Canvas.Top="118" Margin="66,106,113,298">
+        
+        <ListBox x:Name="LiikkumisAsetukset" Canvas.Left="69" Canvas.Top="118" Margin="66,103,108,236" >
             <TextBlock TextWrapping="Wrap"><Run Language="fi-fi" Text="Ylös"/></TextBlock>
             <TextBox x:Name="ylösboksi" Height="23" TextWrapping="Wrap" Text="w" Width="31" KeyUp="TextBox_KeyUp"/>
+            
             <TextBlock TextWrapping="Wrap"><Run Language="fi-fi" Text="Alas"/></TextBlock>
             <TextBox x:Name="alasboksi" Height="23" TextWrapping="Wrap" Text="s" Width="31" KeyUp="TextBox_KeyUp_1"/>
             <TextBlock TextWrapping="Wrap"><Run Language="fi-fi" Text="Vasemmalle"/></TextBlock>
             <TextBox x:Name="vasemmalleboksi" Height="23" TextWrapping="Wrap" Text="a" Width="31" KeyUp="vasemmalleboksi_KeyUp"/>
             <TextBlock TextWrapping="Wrap"><Run Language="fi-fi" Text="Oikealle"/></TextBlock>
             <TextBox x:Name="oikealleboksi" Height="23" TextWrapping="Wrap" Text="d" Width="31" KeyUp="oikealleboksi_KeyUp"/>
+            <TextBlock TextWrapping="Wrap"><Run Language="fi-fi" Text="Lataa"/></TextBlock>
+            <TextBox x:Name="lataaboksi" Height="23" TextWrapping="Wrap" Text="r" Width="31" KeyUp="lataaboksi_KeyUp" />
 
         </ListBox>
         <TextBox Name="syötelokero" HorizontalAlignment="Left" Height="22" Margin="66,62,0,0" TextWrapping="Wrap" Text="Jyväskylä" VerticalAlignment="Top" Width="323" KeyDown="TextBox_KeyDown" Grid.RowSpan="2"/>

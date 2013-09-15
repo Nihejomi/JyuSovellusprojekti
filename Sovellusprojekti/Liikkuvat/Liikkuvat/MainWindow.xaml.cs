@@ -38,6 +38,7 @@ namespace Liikkuvat
         public bool pelaajakuoli = false;
         public bool Inputmenu;
         public bool pausepohjassa;
+        public bool ohjepaalla;
         //kaupungin luomiseen käytetty reso
         public int kaupunginResoX;
         public int kaupunginResoY;
@@ -45,6 +46,7 @@ namespace Liikkuvat
         public Key taaksenappi = Key.S;
         public Key oikeallenappi = Key.D;
         public Key vasemmallenappi = Key.A;
+        public Key latausnappi = Key.R;
         bool eteen = false;
         bool taakse = false;
         bool zoomataan = false;
@@ -87,9 +89,7 @@ namespace Liikkuvat
 
         public MainWindow()
         {
-
-           
-            
+                  
         }
         /// <summary>
         /// Alustetaan kaupunki jossa zombit riehuu, zombien määrä kaupungin nimen mukaan.
@@ -98,6 +98,8 @@ namespace Liikkuvat
         /// <param name="p"></param>
         private void alusta(string p)
         {
+            Ohje.Visibility = Visibility.Collapsed;
+            pelaaja1.Visibility = Visibility.Visible;
             pelaajakuoli = false;
             // resot jotka voidaan myöhemmin sitoa johonkin muuttujaan.
             int resox = 4000;
@@ -657,8 +659,9 @@ namespace Liikkuvat
                    pausepohjassa = true;
                    if (paused)
                    {
-
+                     
                        paused = false;
+                       Ohje.Visibility = Visibility.Collapsed;
                        menunappi.Visibility = Visibility.Collapsed;
                        LiikkumisAsetukset.Visibility = Visibility.Collapsed;
                        ohjenappi.Visibility = Visibility.Collapsed;
@@ -667,7 +670,7 @@ namespace Liikkuvat
                    }
                    else
                    {
-                       
+              
                        paused = true;
                        ohjenappi.Visibility = Visibility.Visible;
                        lopetusnappi.Visibility = Visibility.Visible;   
@@ -681,7 +684,7 @@ namespace Liikkuvat
                pausepohjassa = false;
            }
 
-           if (Keyboard.IsKeyDown(Key.R))
+           if (Keyboard.IsKeyDown(latausnappi))
            {
                if (ammoBar.Value < lipas)
                {
@@ -778,6 +781,7 @@ namespace Liikkuvat
             syötelokero.Visibility = Visibility.Visible;
             menunappi.Visibility = Visibility.Visible;
             ohjenappi.Visibility = Visibility.Visible;
+            lopetusnappi.Visibility = Visibility.Visible;
         }
         /// <summary>
         /// Piirtää viivan. viiva liataan Viivat- arraylistaan ja Canvas1 lapsiin.
@@ -1421,7 +1425,10 @@ namespace Liikkuvat
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            pelaaja1.Visibility = Visibility.Collapsed;
+            Ohje.Visibility = Visibility.Collapsed;
             LiikkumisAsetukset.Visibility = Visibility.Collapsed;
+            
         }
 
         /// <summary>
@@ -1647,9 +1654,14 @@ namespace Liikkuvat
             {
                 Inputmenu = false;
                 LiikkumisAsetukset.Visibility = Visibility.Collapsed;
+                Ohje.Visibility = Visibility.Collapsed;
             }
             else
             {
+                if (ohjepaalla)
+                {
+                    Ohje.Visibility = Visibility.Collapsed;
+                }
                 Inputmenu = true;
                 LiikkumisAsetukset.Visibility = Visibility.Visible;
                 
@@ -1663,8 +1675,21 @@ namespace Liikkuvat
 
         private void ohjenappi_Click(object sender, RoutedEventArgs e)
         {
+            Ohje.Visibility = Visibility.Visible;
             LiikkumisAsetukset.Visibility = Visibility.Collapsed;
+            Inputmenu = false;
+            ohjenappi.Visibility = Visibility.Visible;
         }
+
+        private void lataaboksi_KeyUp(object sender, KeyEventArgs e)
+        {
+
+            lataaboksi.Text = e.Key.ToString();
+            latausnappi = e.Key;
+
+        }
+
+       
 
 
 
